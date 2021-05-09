@@ -37,10 +37,10 @@ public class Constants {
             put(new Coordinate3D(0, 1, 0), Material.IRON_BARS);
             put(new Coordinate3D(0, 2, 0), Material.IRON_BARS);
             put(new Coordinate3D(0, 3, 0), Material.IRON_BARS);
-            put(new Coordinate3D(1, 3, 1), Material.IRON_BARS);
-            put(new Coordinate3D(1, 3, -1), Material.IRON_BARS);
-            put(new Coordinate3D(-1, 3, 1), Material.IRON_BARS);
-            put(new Coordinate3D(-1, 3, -1), Material.IRON_BARS);
+            put(new Coordinate3D(1, 3, 0), Material.IRON_BARS);
+            put(new Coordinate3D(-1, 3, 0), Material.IRON_BARS);
+            put(new Coordinate3D(0, 3, 1), Material.IRON_BARS);
+            put(new Coordinate3D(0, 3, -1), Material.IRON_BARS);
             put(new Coordinate3D(0, 4, 0), Material.IRON_BARS);
         }});
 

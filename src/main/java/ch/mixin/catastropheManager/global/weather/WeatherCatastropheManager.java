@@ -17,10 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class WeatherCatastropheManager extends CatastropheManager {
     private static final HashMap<WeatherCatastropheType, Double> catastropheWeights;
@@ -305,15 +302,30 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
     private void enforceThunderStorm() {
         HashMap<UUID, PlayerData> pcm = metaData.getPlayerDataMap();
-
         ArrayList<Location> targets = new ArrayList<>();
+        List<BlitzardData> blitzardDataList = metaData.getBlitzardDataList();
+        HashMap<Location, Integer> blitzardMap = new HashMap<>();
+
+        for (BlitzardData blitzardData : blitzardDataList) {
+            World world = plugin.getServer().getWorld(blitzardData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location location = blitzardData.getPosition().toLocation(world);
+
+            if (!Constants.Blitzard.isConstructed(location))
+                continue;
+
+            blitzardMap.put(location, blitzardData.getLevel() * 10);
+        }
 
         for (World world : plugin.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
-                Location playerLocation = player.getLocation();
-                Coordinate2D center = new Coordinate2D(playerLocation.getBlockX(), playerLocation.getBlockZ());
+                Location location = player.getLocation();
+                Coordinate2D center = Coordinate2D.convert(location);
                 spaces = Functions.merge(spaces, Functions.getSphere2D(center, 20));
 
                 if (Functions.hasShelter(player))
@@ -323,7 +335,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 double probability = misfortune / (20.0 + misfortune);
 
                 if (new Random().nextDouble() < probability) {
-                    targets.add(playerLocation);
+                    targets.add(rerouteBlitzard(blitzardMap, location));
                 }
             }
 
@@ -331,14 +343,39 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 if (new Random().nextDouble() < 1 / (double) 1250) {
                     Location roofAbove = Functions.offset(Functions.absoluteRoof(world, space), 1);
 
-                    if (roofAbove != null) {
-                        targets.add(roofAbove);
-                    }
+                    if (roofAbove == null)
+                        continue;
+
+                    targets.add(rerouteBlitzard(blitzardMap, roofAbove));
                 }
             }
         }
 
         lightningChain(targets, 4);
+    }
+
+    private Location rerouteBlitzard(HashMap<Location, Integer> blitzardMap, Location baseLocation) {
+        Location strongestBlitzard = null;
+        double strongestPull = -1;
+
+        for (Location blitzardLocation : blitzardMap.keySet()) {
+            double pull = blitzardMap.get(blitzardLocation) - blitzardLocation.distance(baseLocation);
+
+            if (pull < 0)
+                continue;
+
+            if (pull <= strongestPull)
+                continue;
+
+            strongestPull = pull;
+            strongestBlitzard = blitzardLocation;
+        }
+
+        if (strongestBlitzard != null) {
+            return Functions.absoluteRoof(strongestBlitzard.getWorld(), Coordinate2D.convert(strongestBlitzard));
+        } else {
+            return baseLocation;
+        }
     }
 
     private void lightningChain(ArrayList<Location> targets, int ticks) {
@@ -348,7 +385,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 targets.remove(target);
                 i--;
 
-                target.getWorld().strikeLightning(target);
+                target.getWorld().strikeLightning(target.add(0.5, 0, 0.5));
             }
         }
 

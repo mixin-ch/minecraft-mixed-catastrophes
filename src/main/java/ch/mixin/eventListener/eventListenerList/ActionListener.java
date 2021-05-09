@@ -16,6 +16,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -91,6 +92,9 @@ public class ActionListener implements Listener {
     @EventHandler
     public void makeGreenWell(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        if (event.getHand() != EquipmentSlot.HAND)
             return;
 
         Player player = event.getPlayer();
@@ -189,6 +193,9 @@ public class ActionListener implements Listener {
     @EventHandler
     public void makeBlitzard(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        if (event.getHand() != EquipmentSlot.HAND)
             return;
 
         Player player = event.getPlayer();

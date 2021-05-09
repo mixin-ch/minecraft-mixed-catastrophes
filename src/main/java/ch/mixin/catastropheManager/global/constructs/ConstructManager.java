@@ -26,9 +26,11 @@ public class ConstructManager extends CatastropheManager {
 
     @Override
     public void initializeMetaData() {
-        if (metaData.getGreenWellDataList() == null) {
+        if (metaData.getGreenWellDataList() == null)
             metaData.setGreenWellDataList(new ArrayList<>());
-        }
+
+        if (metaData.getBlitzardDataList() == null)
+            metaData.setBlitzardDataList(new ArrayList<>());
     }
 
     @Override
