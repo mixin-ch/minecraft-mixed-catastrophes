@@ -261,6 +261,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.DIAMOND_BLOCK, 1, slot(2, 8), "Diamond", new String[]{
                 "Modifier (Top Block).", "Secrets -6400."
         });
+        createSlot(inventory, Material.NETHERITE_BLOCK, 1, slot(2, 9), "Netherite", new String[]{
+                "Modifier (Top Block).", "Secrets -6400."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -293,6 +296,9 @@ public class HelpInventoryManager {
                 "Modifier (Top Block).", "Secrets +1600."
         });
         createSlot(inventory, Material.DIAMOND_BLOCK, 1, slot(2, 8), "Diamond", new String[]{
+                "Modifier (Top Block).", "Secrets +3200."
+        });
+        createSlot(inventory, Material.NETHERITE_BLOCK, 1, slot(2, 8), "Netherite", new String[]{
                 "Modifier (Top Block).", "Secrets +3200."
         });
 

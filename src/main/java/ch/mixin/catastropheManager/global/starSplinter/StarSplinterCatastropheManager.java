@@ -32,6 +32,9 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
                 "Diamond", Material.DIAMOND, 1.0
         ), 1.0);
         starSplinterWeights.put(new StarSplinterPremise(
+                "Netherite", Material.NETHERITE_SCRAP, 4.0
+        ), 1.0);
+        starSplinterWeights.put(new StarSplinterPremise(
                 "Emerald", Material.EMERALD, 1.0
         ), 1.0);
         starSplinterWeights.put(new StarSplinterPremise(
