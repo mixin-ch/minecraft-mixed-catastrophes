@@ -1,0 +1,190 @@
+package ch.mixin.eventListener.eventListenerList;
+
+import ch.mixin.MetaData.GreenWellData;
+import ch.mixin.MetaData.PlayerData;
+import ch.mixin.eventChange.aspect.AspectType;
+import ch.mixin.helpInventory.HelpInventoryManager;
+import ch.mixin.helperClasses.Constants;
+import ch.mixin.helperClasses.Coordinate2D;
+import ch.mixin.helperClasses.Coordinate3D;
+import ch.mixin.helperClasses.Functions;
+import ch.mixin.main.MixedCatastrophesPlugin;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
+
+public class ActionListener implements Listener {
+    protected final MixedCatastrophesPlugin plugin;
+
+    public ActionListener(MixedCatastrophesPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void openMixIslandDictionary(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!plugin.getAffectedWorlds().contains(world))
+            return;
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        ItemStack mixIslandDictionary = HelpInventoryManager.HelpBookItem;
+
+        if (itemStack.getType() != mixIslandDictionary.getType())
+            return;
+
+        if (!itemStack.getItemMeta().equals(mixIslandDictionary.getItemMeta()))
+            return;
+
+        plugin.getHelpInventoryManager().open(player);
+    }
+
+    @EventHandler
+    public void dream(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        if (!Constants.Beds.contains(event.getClickedBlock().getType()))
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!plugin.getAffectedWorlds().contains(world))
+            return;
+
+        plugin.getRootCatastropheManager().getPersonalCatastropheManager().getDreamManager().performDream(player, event.getClickedBlock());
+    }
+
+    @EventHandler
+    public void rite(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!plugin.getAffectedWorlds().contains(world))
+            return;
+
+        if (!Constants.Fires.contains(event.getBlockPlaced().getType()))
+            return;
+
+        Location location = event.getBlockPlaced().getLocation();
+        Location LocationN1 = Coordinate3D.toCoordinate(location).sum(0, -1, 0).toLocation(world);
+        Location LocationN2 = Coordinate3D.toCoordinate(LocationN1).sum(0, -1, 0).toLocation(world);
+        Block blockN1 = LocationN1.getBlock();
+        Block blockN2 = LocationN2.getBlock();
+
+        plugin.getRootCatastropheManager().getPersonalCatastropheManager().getRiteManager().performRite(player, blockN1, blockN2);
+    }
+
+    @EventHandler
+    public void makeGreenWell(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!plugin.getAffectedWorlds().contains(world))
+            return;
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (itemStack.getType() != Material.ENDER_EYE)
+            return;
+
+        Block block = null;
+        List<Block> lineOfSight = event.getPlayer().getLineOfSight(null, 5);
+
+        for (Block b : lineOfSight) {
+            if (b.getType() == Material.WATER) {
+                block = b;
+                break;
+            }
+        }
+
+        if (block == null)
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+        List<Coordinate2D> square = Functions.getSquareEdge(center.to2D(), 1);
+
+        for (Coordinate2D field : square) {
+            if (!Constants.Logs.contains(field.to3D(center.getY()).toLocation(world).getBlock().getType()))
+                return;
+        }
+
+        GreenWellData greenWellData = null;
+
+        for (GreenWellData gwd : plugin.getMetaData().getGreenWellDataList()) {
+            if (center.equals(gwd.getPosition())) {
+                greenWellData = gwd;
+                break;
+            }
+        }
+
+        if (greenWellData == null) {
+            greenWellData = new GreenWellData(center, world.getName(), 0);
+            plugin.getMetaData().getGreenWellDataList().add(greenWellData);
+        } else if (block.getType() != Material.WATER) {
+            return;
+        }
+
+        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int cost = 160 + 80 * greenWellData.getLevel();
+        int costEyes = 1 + (int) Math.floor(0.5 * greenWellData.getLevel());
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costEyes) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costEyes + " Ender Eyes to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        greenWellData.setLevel(greenWellData.getLevel() + 1);
+        itemStack.setAmount(itemStack.getAmount() - costEyes);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Green Well has Depth " + greenWellData.getLevel() + ".")
+                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy))
+                .withTitle(true)
+                .finish()
+                .execute();
+    }
+}

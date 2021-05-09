@@ -1,0 +1,28 @@
+name: MixedCatastrophes
+version: ${project.version}
+main: ch.mixin.main.MixedCatastrophesPlugin
+api-version: 1.16
+
+commands:
+  mx-help:
+    description: Opens the Help Inventory.
+  mx-dealWithDevil:
+    description: Initiates a Deal.
+  mx-cs-startCatastrophes:
+    description: Activates the Catastrophe.
+  mx-cs-stopCatastrophes:
+    description: Deactivates the Catastrophe.
+  mx-cs-aspect:
+    description: Sets an Aspect.
+  mx-cs-timeDistortion:
+    description: Causes a TimeDistorton.
+  mx-cs-weatherCatastrophe:
+    description: Sets the WeatherCatastrophe.
+  mx-cs-assault:
+    description: Triggers an Assault.
+  mx-cs-starSplinter:
+    description: Triggers a Star-Splinter.
+  mx-cs-causeStalker:
+    description: Causes Stalker.
+  mx-cs-clearStalker:
+    description: Clears Stalker.
