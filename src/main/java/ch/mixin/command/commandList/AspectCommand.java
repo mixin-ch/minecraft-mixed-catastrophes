@@ -1,6 +1,5 @@
 package ch.mixin.command.commandList;
 
-import ch.mixin.MetaData.MetaData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Functions;

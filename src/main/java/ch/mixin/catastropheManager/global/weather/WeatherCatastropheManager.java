@@ -1,5 +1,6 @@
 package ch.mixin.catastropheManager.global.weather;
 
+import ch.mixin.MetaData.BlitzardData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;

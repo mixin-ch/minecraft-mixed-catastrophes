@@ -17,6 +17,7 @@ public class MetaData {
     private int starSplinterTimer;
     private HashMap<UUID, PlayerData> playerDataMap;
     private List<GreenWellData> greenWellDataList;
+    private List<BlitzardData> blitzardDataList;
 
     public MetaData() {
         save();
@@ -80,5 +81,13 @@ public class MetaData {
 
     public void setGreenWellDataList(List<GreenWellData> greenWellDataList) {
         this.greenWellDataList = greenWellDataList;
+    }
+
+    public List<BlitzardData> getBlitzardDataList() {
+        return blitzardDataList;
+    }
+
+    public void setBlitzardDataList(List<BlitzardData> blitzardDataList) {
+        this.blitzardDataList = blitzardDataList;
     }
 }

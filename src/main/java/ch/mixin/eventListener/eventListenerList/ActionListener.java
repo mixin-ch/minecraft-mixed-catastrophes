@@ -1,13 +1,11 @@
 package ch.mixin.eventListener.eventListenerList;
 
+import ch.mixin.MetaData.BlitzardData;
 import ch.mixin.MetaData.GreenWellData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helpInventory.HelpInventoryManager;
-import ch.mixin.helperClasses.Constants;
-import ch.mixin.helperClasses.Coordinate2D;
-import ch.mixin.helperClasses.Coordinate3D;
-import ch.mixin.helperClasses.Functions;
+import ch.mixin.helperClasses.*;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -183,6 +181,91 @@ public class ActionListener implements Listener {
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Green Well has Depth " + greenWellData.getLevel() + ".")
                 .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy))
+                .withTitle(true)
+                .finish()
+                .execute();
+    }
+
+    @EventHandler
+    public void makeBlitzard(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!plugin.getAffectedWorlds().contains(world))
+            return;
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (itemStack.getType() != Material.QUARTZ)
+            return;
+
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (!Constants.Blitzard.isConstructed(block.getLocation()))
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+        BlitzardData blitzardData = null;
+
+        for (BlitzardData bd : plugin.getMetaData().getBlitzardDataList()) {
+            if (center.equals(bd.getPosition())) {
+                blitzardData = bd;
+                break;
+            }
+        }
+
+        if (blitzardData == null) {
+            blitzardData = new BlitzardData(center, world.getName(), 0);
+            plugin.getMetaData().getBlitzardDataList().add(blitzardData);
+        }
+
+        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int multiplier = (int) Math.pow(1 + blitzardData.getLevel(), 2);
+        int cost = 100 * multiplier;
+        int costItem = multiplier;
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Quartz to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        blitzardData.setLevel(blitzardData.getLevel() + 1);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Blitzard has Range " + blitzardData.getLevel() * 10 + ".")
+                .withColor(ChatColor.DARK_AQUA)
                 .withTitle(true)
                 .finish()
                 .execute();

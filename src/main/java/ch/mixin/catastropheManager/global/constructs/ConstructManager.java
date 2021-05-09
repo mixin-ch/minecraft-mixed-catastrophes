@@ -1,5 +1,6 @@
-package ch.mixin.catastropheManager.global.greenWell;
+package ch.mixin.catastropheManager.global.constructs;
 
+import ch.mixin.MetaData.BlitzardData;
 import ch.mixin.MetaData.GreenWellData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GreenWellManager extends CatastropheManager {
-    public GreenWellManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
+public class ConstructManager extends CatastropheManager {
+    public ConstructManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
         super(plugin, rootCatastropheManager);
     }
 
@@ -43,6 +44,12 @@ public class GreenWellManager extends CatastropheManager {
         if (plugin.getServer().getOnlinePlayers().size() == 0)
             return;
 
+        tickGreenWell();
+        tickBlitzard();
+    }
+
+
+    private void tickGreenWell() {
         List<GreenWellData> greenWellDataList = metaData.getGreenWellDataList();
 
         greenWellDataListLoop:
@@ -109,6 +116,21 @@ public class GreenWellManager extends CatastropheManager {
                     }
                 }
             }
+        }
+    }
+
+    private void tickBlitzard() {
+        List<BlitzardData> blitzardDataList = metaData.getBlitzardDataList();
+
+        for (BlitzardData blitzardData : blitzardDataList) {
+            World world = plugin.getServer().getWorld(blitzardData.getWorldName());
+            Coordinate3D center = blitzardData.getPosition();
+            int level = blitzardData.getLevel();
+
+            List<Coordinate3D> particles = new ArrayList<>();
+            particles.add(center.sum(0, 4, 0));
+
+            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, level * 0.25, 4, 5);
         }
     }
 }

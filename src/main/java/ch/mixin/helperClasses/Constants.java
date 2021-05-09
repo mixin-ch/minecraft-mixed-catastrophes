@@ -10,6 +10,8 @@ import java.util.HashMap;
 public class Constants {
     public static final HashMap<AspectType, ChatColor> AspectThemes;
 
+    public static final ConstructShape Blitzard;
+
     public static final ArrayList<Material> Airs;
     public static final ArrayList<Material> Logs;
     public static final ArrayList<Material> Flowers;
@@ -29,6 +31,18 @@ public class Constants {
         AspectThemes.put(AspectType.Misfortune, ChatColor.DARK_BLUE);
         AspectThemes.put(AspectType.Greyhat_Debt, ChatColor.DARK_GRAY);
         AspectThemes.put(AspectType.Celestial_Favor, ChatColor.AQUA);
+
+        Blitzard = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(0, 0, 0), Material.QUARTZ_BLOCK);
+            put(new Coordinate3D(0, 1, 0), Material.IRON_BARS);
+            put(new Coordinate3D(0, 2, 0), Material.IRON_BARS);
+            put(new Coordinate3D(0, 3, 0), Material.IRON_BARS);
+            put(new Coordinate3D(1, 3, 1), Material.IRON_BARS);
+            put(new Coordinate3D(1, 3, -1), Material.IRON_BARS);
+            put(new Coordinate3D(-1, 3, 1), Material.IRON_BARS);
+            put(new Coordinate3D(-1, 3, -1), Material.IRON_BARS);
+            put(new Coordinate3D(0, 4, 0), Material.IRON_BARS);
+        }});
 
         Airs = new ArrayList<>();
         Airs.add(Material.AIR);

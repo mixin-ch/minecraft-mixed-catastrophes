@@ -1,7 +1,7 @@
 package ch.mixin.catastropheManager;
 
 import ch.mixin.MetaData.MetaData;
-import ch.mixin.catastropheManager.global.greenWell.GreenWellManager;
+import ch.mixin.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.catastropheManager.global.timeDistortion.TimeDistortionManager;
 import ch.mixin.catastropheManager.global.weather.WeatherCatastropheManager;
@@ -17,7 +17,7 @@ public class RootCatastropheManager {
     private final TimeDistortionManager timeDistortionManager;
     private final WeatherCatastropheManager weatherCatastropheManager;
     private final StarSplinterCatastropheManager starSplinterCatastropheManager;
-    private final GreenWellManager greenWellManager;
+    private final ConstructManager constructManager;
     private final PersonalCatastropheManager personalCatastropheManager;
 
     private final int metaDataSaveDuration = 5 * 60;
@@ -30,7 +30,7 @@ public class RootCatastropheManager {
         timeDistortionManager = new TimeDistortionManager(plugin, this);
         weatherCatastropheManager = new WeatherCatastropheManager(plugin, this);
         starSplinterCatastropheManager = new StarSplinterCatastropheManager(plugin, this);
-        greenWellManager = new GreenWellManager(plugin, this);
+        constructManager = new ConstructManager(plugin, this);
         personalCatastropheManager = new PersonalCatastropheManager(plugin, this);
         metaDataSaveTimer = 0;
     }
@@ -39,7 +39,7 @@ public class RootCatastropheManager {
         timeDistortionManager.initializeMetaData();
         weatherCatastropheManager.initializeMetaData();
         starSplinterCatastropheManager.initializeMetaData();
-        greenWellManager.initializeMetaData();
+        constructManager.initializeMetaData();
         personalCatastropheManager.initializeMetaData();
     }
 
@@ -47,7 +47,7 @@ public class RootCatastropheManager {
         timeDistortionManager.initializeCauser();
         weatherCatastropheManager.initializeCauser();
         starSplinterCatastropheManager.initializeCauser();
-        greenWellManager.initializeCauser();
+        constructManager.initializeCauser();
         personalCatastropheManager.initializeCauser();
     }
 
@@ -82,7 +82,7 @@ public class RootCatastropheManager {
         timeDistortionManager.tick();
         weatherCatastropheManager.tick();
         starSplinterCatastropheManager.tick();
-        greenWellManager.tick();
+        constructManager.tick();
         personalCatastropheManager.tick();
 
         save();
@@ -93,7 +93,7 @@ public class RootCatastropheManager {
         timeDistortionManager.updateMetaData();
         weatherCatastropheManager.updateMetaData();
         starSplinterCatastropheManager.updateMetaData();
-        greenWellManager.updateMetaData();
+        constructManager.updateMetaData();
         personalCatastropheManager.updateMetaData();
 
         if (metaDataSaveTimer <= 0) {
@@ -116,8 +116,8 @@ public class RootCatastropheManager {
         return starSplinterCatastropheManager;
     }
 
-    public GreenWellManager getGreenWellManager() {
-        return greenWellManager;
+    public ConstructManager getGreenWellManager() {
+        return constructManager;
     }
 
     public PersonalCatastropheManager getPersonalCatastropheManager() {
