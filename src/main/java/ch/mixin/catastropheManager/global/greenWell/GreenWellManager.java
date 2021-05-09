@@ -74,7 +74,7 @@ public class GreenWellManager extends CatastropheManager {
                 logs.add(material);
             }
 
-            double amount = Math.pow(3 + 2 * level, 2) * 0.005;
+            double amount = Math.pow(3 + 2 * level, 2) * 0.002;
 
             while (amount > 0) {
                 double probability = Math.min(1, amount);
