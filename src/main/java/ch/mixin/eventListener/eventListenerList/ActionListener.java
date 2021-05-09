@@ -2,6 +2,7 @@ package ch.mixin.eventListener.eventListenerList;
 
 import ch.mixin.MetaData.BlitzardData;
 import ch.mixin.MetaData.GreenWellData;
+import ch.mixin.MetaData.LighthouseData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helpInventory.HelpInventoryManager;
@@ -206,7 +207,7 @@ public class ActionListener implements Listener {
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (itemStack.getType() != Material.REDSTONE)
+        if (itemStack.getType() != Material.QUARTZ)
             return;
 
         Block block = event.getClickedBlock();
@@ -273,6 +274,94 @@ public class ActionListener implements Listener {
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Blitzard has Range " + blitzardData.getLevel() * 10 + ".")
                 .withColor(ChatColor.DARK_AQUA)
+                .withTitle(true)
+                .finish()
+                .execute();
+    }
+
+    @EventHandler
+    public void makeLighthouse(PlayerInteractEvent event) {
+        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        if (event.getHand() != EquipmentSlot.HAND)
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!plugin.getAffectedWorlds().contains(world))
+            return;
+
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+
+        if (itemStack.getType() != Material.GLOWSTONE)
+            return;
+
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (!Constants.Lighthouse.isConstructed(block.getLocation()))
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+        LighthouseData lighthouseData = null;
+
+        for (LighthouseData ld : plugin.getMetaData().getLightHouseDataList()) {
+            if (center.equals(ld.getPosition())) {
+                lighthouseData = ld;
+                break;
+            }
+        }
+
+        if (lighthouseData == null) {
+            lighthouseData = new LighthouseData(center, world.getName(), 0);
+            plugin.getMetaData().getLightHouseDataList().add(lighthouseData);
+        }
+
+        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        double multiplier = Math.pow(1 + lighthouseData.getLevel(), 1.5);
+        int cost = (int) Math.round(100 * multiplier);
+        int costItem = (int) Math.round(multiplier);
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Glowstone to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        lighthouseData.setLevel(lighthouseData.getLevel() + 1);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Lighthouse has Range " + lighthouseData.getLevel() * 10 + ".")
+                .withColor(ChatColor.GOLD)
                 .withTitle(true)
                 .finish()
                 .execute();

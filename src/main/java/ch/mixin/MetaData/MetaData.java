@@ -18,6 +18,7 @@ public class MetaData {
     private HashMap<UUID, PlayerData> playerDataMap;
     private List<GreenWellData> greenWellDataList;
     private List<BlitzardData> blitzardDataList;
+    private List<LighthouseData> lighthouseDataList;
 
     public MetaData() {
         save();
@@ -89,5 +90,13 @@ public class MetaData {
 
     public void setBlitzardDataList(List<BlitzardData> blitzardDataList) {
         this.blitzardDataList = blitzardDataList;
+    }
+
+    public List<LighthouseData> getLightHouseDataList() {
+        return lighthouseDataList;
+    }
+
+    public void setLightHouseDataList(List<LighthouseData> lighthouseDataList) {
+        this.lighthouseDataList = lighthouseDataList;
     }
 }

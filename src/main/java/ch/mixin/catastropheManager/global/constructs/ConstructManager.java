@@ -2,6 +2,7 @@ package ch.mixin.catastropheManager.global.constructs;
 
 import ch.mixin.MetaData.BlitzardData;
 import ch.mixin.MetaData.GreenWellData;
+import ch.mixin.MetaData.LighthouseData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.helperClasses.Constants;
@@ -31,6 +32,9 @@ public class ConstructManager extends CatastropheManager {
 
         if (metaData.getBlitzardDataList() == null)
             metaData.setBlitzardDataList(new ArrayList<>());
+
+        if (metaData.getLightHouseDataList() == null)
+            metaData.setLightHouseDataList(new ArrayList<>());
     }
 
     @Override
@@ -48,6 +52,7 @@ public class ConstructManager extends CatastropheManager {
 
         tickGreenWell();
         tickBlitzard();
+        tickLighthouse();
     }
 
 
@@ -130,9 +135,26 @@ public class ConstructManager extends CatastropheManager {
             int level = blitzardData.getLevel();
 
             List<Coordinate3D> particles = new ArrayList<>();
-            particles.add(center.sum(0, 4, 0));
+            particles.add(center);
+            particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, level * 0.5, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, level * 0.25, 4, 5);
+        }
+    }
+
+    private void tickLighthouse() {
+        List<LighthouseData> lighthouseDataList = metaData.getLightHouseDataList();
+
+        for (LighthouseData lighthouseData : lighthouseDataList) {
+            World world = plugin.getServer().getWorld(lighthouseData.getWorldName());
+            Coordinate3D center = lighthouseData.getPosition();
+            int level = lighthouseData.getLevel();
+
+            List<Coordinate3D> particles = new ArrayList<>();
+            particles.add(center);
+            particles.add(center.sum(0, 1, 0));
+
+            plugin.getParticler().spawnParticles(Particle.LAVA, particles, world, level * 0.25, 4, 5);
         }
     }
 }
