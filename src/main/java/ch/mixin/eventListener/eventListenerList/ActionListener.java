@@ -206,7 +206,7 @@ public class ActionListener implements Listener {
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (itemStack.getType() != Material.QUARTZ)
+        if (itemStack.getType() != Material.REDSTONE)
             return;
 
         Block block = event.getClickedBlock();

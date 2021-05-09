@@ -132,7 +132,7 @@ public class ConstructManager extends CatastropheManager {
             List<Coordinate3D> particles = new ArrayList<>();
             particles.add(center.sum(0, 4, 0));
 
-            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, level * 0.25, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, level * 0.5, 4, 5);
         }
     }
 }
