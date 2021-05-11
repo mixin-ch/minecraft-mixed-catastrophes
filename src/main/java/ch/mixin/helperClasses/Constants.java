@@ -22,7 +22,7 @@ public class Constants {
     public static final ArrayList<Material> HotItems;
     public static final ArrayList<Material> Lanterns;
 
-    public static final ConstructShape Greenwell;
+    public static final ConstructShape GreenWell;
     public static final ConstructShape Blitzard;
     public static final ConstructShape Lighthouse;
 
@@ -156,7 +156,7 @@ public class Constants {
         HotItems.add(Material.LANTERN);
         HotItems.add(Material.SOUL_LANTERN);
 
-        Greenwell = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
+        GreenWell = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.WATER);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
             put(new Coordinate3D(-1, 0, -1), Logs);

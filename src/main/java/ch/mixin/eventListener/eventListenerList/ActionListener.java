@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -122,7 +121,7 @@ public class ActionListener implements Listener {
         if (block == null)
             return;
 
-        if (!Constants.Greenwell.isConstructed(block.getLocation()))
+        if (!Constants.GreenWell.isConstructed(block.getLocation()))
             return;
 
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());

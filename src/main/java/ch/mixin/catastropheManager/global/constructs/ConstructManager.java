@@ -73,7 +73,7 @@ public class ConstructManager extends CatastropheManager {
 
             plugin.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
 
-            if (!Constants.Greenwell.isConstructed(locationCenter))
+            if (!Constants.GreenWell.isConstructed(locationCenter))
                 return;
 
             List<Coordinate2D> square = Functions.getSquareEdge(center.to2D(), 1);
