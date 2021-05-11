@@ -153,8 +153,8 @@ public class Constants {
         HotItems.add(Material.TORCH);
 
         Lanterns = new ArrayList<>();
-        HotItems.add(Material.LANTERN);
-        HotItems.add(Material.SOUL_LANTERN);
+        Lanterns.add(Material.LANTERN);
+        Lanterns.add(Material.SOUL_LANTERN);
 
         GreenWell = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.WATER);
@@ -186,7 +186,7 @@ public class Constants {
             put(new Coordinate3D(0, 1, 0), Material.STONE_BRICK_WALL);
             put(new Coordinate3D(0, 2, 0), Material.STONE_BRICK_WALL);
             put(new Coordinate3D(0, 3, 0), Material.STONE_BRICK_WALL);
-            put(new Coordinate3D(0, 4, 0), Material.STONE_BRICK_WALL);
+            put(new Coordinate3D(0, 4, 0), Material.STONE_BRICKS);
             put(new Coordinate3D(1, 4, 0), Material.STONE_BRICK_STAIRS);
             put(new Coordinate3D(-1, 4, 0), Material.STONE_BRICK_STAIRS);
             put(new Coordinate3D(0, 4, 1), Material.STONE_BRICK_STAIRS);

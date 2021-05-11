@@ -26,6 +26,8 @@ public class HelpInventoryManager {
         HelpBookItem.setItemMeta(meta);
     }
 
+    public static final String FrontBackSymmetryText = "Also place this symmetrically in the front and back.";
+
     private final MixedCatastrophesPlugin plugin;
     private final HashMap<HelpInventoryType, HelpInventory> helpInventoryMap;
     private final HelpInventoryType mainInventoryType;
@@ -397,9 +399,15 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Place Blocks in certain Configurations."
         });
-        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 5), "GreenWell", new String[]{
+        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 4), "Green Well", new String[]{
                 "regularly Drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
         }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
+        createSlotLink(inventory, Material.IRON_BARS, 1, slot(2, 5), "Blitzard", new String[]{
+                "Attracts Lightning."
+        }, linkInventoryMap, HelpInventoryType.Constructs_Blitzard);
+        createSlotLink(inventory, Material.LANTERN, 1, slot(2, 6), "Lighthouse", new String[]{
+                "Protects against any Terror Event."
+        }, linkInventoryMap, HelpInventoryType.Constructs_Lighthouse);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -438,7 +446,7 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Construct in the following Configuration.", "Use Quartz to Level up.", "Attracts Lightning within Range."
         });
-        createSlot(inventory, Material.QUARTZ, 1, true, slot(1, 2), "Quartz", new String[]{
+        createSlot(inventory, Material.QUARTZ, 1, true, slot(5, 2), "Quartz", new String[]{
                 "Click on the Quartz Block with Quartz.", "Costs (Level^2) Quartz.", "Secrets - (100 * Level^2)"
         });
         createSlot(inventory, Material.QUARTZ_BLOCK, 1,  slot(5, 5), "Quartz Block", new String[]{
@@ -452,10 +460,10 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.IRON_BARS, 1,  slot(1, 5), "Iron Bars", new String[]{
         });
         createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 4), "Iron Bars", new String[]{
-                "Put also symmetrically in the front and back."
+                FrontBackSymmetryText
         });
-        createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 4), "Iron Bars", new String[]{
-                "Put also symmetrically in the front and back."
+        createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 6), "Iron Bars", new String[]{
+                FrontBackSymmetryText
         });
 
         return new HelpInventory(inventory, linkInventoryMap);
@@ -470,7 +478,7 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Construct in the following Configuration.", "Use Glowstone Dust to Level up.", "No Terror Events within Range."
         });
-        createSlot(inventory, Material.GLOWSTONE_DUST, 1, true, slot(1, 2), "Glowstone Dust", new String[]{
+        createSlot(inventory, Material.GLOWSTONE_DUST, 1, true, slot(5, 2), "Glowstone Dust", new String[]{
                 "Click on the Glowstone Block with Glowstone Dust.", "Costs (Level^1.5) Glowstone Dust.", "Secrets - (100 * Level^1.5)"
         });
         createSlot(inventory, Material.GLOWSTONE, 1,  slot(5, 5), "Glowstone Block", new String[]{
@@ -484,16 +492,16 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.STONE_BRICKS, 1,  slot(1, 5), "Stone Bricks", new String[]{
         });
         createSlot(inventory, Material.STONE_BRICK_STAIRS, 2,  slot(1, 4), "Stone Brick Stairs", new String[]{
-                "Put also symmetrically in the front and back."
+                FrontBackSymmetryText
         });
         createSlot(inventory, Material.STONE_BRICK_STAIRS, 2,  slot(1, 6), "Stone Brick Stairs", new String[]{
-                "Put also symmetrically in the front and back."
+                FrontBackSymmetryText
         });
-        createSlot(inventory, Material.LANTERN, 2,  slot(1, 4), "Lantern", new String[]{
-                "Put also symmetrically in the front and back.", "Can be any Lantern."
+        createSlot(inventory, Material.LANTERN, 2,  slot(2, 4), "Lantern", new String[]{
+                FrontBackSymmetryText, "Can be any Lantern."
         });
-        createSlot(inventory, Material.LANTERN, 2,  slot(1, 6), "Lantern", new String[]{
-                "Put also symmetrically in the front and back.", "Can be any Lantern."
+        createSlot(inventory, Material.LANTERN, 2,  slot(2, 6), "Lantern", new String[]{
+                FrontBackSymmetryText, "Can be any Lantern."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);
