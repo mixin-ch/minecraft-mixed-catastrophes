@@ -26,7 +26,7 @@ public class HelpInventoryManager {
         HelpBookItem.setItemMeta(meta);
     }
 
-    public static final String FrontBackSymmetryText = "Also place this symmetrically in the front and back.";
+    public static final String FrontBackSymmetryText = "Also place this around the center in the front and back.";
 
     private final MixedCatastrophesPlugin plugin;
     private final HashMap<HelpInventoryType, HelpInventory> helpInventoryMap;

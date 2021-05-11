@@ -15,6 +15,7 @@ import ch.mixin.helperClasses.Functions;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -73,14 +74,24 @@ public class TerrorCatastropheManager extends CatastropheManager {
             if (!plugin.getAffectedWorlds().contains(player.getWorld()))
                 continue;
 
-            String worldName = player.getWorld().getName();
-            Coordinate3D position = Coordinate3D.toCoordinate(player.getLocation());
+            World world = player.getWorld();
+            Location playerLocation = player.getLocation();
 
             for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
-                if (!lighthouseData.getWorldName().equals(worldName))
+                World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+
+                if (lightHouseWorld == null)
                     continue;
 
-                if (lighthouseData.getPosition().distance(position) <= 10 * lighthouseData.getLevel())
+                if (!world.getName().equals(lightHouseWorld.getName()))
+                    continue;
+
+                Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
+
+                if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+                    continue;
+
+                if (lighthouseLocation.distance(playerLocation) <= 10 * lighthouseData.getLevel())
                     continue playerLoop;
             }
 

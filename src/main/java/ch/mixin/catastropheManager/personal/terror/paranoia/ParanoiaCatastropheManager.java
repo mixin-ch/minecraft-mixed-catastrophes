@@ -38,6 +38,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         soundList.add(Sound.ENTITY_BLAZE_AMBIENT);
         soundList.add(Sound.ENTITY_GHAST_WARN);
         soundList.add(Sound.ENTITY_GHAST_HURT);
+        soundList.add(Sound.ENTITY_ARROW_SHOOT);
     }
 
     public ParanoiaCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
@@ -99,16 +100,16 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         if (check(terror, 0, 0.3, 300))
             paranoiaTypeList.add(ParanoiaType.Sounds);
 
-        if (check(terror, 100, 0.12, 300))
+        if (check(terror, 100, 0.1, 300))
             paranoiaTypeList.add(ParanoiaType.Insomnia);
 
-        if (check(terror, 50, 0.12, 300))
+        if (check(terror, 50, 0.1, 300))
             paranoiaTypeList.add(ParanoiaType.Weakness);
 
-        if (check(terror, 75, 0.12, 300))
+        if (check(terror, 75, 0.1, 300))
             paranoiaTypeList.add(ParanoiaType.Vulnerability);
 
-        if (check(terror, 25, 0.12, 300))
+        if (check(terror, 25, 0.1, 300))
             paranoiaTypeList.add(ParanoiaType.Paralysis);
 
         for (ParanoiaType paranoiaType : paranoiaOrder) {

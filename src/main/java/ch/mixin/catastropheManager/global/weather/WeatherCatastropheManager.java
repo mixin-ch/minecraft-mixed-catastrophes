@@ -303,10 +303,9 @@ public class WeatherCatastropheManager extends CatastropheManager {
     private void enforceThunderStorm() {
         HashMap<UUID, PlayerData> pcm = metaData.getPlayerDataMap();
         ArrayList<Location> targets = new ArrayList<>();
-        List<BlitzardData> blitzardDataList = metaData.getBlitzardDataList();
         HashMap<Location, Integer> blitzardMap = new HashMap<>();
 
-        for (BlitzardData blitzardData : blitzardDataList) {
+        for (BlitzardData blitzardData : metaData.getBlitzardDataList()) {
             World world = plugin.getServer().getWorld(blitzardData.getWorldName());
 
             if (world == null)

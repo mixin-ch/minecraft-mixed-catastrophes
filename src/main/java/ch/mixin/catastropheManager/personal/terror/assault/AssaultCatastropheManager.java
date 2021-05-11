@@ -6,6 +6,7 @@ import ch.mixin.MetaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
+import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Coordinate2D;
 import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.helperClasses.Functions;
@@ -38,7 +39,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.EVOKER
                 , "The Summoner has been summoned."
-                , 0.75
+                , 0.35
         ), 1.0);
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.GHAST
@@ -48,12 +49,12 @@ public class AssaultCatastropheManager extends CatastropheManager {
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.HUSK
                 , "Dust and decayed Flesh is walking."
-                , 10
+                , 8.5
         ), 1.0);
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.PILLAGER
                 , "To pillage is their only Desire."
-                , 3
+                , 2.5
         ), 1.0);
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.VINDICATOR
@@ -63,14 +64,14 @@ public class AssaultCatastropheManager extends CatastropheManager {
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.WITCH
                 , "The Brewing of vile Potions is an Art Form."
-                , 2.5
+                , 2
         ), 1.0);
 
         entitySummonNightWeights = new HashMap<>();
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.CAVE_SPIDER
                 , "These Ones are vile and venomous."
-                , 4
+                , 3
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.DROWNED
@@ -80,32 +81,32 @@ public class AssaultCatastropheManager extends CatastropheManager {
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.ENDERMAN
                 , "They visit from the End of the World."
-                , 3
+                , 2.5
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.PHANTOM
                 , "The Terrors of the Sky seek their Prey."
-                , 4
+                , 3
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.SKELETON
                 , "They wake with Bone, Bow and Arrow."
-                , 5
+                , 4
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.SPIDER
                 , "Many legged and many eyed they lurk."
-                , 6
+                , 5
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.STRAY
                 , "They are the icy Touch of Death"
-                , 4
+                , 3
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.WITHER_SKELETON
                 , "Charred and withered they inflict their deadly Curse."
-                , 3
+                , 2.5
         ), 1.0);
         entitySummonNightWeights.put(new AssaultPremise(
                 EntityType.ZOMBIE
@@ -155,7 +156,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
 
             int terror = playerData.getAspect(AspectType.Terror);
             double modifier = Math.pow(terror, 0.5);
-            double probability = (modifier + 1) / (modifier + 50.0);
+            double probability = (modifier + 1) / (modifier + 100.0);
 
             if (new Random().nextDouble() < probability) {
                 causeAssault(player);
@@ -166,23 +167,35 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     private int assaultTimer() {
-        return Functions.random(30, 70);
+        return Functions.random(20, 40);
     }
 
     public void causeAssault(Player player) {
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
 
         World world = player.getWorld();
-        Location location = player.getLocation();
-        AssaultPremise assaultPremise;
+        Location mainPlayerLocation = player.getLocation();
+        HashMap<AssaultPremise, Double> possibleAssaults;
 
         if (Functions.isNight(world)) {
-            assaultPremise = Functions.getRandomWithWeights(entitySummonNightWeights);
+            possibleAssaults = new HashMap<>(entitySummonNightWeights);
         } else {
-            assaultPremise = Functions.getRandomWithWeights(entitySummonDayWeights);
+            possibleAssaults = new HashMap<>(entitySummonDayWeights);
         }
 
-        Coordinate2D center = new Coordinate2D(location.getBlockX(), location.getBlockZ());
+        int terror = playerData.getAspect(AspectType.Terror);
+        int amount = 0;
+        AssaultPremise assaultPremise = null;
+
+        while (amount == 0 && possibleAssaults.size() > 0) {
+            assaultPremise = Functions.getRandomWithWeights(entitySummonNightWeights);
+            amount = (int) Math.floor(Math.pow(terror, 0.5) * 0.2 * assaultPremise.getAmount());
+        }
+
+        if (assaultPremise == null)
+            return;
+
+        Coordinate2D center = new Coordinate2D(mainPlayerLocation.getBlockX(), mainPlayerLocation.getBlockZ());
         ArrayList<Coordinate2D> spaces = Functions.getSphere2D(center, 30);
         ArrayList<Location> spawnPoints = new ArrayList<>();
         ArrayList<Location> playerLocations = new ArrayList<>();
@@ -191,18 +204,28 @@ public class AssaultCatastropheManager extends CatastropheManager {
             playerLocations.add(p.getLocation());
         }
 
-        List<LighthouseData> lighthouseDataList = new ArrayList<>(metaData.getLightHouseDataList());
+        HashMap<Location, Integer> lighthouseMap = new HashMap<>();
 
-        for (int i = 0; i < lighthouseDataList.size(); i++) {
-            if (!lighthouseDataList.get(i).getWorldName().equals(world.getName())) {
-                lighthouseDataList.remove(i);
-                i--;
-            }
+        for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+
+            if (lightHouseWorld == null)
+                continue;
+
+            if (!world.getName().equals(lightHouseWorld.getName()))
+                continue;
+
+            Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
+
+            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+                continue;
+
+            lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());
         }
 
         spaceLoop:
         for (Coordinate2D space : spaces) {
-            Location groundP1 = Functions.offset(Functions.relativeGround(world, space.to3D(location.getBlockY())), 1);
+            Location groundP1 = Functions.offset(Functions.relativeGround(world, space.to3D(mainPlayerLocation.getBlockY())), 1);
 
             if (groundP1 == null)
                 continue;
@@ -210,8 +233,10 @@ public class AssaultCatastropheManager extends CatastropheManager {
             if (player.getLocation().distance(groundP1) > 50)
                 continue;
 
-            for (LighthouseData lighthouseData : lighthouseDataList) {
-                if (lighthouseData.getPosition().distance(Coordinate3D.toCoordinate(groundP1)) <= 10 * lighthouseData.getLevel())
+            for (Location lighthouseLocation : lighthouseMap.keySet()) {
+                int range = lighthouseMap.get(lighthouseLocation);
+
+                if (lighthouseLocation.distance(groundP1) <= range)
                     continue spaceLoop;
             }
 
@@ -223,24 +248,22 @@ public class AssaultCatastropheManager extends CatastropheManager {
             spawnPoints.add(groundP1);
         }
 
-        if (spawnPoints.size() > 0) {
-            int terror = playerData.getAspect(AspectType.Terror);
-            int amount = (int) Math.round(Math.max(1, Math.pow(terror, 0.5) * 0.2 * assaultPremise.getAmount()));
+        if (spawnPoints.size() == 0)
+            return;
 
-            for (int i = 0; i < amount; i++) {
-                Location spawnPoint = spawnPoints.get(new Random().nextInt(spawnPoints.size()));
-                Mob mob = (Mob) world.spawnEntity(spawnPoint, assaultPremise.getEntityType());
-                mob.setTarget(player);
-            }
-
-            plugin.getEventChangeManager()
-                    .eventChange(player)
-                    .withEventSound(Sound.AMBIENT_CAVE)
-                    .withEventMessage(assaultPremise.getMessage())
-                    .withCause(AspectType.Terror)
-                    .withTitle(true)
-                    .finish()
-                    .execute();
+        for (int i = 0; i < amount; i++) {
+            Location spawnPoint = spawnPoints.get(new Random().nextInt(spawnPoints.size()));
+            Mob mob = (Mob) world.spawnEntity(spawnPoint, assaultPremise.getEntityType());
+            mob.setTarget(player);
         }
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage(assaultPremise.getMessage())
+                .withCause(AspectType.Terror)
+                .withTitle(true)
+                .finish()
+                .execute();
     }
 }
