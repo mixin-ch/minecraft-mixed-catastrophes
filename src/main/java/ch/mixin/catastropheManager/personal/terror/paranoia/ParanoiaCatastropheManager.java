@@ -157,7 +157,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     private void insomnia(Player player) {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
-        int time = 10 * 60 + playerData.getAspect(AspectType.Terror);
+        int time = 5 * 60 + playerData.getAspect(AspectType.Terror);
 
         if (playerData.getDreamCooldown() < time) {
             playerData.setDreamCooldown(time);
@@ -178,7 +178,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 2 * 60 + (int) Math.round(0.25 * extent);
-        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5));
+        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5) - 1);
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, amplitude));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, amplitude));
@@ -199,10 +199,10 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 2 * 60 + (int) Math.round(0.25 * extent);
-        int amplitude = -1 - (int) Math.floor(Math.pow(0.02 * extent, 0.5));
+        int amplitude = (int) Math.floor(Math.pow(0.02 * extent, 0.5) - 1);
 
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, amplitude));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
 
         plugin.getEventChangeManager()
                 .eventChange(player)
@@ -218,7 +218,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-        int time = 3 + (int) Math.round(Math.pow(0.05 * extent, 0.75));
+        int time = 1 + (int) Math.round(Math.pow(0.05 * extent, 0.75));
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 10));
         player.removePotionEffect(PotionEffectType.JUMP);
