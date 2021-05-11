@@ -22,6 +22,7 @@ public class Constants {
     public static final ArrayList<Material> HotItems;
     public static final ArrayList<Material> Lanterns;
 
+    public static final ConstructShape Greenwell;
     public static final ConstructShape Blitzard;
     public static final ConstructShape Lighthouse;
 
@@ -155,6 +156,19 @@ public class Constants {
         HotItems.add(Material.LANTERN);
         HotItems.add(Material.SOUL_LANTERN);
 
+        Greenwell = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(0, 0, 0), Material.WATER);
+        }}, new HashMap<Coordinate3D, List<Material>>() {{
+            put(new Coordinate3D(-1, 0, -1), Logs);
+            put(new Coordinate3D(-1, 0, 0), Logs);
+            put(new Coordinate3D(-1, 0, 1), Logs);
+            put(new Coordinate3D(0, 0, -1), Logs);
+            put(new Coordinate3D(0, 0, 1), Logs);
+            put(new Coordinate3D(1, 0, -1), Logs);
+            put(new Coordinate3D(1, 0, 0), Logs);
+            put(new Coordinate3D(1, 0, 1), Logs);
+        }});
+
         Blitzard = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.QUARTZ_BLOCK);
             put(new Coordinate3D(0, 1, 0), Material.IRON_BARS);
@@ -166,7 +180,6 @@ public class Constants {
             put(new Coordinate3D(0, 3, -1), Material.IRON_BARS);
             put(new Coordinate3D(0, 4, 0), Material.IRON_BARS);
         }});
-
 
         Lighthouse = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.GLOWSTONE);

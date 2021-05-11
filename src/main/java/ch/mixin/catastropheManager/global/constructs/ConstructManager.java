@@ -73,19 +73,14 @@ public class ConstructManager extends CatastropheManager {
 
             plugin.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
 
-            if (locationCenter.getBlock().getType() != Material.WATER)
-                continue;
+            if (!Constants.Greenwell.isConstructed(locationCenter))
+                return;
 
             List<Coordinate2D> square = Functions.getSquareEdge(center.to2D(), 1);
             List<Material> logs = new ArrayList<>();
 
             for (Coordinate2D field : square) {
-                Material material = field.to3D(center.getY()).toLocation(world).getBlock().getType();
-
-                if (!Constants.Logs.contains(material))
-                    continue greenWellDataListLoop;
-
-                logs.add(material);
+                logs.add(field.to3D(center.getY()).toLocation(world).getBlock().getType());
             }
 
             double amount = Math.pow(3 + 2 * level, 2) * 0.002;

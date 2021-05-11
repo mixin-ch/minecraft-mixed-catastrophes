@@ -122,14 +122,10 @@ public class ActionListener implements Listener {
         if (block == null)
             return;
 
+        if (!Constants.Greenwell.isConstructed(block.getLocation()))
+            return;
+
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
-        List<Coordinate2D> square = Functions.getSquareEdge(center.to2D(), 1);
-
-        for (Coordinate2D field : square) {
-            if (!Constants.Logs.contains(field.to3D(center.getY()).toLocation(world).getBlock().getType()))
-                return;
-        }
-
         GreenWellData greenWellData = null;
 
         for (GreenWellData gwd : plugin.getMetaData().getGreenWellDataList()) {
