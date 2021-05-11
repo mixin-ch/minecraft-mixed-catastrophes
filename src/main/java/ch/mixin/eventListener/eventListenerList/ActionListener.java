@@ -290,7 +290,7 @@ public class ActionListener implements Listener {
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (itemStack.getType() != Material.GLOWSTONE)
+        if (itemStack.getType() != Material.GLOWSTONE_DUST)
             return;
 
         Block block = event.getClickedBlock();

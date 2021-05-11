@@ -4,10 +4,12 @@ import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -109,7 +111,9 @@ public class HelpInventoryManager {
         helpInventoryMap.put(HelpInventoryType.Rites_Blessing, makeRitesBlessingInventory());
         helpInventoryMap.put(HelpInventoryType.Dreams, makeDreamsInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs, makeConstructsInventory());
-        helpInventoryMap.put(HelpInventoryType.Constructs_Greenwell, makeConstructsGreenwellInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_GreenWell, makeConstructsGreenWellInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_Blitzard, makeConstructsBlitzardInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_Lighthouse, makeConstructsLighthouseInventory());
     }
 
     private HelpInventory makeHelpInventory() {
@@ -229,7 +233,7 @@ public class HelpInventoryManager {
     }
 
     private HelpInventory makeRitesProductionInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rites Production");
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rite Production");
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
@@ -269,7 +273,7 @@ public class HelpInventoryManager {
     }
 
     private HelpInventory makeRitesSacrificeInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rites Sacrifice");
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rite Sacrifice");
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
@@ -306,7 +310,7 @@ public class HelpInventoryManager {
     }
 
     private HelpInventory makeRitesCurseInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rites Curse");
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rite Curse");
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
@@ -328,7 +332,7 @@ public class HelpInventoryManager {
     }
 
     private HelpInventory makeRitesBlessingInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rites Blessing");
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rite Blessing");
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
@@ -393,15 +397,15 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Place Blocks in certain Configurations."
         });
-        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 5), "Greenwell", new String[]{
+        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 5), "GreenWell", new String[]{
                 "regularly Drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
-        }, linkInventoryMap, HelpInventoryType.Constructs_Greenwell);
+        }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
 
-    private HelpInventory makeConstructsGreenwellInventory() {
-        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Constructs Greenwell");
+    private HelpInventory makeConstructsGreenWellInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Green Well");
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
@@ -409,8 +413,8 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Construct in the following Configuration.", "Use Ender Eyes to Level up.", "Spawns Flowers when possible.", "Spawns Logs on Flowers spawn."
         });
-        createSlot(inventory, Material.ENDER_EYE, 1, slot(2, 2), "Ender Eye", new String[]{
-                "Click on the Water with Ender Eye.", "Costs 1 Ender Eye per 2 Levels.", "Secrets -(160+80*Level)"
+        createSlot(inventory, Material.ENDER_EYE, 1, true, slot(2, 2), "Ender Eye", new String[]{
+                "Click on the Water with Ender Eye.", "Costs 1 Ender Eye per 2 Levels.", "Secrets - (160 + 80 * Level)"
         });
         for (int row = 1; row <= 3; row++) {
             for (int col = 4; col <= 6; col++) {
@@ -425,14 +429,98 @@ public class HelpInventoryManager {
         return new HelpInventory(inventory, linkInventoryMap);
     }
 
+    private HelpInventory makeConstructsBlitzardInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 5 * 9, "Blitzard");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration.", "Use Quartz to Level up.", "Attracts Lightning within Range."
+        });
+        createSlot(inventory, Material.QUARTZ, 1, true, slot(1, 2), "Quartz", new String[]{
+                "Click on the Quartz Block with Quartz.", "Costs (Level^2) Quartz.", "Secrets - (100 * Level^2)"
+        });
+        createSlot(inventory, Material.QUARTZ_BLOCK, 1,  slot(5, 5), "Quartz Block", new String[]{
+        });
+        createSlot(inventory, Material.IRON_BARS, 1,  slot(4, 5), "Iron Bars", new String[]{
+        });
+        createSlot(inventory, Material.IRON_BARS, 1,  slot(3, 5), "Iron Bars", new String[]{
+        });
+        createSlot(inventory, Material.IRON_BARS, 1,  slot(2, 5), "Iron Bars", new String[]{
+        });
+        createSlot(inventory, Material.IRON_BARS, 1,  slot(1, 5), "Iron Bars", new String[]{
+        });
+        createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 4), "Iron Bars", new String[]{
+                "Put also symmetrically in the front and back."
+        });
+        createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 4), "Iron Bars", new String[]{
+                "Put also symmetrically in the front and back."
+        });
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeConstructsLighthouseInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 5 * 9, "Lighthouse");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration.", "Use Glowstone Dust to Level up.", "No Terror Events within Range."
+        });
+        createSlot(inventory, Material.GLOWSTONE_DUST, 1, true, slot(1, 2), "Glowstone Dust", new String[]{
+                "Click on the Glowstone Block with Glowstone Dust.", "Costs (Level^1.5) Glowstone Dust.", "Secrets - (100 * Level^1.5)"
+        });
+        createSlot(inventory, Material.GLOWSTONE, 1,  slot(5, 5), "Glowstone Block", new String[]{
+        });
+        createSlot(inventory, Material.STONE_BRICK_WALL, 1,  slot(4, 5), "Stone Brick Wall", new String[]{
+        });
+        createSlot(inventory, Material.STONE_BRICK_WALL, 1,  slot(3, 5), "Stone Brick Wall", new String[]{
+        });
+        createSlot(inventory, Material.STONE_BRICK_WALL, 1,  slot(2, 5), "Stone Brick Wall", new String[]{
+        });
+        createSlot(inventory, Material.STONE_BRICKS, 1,  slot(1, 5), "Stone Bricks", new String[]{
+        });
+        createSlot(inventory, Material.STONE_BRICK_STAIRS, 2,  slot(1, 4), "Stone Brick Stairs", new String[]{
+                "Put also symmetrically in the front and back."
+        });
+        createSlot(inventory, Material.STONE_BRICK_STAIRS, 2,  slot(1, 6), "Stone Brick Stairs", new String[]{
+                "Put also symmetrically in the front and back."
+        });
+        createSlot(inventory, Material.LANTERN, 2,  slot(1, 4), "Lantern", new String[]{
+                "Put also symmetrically in the front and back.", "Can be any Lantern."
+        });
+        createSlot(inventory, Material.LANTERN, 2,  slot(1, 6), "Lantern", new String[]{
+                "Put also symmetrically in the front and back.", "Can be any Lantern."
+        });
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
     private void createSlot(Inventory inventory, Material material, int amount, int slot, String name, String[] lores) {
-        createSlot(inventory, material, amount, slot, name, lores, false);
+        createSlot(inventory, material, amount, false, slot, name, lores, false);
+    }
+
+    private void createSlot(Inventory inventory, Material material, int amount, boolean glowing, int slot, String name, String[] lores) {
+        createSlot(inventory, material, amount, glowing, slot, name, lores, false);
     }
 
     private void createSlot(Inventory inventory, Material material, int amount, int slot, String name, String[] lores, boolean clickable) {
+        createSlot(inventory, material, amount, false, slot, name, lores, clickable);
+    }
+
+    private void createSlot(Inventory inventory, Material material, int amount, boolean glowing, int slot, String name, String[] lores, boolean clickable) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD + name);
+
+        if (glowing) {
+            meta.addEnchant(Enchantment.LOYALTY, 1, true);
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        }
+
         ArrayList<String> Lore = new ArrayList<>();
 
         if (clickable) {

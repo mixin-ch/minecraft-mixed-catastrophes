@@ -11,6 +11,7 @@ public enum HelpInventoryType {
     Rites_Blessing,
     Dreams,
     Constructs,
-    Constructs_Greenwell,
-    ;
+    Constructs_GreenWell,
+    Constructs_Blitzard,
+    Constructs_Lighthouse,
 }
