@@ -8,7 +8,6 @@ import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Coordinate2D;
-import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.helperClasses.Functions;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
@@ -18,7 +17,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class AssaultCatastropheManager extends CatastropheManager {
     private static final HashMap<AssaultPremise, Double> entitySummonDayWeights;
@@ -184,12 +185,13 @@ public class AssaultCatastropheManager extends CatastropheManager {
         }
 
         int terror = playerData.getAspect(AspectType.Terror);
+        double modifier = Math.pow(terror * 0.03, 0.75);
         int amount = 0;
         AssaultPremise assaultPremise = null;
 
         while (amount == 0 && possibleAssaults.size() > 0) {
             assaultPremise = Functions.getRandomWithWeights(entitySummonNightWeights);
-            amount = (int) Math.floor(Math.pow(terror, 0.5) * 0.2 * assaultPremise.getAmount());
+            amount = (int) Math.floor(modifier * assaultPremise.getAmount());
         }
 
         if (assaultPremise == null)

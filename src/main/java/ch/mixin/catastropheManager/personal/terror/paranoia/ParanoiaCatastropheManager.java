@@ -91,25 +91,25 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private int paranoiaTimer() {
-        return Functions.random(5, 15);
+        return Functions.random(20, 40);
     }
 
     private ParanoiaType getParanoia(int terror) {
         ArrayList<ParanoiaType> paranoiaTypeList = new ArrayList<>();
 
-        if (check(terror, 0, 0.3, 300))
+        if (check(terror, 0, 1, 200))
             paranoiaTypeList.add(ParanoiaType.Sounds);
 
-        if (check(terror, 100, 0.1, 300))
+        if (check(terror, 65, 1, 1200))
             paranoiaTypeList.add(ParanoiaType.Insomnia);
 
-        if (check(terror, 50, 0.1, 300))
+        if (check(terror, 135, 1, 1200))
             paranoiaTypeList.add(ParanoiaType.Weakness);
 
-        if (check(terror, 75, 0.1, 300))
+        if (check(terror, 100, 1, 1200))
             paranoiaTypeList.add(ParanoiaType.Vulnerability);
 
-        if (check(terror, 25, 0.1, 300))
+        if (check(terror, 35, 1, 1200))
             paranoiaTypeList.add(ParanoiaType.Paralysis);
 
         for (ParanoiaType paranoiaType : paranoiaOrder) {
@@ -158,7 +158,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     private void insomnia(Player player) {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
-        int time = 5 * 60 + playerData.getAspect(AspectType.Terror);
+        int time = 3 * 60;
 
         if (playerData.getDreamCooldown() < time) {
             playerData.setDreamCooldown(time);
@@ -178,8 +178,8 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-        int time = 2 * 60 + (int) Math.round(0.25 * extent);
-        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5) - 1);
+        int time = 2 * 60;
+        int amplitude = (int) Math.floor(Math.pow(0.005 * extent, 0.5));
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, amplitude));
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, amplitude));
@@ -199,8 +199,8 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-        int time = 2 * 60 + (int) Math.round(0.25 * extent);
-        int amplitude = (int) Math.floor(Math.pow(0.02 * extent, 0.5) - 1);
+        int time = 2 * 60;
+        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5));
 
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
@@ -219,7 +219,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-        int time = 1 + (int) Math.round(Math.pow(0.05 * extent, 0.75));
+        int time = 1 + (int) Math.round(Math.pow(0.05 * extent, 0.5));
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 10));
         player.removePotionEffect(PotionEffectType.JUMP);
