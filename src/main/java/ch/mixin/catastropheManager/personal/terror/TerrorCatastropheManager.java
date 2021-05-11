@@ -1,5 +1,6 @@
 package ch.mixin.catastropheManager.personal.terror;
 
+import ch.mixin.MetaData.LighthouseData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.MetaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
@@ -9,15 +10,14 @@ import ch.mixin.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheM
 import ch.mixin.catastropheManager.personal.terror.stalker.StalkerCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
+import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.helperClasses.Functions;
 import ch.mixin.main.MixedCatastrophesPlugin;
+import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class TerrorCatastropheManager extends CatastropheManager {
     private final AssaultCatastropheManager assaultCatastropheManager;
@@ -68,14 +68,23 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
-
+        playerLoop:
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!plugin.getAffectedWorlds().contains(player.getWorld()))
                 continue;
 
-            PlayerData playerData = playerDataMap.get(player.getUniqueId());
-            TerrorData terrorData = playerData.getTerrorData();
+            String worldName = player.getWorld().getName();
+            Coordinate3D position = Coordinate3D.toCoordinate(player.getLocation());
+
+            for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+                if (!lighthouseData.getWorldName().equals(worldName))
+                    continue;
+
+                if (lighthouseData.getPosition().distance(position) <= 10 * lighthouseData.getLevel())
+                    continue playerLoop;
+            }
+
+            TerrorData terrorData = metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData();
 
             int timer = terrorData.getTerrorTimer();
             timer--;
@@ -86,11 +95,11 @@ public class TerrorCatastropheManager extends CatastropheManager {
             }
 
             terrorData.setTerrorTimer(timer);
-        }
 
-        assaultCatastropheManager.tick();
-        stalkerCatastropheManager.tick();
-        paranoiaCatastropheManager.tick();
+            assaultCatastropheManager.tick(player);
+            stalkerCatastropheManager.tick(player);
+            paranoiaCatastropheManager.tick(player);
+        }
     }
 
     private int terrorTimer() {

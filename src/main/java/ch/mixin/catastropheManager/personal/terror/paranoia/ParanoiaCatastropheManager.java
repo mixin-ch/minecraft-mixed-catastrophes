@@ -65,31 +65,28 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     @Override
+    @Deprecated
     public void tick() {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+    }
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getAffectedWorlds().contains(player.getWorld()))
-                continue;
+    public void tick(Player player) {
+        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        TerrorData terrorData = playerData.getTerrorData();
 
-            PlayerData playerData = playerDataMap.get(player.getUniqueId());
-            TerrorData terrorData = playerData.getTerrorData();
+        int timer = terrorData.getParanoiaTimer();
+        timer--;
 
-            int timer = terrorData.getParanoiaTimer();
-            timer--;
+        if (timer <= 0) {
+            timer = paranoiaTimer();
 
-            if (timer <= 0) {
-                timer = paranoiaTimer();
+            ParanoiaType paranoiaType = getParanoia(playerData.getAspect(AspectType.Terror));
 
-                ParanoiaType paranoiaType = getParanoia(playerData.getAspect(AspectType.Terror));
-
-                if (paranoiaType != null) {
-                    causeParanoia(player, paranoiaType);
-                }
+            if (paranoiaType != null) {
+                causeParanoia(player, paranoiaType);
             }
-
-            terrorData.setParanoiaTimer(timer);
         }
+
+        terrorData.setParanoiaTimer(timer);
     }
 
     private int paranoiaTimer() {

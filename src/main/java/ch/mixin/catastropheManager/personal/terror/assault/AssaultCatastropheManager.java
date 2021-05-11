@@ -1,11 +1,13 @@
 package ch.mixin.catastropheManager.personal.terror.assault;
 
+import ch.mixin.MetaData.LighthouseData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.MetaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Coordinate2D;
+import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.helperClasses.Functions;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
@@ -15,10 +17,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class AssaultCatastropheManager extends CatastropheManager {
     private static final HashMap<AssaultPremise, Double> entitySummonDayWeights;
@@ -140,33 +139,30 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     @Override
+    @Deprecated
     public void tick() {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+    }
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getAffectedWorlds().contains(player.getWorld()))
-                continue;
+    public void tick(Player player) {
+        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        TerrorData terrorData = playerData.getTerrorData();
 
-            PlayerData playerData = playerDataMap.get(player.getUniqueId());
-            TerrorData terrorData = playerData.getTerrorData();
+        int assaultTimer = terrorData.getAssaultTimer();
+        assaultTimer--;
 
-            int assaultTimer = terrorData.getAssaultTimer();
-            assaultTimer--;
+        if (assaultTimer <= 0) {
+            assaultTimer = assaultTimer();
 
-            if (assaultTimer <= 0) {
-                assaultTimer = assaultTimer();
+            int terror = playerData.getAspect(AspectType.Terror);
+            double modifier = Math.pow(terror, 0.5);
+            double probability = (modifier + 1) / (modifier + 50.0);
 
-                int terror = playerData.getAspect(AspectType.Terror);
-                double modifier = Math.pow(terror, 0.5);
-                double probability = (modifier + 1) / (modifier + 50.0);
-
-                if (new Random().nextDouble() < probability) {
-                    causeAssault(player);
-                }
+            if (new Random().nextDouble() < probability) {
+                causeAssault(player);
             }
-
-            terrorData.setAssaultTimer(assaultTimer);
         }
+
+        terrorData.setAssaultTimer(assaultTimer);
     }
 
     private int assaultTimer() {
@@ -195,27 +191,36 @@ public class AssaultCatastropheManager extends CatastropheManager {
             playerLocations.add(p.getLocation());
         }
 
+        List<LighthouseData> lighthouseDataList = new ArrayList<>(metaData.getLightHouseDataList());
+
+        for (int i = 0; i < lighthouseDataList.size(); i++) {
+            if (!lighthouseDataList.get(i).getWorldName().equals(world.getName())) {
+                lighthouseDataList.remove(i);
+                i--;
+            }
+        }
+
+        spaceLoop:
         for (Coordinate2D space : spaces) {
             Location groundP1 = Functions.offset(Functions.relativeGround(world, space.to3D(location.getBlockY())), 1);
 
             if (groundP1 == null)
                 continue;
 
-            if (player.getLocation().distance(groundP1) > 40)
+            if (player.getLocation().distance(groundP1) > 50)
                 continue;
 
-            boolean enoughDistance = true;
+            for (LighthouseData lighthouseData : lighthouseDataList) {
+                if (lighthouseData.getPosition().distance(Coordinate3D.toCoordinate(groundP1)) <= 10 * lighthouseData.getLevel())
+                    continue spaceLoop;
+            }
 
             for (Location playerLocation : playerLocations) {
-                if (playerLocation.distance(groundP1) < 20) {
-                    enoughDistance = false;
-                    break;
-                }
+                if (playerLocation.distance(groundP1) < 20)
+                    continue spaceLoop;
             }
 
-            if (enoughDistance) {
-                spawnPoints.add(groundP1);
-            }
+            spawnPoints.add(groundP1);
         }
 
         if (spawnPoints.size() > 0) {

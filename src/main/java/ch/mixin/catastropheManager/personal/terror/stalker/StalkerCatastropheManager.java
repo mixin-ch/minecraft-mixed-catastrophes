@@ -15,9 +15,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.UUID;
 
 public class StalkerCatastropheManager extends CatastropheManager {
     public StalkerCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
@@ -45,37 +43,33 @@ public class StalkerCatastropheManager extends CatastropheManager {
     }
 
     @Override
+    @Deprecated
     public void tick() {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+    }
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getAffectedWorlds().contains(player.getWorld()))
-                continue;
+    public void tick(Player player) {
+        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        TerrorData terrorData = playerData.getTerrorData();
 
-            PlayerData playerData = playerDataMap.get(player.getUniqueId());
-            TerrorData terrorData = playerData.getTerrorData();
+        int timer = terrorData.getStalkerTimer();
+        timer--;
 
-            int timer = terrorData.getStalkerTimer();
-            timer--;
+        if (timer <= 0) {
+            timer = stalkerTimer();
 
-            if (timer <= 0) {
-                timer = stalkerTimer();
+            int hauntingDemise = playerData.getAspect(AspectType.Death_Seeker);
+            int terror = playerData.getAspect(AspectType.Terror);
+            double modifier = Math.pow(Math.max(0, terror + hauntingDemise - 50), 0.5);
 
-                int hauntingDemise = playerData.getAspect(AspectType.Death_Seeker);
-                int terror = playerData.getAspect(AspectType.Terror);
-                double modifier = Math.pow(Math.max(0, terror + hauntingDemise - 50), 0.5);
+            double probability = (modifier) / (modifier + 150.0);
 
-                double probability = (modifier) / (modifier + 150.0);
-
-                if (new Random().nextDouble() < probability) {
-                    causeStalker(player);
-                }
+            if (new Random().nextDouble() < probability) {
+                causeStalker(player);
             }
-
-            terrorData.setStalkerTimer(timer);
-
-            stalkerActions(player);
         }
+
+        terrorData.setStalkerTimer(timer);
+        stalkerActions(player);
     }
 
     private int stalkerTimer() {
