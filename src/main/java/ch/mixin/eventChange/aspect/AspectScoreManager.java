@@ -23,11 +23,32 @@ public class AspectScoreManager {
         PlayerData pcd = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         HashMap<AspectType, Integer> aspects = pcd.getAspects();
 
+        int dreamCooldown = pcd.getDreamCooldown();
+        int antiLighthouseTimer = pcd.getAntiLighthouseTimer();
+
         Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
         Objective objective = scoreboard.registerNewObjective("Aspects", "dummy", ChatColor.GRAY + "Aspects");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        int hierarchy = aspects.size();
+        int hierarchy = 2 + 1 + aspects.size();
+        boolean hasTimers = false;
+
+        if (dreamCooldown > 0) {
+            makeScore(objective, hierarchy, ChatColor.DARK_AQUA, "Dreamless", dreamCooldown, "s");
+            hierarchy--;
+            hasTimers = true;
+        }
+
+        if (antiLighthouseTimer > 0) {
+            makeScore(objective, hierarchy, Constants.AspectThemes.get(AspectType.Terror), "Red Eye", antiLighthouseTimer, "s");
+            hierarchy--;
+            hasTimers = true;
+        }
+
+        if (hasTimers) {
+            emptyScore(objective, hierarchy);
+            hierarchy--;
+        }
 
         for (AspectType aspectType : AspectType.values()) {
             int value = aspects.get(aspectType);
@@ -41,12 +62,18 @@ public class AspectScoreManager {
         player.setScoreboard(scoreboard);
     }
 
-    private static void makeScore(Objective objective, int hierarchy, ChatColor chatColor, String label, int value) {
-        if (value == 0)
-            return;
+    private void makeScore(Objective objective, int hierarchy, ChatColor chatColor, String label, int value) {
+        makeScore(objective, hierarchy, chatColor, label, value, "");
+    }
 
-        String text = chatColor + label + ": " + value;
+    private void makeScore(Objective objective, int hierarchy, ChatColor chatColor, String label, int value, String valueUnit) {
+        String text = chatColor + label + ": " + value + valueUnit;
         Score score = objective.getScore(text);
+        score.setScore(hierarchy);
+    }
+
+    private void emptyScore(Objective objective, int hierarchy) {
+        Score score = objective.getScore("");
         score.setScore(hierarchy);
     }
 }

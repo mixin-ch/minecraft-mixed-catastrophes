@@ -1,13 +1,22 @@
 package ch.mixin.catastropheManager.personal;
 
+import ch.mixin.MetaData.LighthouseData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.catastropheManager.personal.dream.DreamManager;
 import ch.mixin.catastropheManager.personal.rite.RiteManager;
 import ch.mixin.catastropheManager.personal.terror.TerrorCatastropheManager;
+import ch.mixin.eventChange.aspect.AspectType;
+import ch.mixin.helperClasses.Constants;
 import ch.mixin.main.MixedCatastrophesPlugin;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -67,6 +76,21 @@ public class PersonalCatastropheManager extends CatastropheManager {
     @Override
     public void tick() {
         HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+        HashMap<Location, Integer> lighthouseMap = new HashMap<>();
+
+        for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+
+            if (lightHouseWorld == null)
+                continue;
+
+            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
+
+            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+                continue;
+
+            lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());
+        }
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!plugin.getAffectedWorlds().contains(player.getWorld()))
@@ -79,6 +103,31 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
             PlayerData playerData = playerDataMap.get(player.getUniqueId());
             playerData.setDreamCooldown(Math.max(0, playerData.getDreamCooldown() - 1));
+            playerData.setAntiLighthouseTimer(Math.max(0, playerData.getAntiLighthouseTimer() - 1));
+
+            if (playerData.getAntiLighthouseTimer() > 0) {
+                if (playerData.getAntiLighthouseTimer() % 10 != 0)
+                    continue;
+
+                for (Location lighthouseLocation : lighthouseMap.keySet()) {
+                    if (player.getWorld() != lighthouseLocation.getWorld())
+                        continue;
+
+                    if (lighthouseLocation.distance(player.getLocation()) > lighthouseMap.get(lighthouseLocation))
+                        continue;
+
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 0));
+
+                    plugin.getEventChangeManager()
+                            .eventChange(player)
+                            .withEventSound(Sound.ENTITY_BLAZE_AMBIENT)
+                            .withEventMessage("The Lighthouse burns the Red Eye in your Mind.")
+                            .withColor(ChatColor.GOLD)
+                            .withTitle(true)
+                            .finish()
+                            .execute();
+                }
+            }
         }
 
         terrorCatastropheManager.tick();

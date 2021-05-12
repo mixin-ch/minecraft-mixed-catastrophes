@@ -63,6 +63,7 @@ public class StatusListener implements Listener {
 
         playerData.getTerrorData().getStalkerDatas().clear();
         playerData.setDreamCooldown(0);
+        playerData.setAntiLighthouseTimer(0);
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Death_Seeker, 1);
@@ -83,6 +84,10 @@ public class StatusListener implements Listener {
     private void saveEssence(PlayerDeathEvent event) {
         Player player = event.getEntity();
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+
+        playerData.getTerrorData().getStalkerDatas().clear();
+        playerData.setDreamCooldown(0);
+        playerData.setAntiLighthouseTimer(0);
 
         event.setKeepInventory(true);
         event.setKeepLevel(true);

@@ -1,14 +1,12 @@
 package ch.mixin.catastropheManager.personal.dream;
 
+import ch.mixin.MetaData.LighthouseData;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.main.MixedCatastrophesPlugin;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -238,11 +236,45 @@ public class DreamManager {
             return;
         }
 
+        boolean nearLighthouse = false;
+
+        for (LighthouseData lighthouseData : plugin.getMetaData().getLightHouseDataList()) {
+            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+
+            if (lightHouseWorld == null)
+                continue;
+
+            if (player.getWorld() != lightHouseWorld)
+                continue;
+
+            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
+
+            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+                continue;
+
+            if (lighthouseLocation.distance(player.getLocation()) > 10 * lighthouseData.getLevel())
+                continue;
+
+            nearLighthouse = true;
+            break;
+        }
+
+        if (nearLighthouse){
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You can't have Bloodstained Dreams in Lighthouse Range.")
+                    .withColor(ChatColor.WHITE)
+                    .finish()
+                    .execute();
+            return;
+        }
+
         if (greyhat(player))
             return;
 
         int time = 10 * 60;
         playerData.setDreamCooldown(time);
+        playerData.setAntiLighthouseTimer(time);
 
         int terrorPlus = (int) Math.round(10 + 0.1 * playerData.getAspect(AspectType.Terror));
         int secretsPlus = 30 + playerData.getAspect(AspectType.Terror);

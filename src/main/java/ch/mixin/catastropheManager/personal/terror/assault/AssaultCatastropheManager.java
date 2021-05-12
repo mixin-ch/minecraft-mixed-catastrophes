@@ -214,10 +214,10 @@ public class AssaultCatastropheManager extends CatastropheManager {
             if (lightHouseWorld == null)
                 continue;
 
-            if (!world.getName().equals(lightHouseWorld.getName()))
+            if (world != lightHouseWorld)
                 continue;
 
-            Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
+            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
 
             if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
                 continue;

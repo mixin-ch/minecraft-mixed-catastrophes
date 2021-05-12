@@ -375,7 +375,7 @@ public class HelpInventoryManager {
                 "Moderate Terror Loss.", "Moderate Secret Loss.", "Jump Boost 2, Slow Falling 1", "10 Minute Cooldown."
         });
         createSlot(inventory, Material.REDSTONE_BLOCK, 1, slot(2, 5), "Bloodstained Dreams (Redstone)", new String[]{
-                "Slight Terror Gain.", "Slight Secret Gain.", "10 Minute Cooldown."
+                "Slight Terror Gain.", "Moderate Secret Gain.", "10 Minute Cooldown.", "10 Minutes of damage while near a Lighthouse."
         });
         createSlot(inventory, Material.IRON_BLOCK, 1, slot(2, 6), "Clockwork Dreams (Iron)", new String[]{
                 "Secrets -30", "Speed 1, Haste 1, Strength 1, Resistance 1", "10 Minute Cooldown."
@@ -449,20 +449,20 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.QUARTZ, 1, true, slot(5, 2), "Quartz", new String[]{
                 "Click on the Quartz Block with Quartz.", "Costs Quartz and Secrets."
         });
-        createSlot(inventory, Material.QUARTZ_BLOCK, 1,  slot(5, 5), "Quartz Block", new String[]{
+        createSlot(inventory, Material.QUARTZ_BLOCK, 1, slot(5, 5), "Quartz Block", new String[]{
         });
-        createSlot(inventory, Material.IRON_BARS, 1,  slot(4, 5), "Iron Bars", new String[]{
+        createSlot(inventory, Material.IRON_BARS, 1, slot(4, 5), "Iron Bars", new String[]{
         });
-        createSlot(inventory, Material.IRON_BARS, 1,  slot(3, 5), "Iron Bars", new String[]{
+        createSlot(inventory, Material.IRON_BARS, 1, slot(3, 5), "Iron Bars", new String[]{
         });
-        createSlot(inventory, Material.IRON_BARS, 1,  slot(2, 5), "Iron Bars", new String[]{
+        createSlot(inventory, Material.IRON_BARS, 1, slot(2, 5), "Iron Bars", new String[]{
         });
-        createSlot(inventory, Material.IRON_BARS, 1,  slot(1, 5), "Iron Bars", new String[]{
+        createSlot(inventory, Material.IRON_BARS, 1, slot(1, 5), "Iron Bars", new String[]{
         });
-        createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 4), "Iron Bars", new String[]{
+        createSlot(inventory, Material.IRON_BARS, 2, slot(2, 4), "Iron Bars", new String[]{
                 FrontBackSymmetryText
         });
-        createSlot(inventory, Material.IRON_BARS, 2,  slot(2, 6), "Iron Bars", new String[]{
+        createSlot(inventory, Material.IRON_BARS, 2, slot(2, 6), "Iron Bars", new String[]{
                 FrontBackSymmetryText
         });
 
@@ -481,26 +481,26 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.GLOWSTONE_DUST, 1, true, slot(5, 2), "Glowstone Dust", new String[]{
                 "Click on the Glowstone Block with Glowstone Dust.", "Costs Glowstone Dust and Secrets."
         });
-        createSlot(inventory, Material.GLOWSTONE, 1,  slot(5, 5), "Glowstone Block", new String[]{
+        createSlot(inventory, Material.GLOWSTONE, 1, slot(5, 5), "Glowstone Block", new String[]{
         });
-        createSlot(inventory, Material.STONE_BRICK_WALL, 1,  slot(4, 5), "Stone Brick Wall", new String[]{
+        createSlot(inventory, Material.STONE_BRICK_WALL, 1, slot(4, 5), "Stone Brick Wall", new String[]{
         });
-        createSlot(inventory, Material.STONE_BRICK_WALL, 1,  slot(3, 5), "Stone Brick Wall", new String[]{
+        createSlot(inventory, Material.STONE_BRICK_WALL, 1, slot(3, 5), "Stone Brick Wall", new String[]{
         });
-        createSlot(inventory, Material.STONE_BRICK_WALL, 1,  slot(2, 5), "Stone Brick Wall", new String[]{
+        createSlot(inventory, Material.STONE_BRICK_WALL, 1, slot(2, 5), "Stone Brick Wall", new String[]{
         });
-        createSlot(inventory, Material.STONE_BRICKS, 1,  slot(1, 5), "Stone Bricks", new String[]{
+        createSlot(inventory, Material.STONE_BRICKS, 1, slot(1, 5), "Stone Bricks", new String[]{
         });
-        createSlot(inventory, Material.STONE_BRICK_STAIRS, 2,  slot(1, 4), "Stone Brick Stairs", new String[]{
+        createSlot(inventory, Material.STONE_BRICK_STAIRS, 2, slot(1, 4), "Stone Brick Stairs", new String[]{
                 FrontBackSymmetryText
         });
-        createSlot(inventory, Material.STONE_BRICK_STAIRS, 2,  slot(1, 6), "Stone Brick Stairs", new String[]{
+        createSlot(inventory, Material.STONE_BRICK_STAIRS, 2, slot(1, 6), "Stone Brick Stairs", new String[]{
                 FrontBackSymmetryText
         });
-        createSlot(inventory, Material.LANTERN, 2,  slot(2, 4), "Lantern", new String[]{
+        createSlot(inventory, Material.LANTERN, 2, slot(2, 4), "Lantern", new String[]{
                 FrontBackSymmetryText, "Can be any Lantern."
         });
-        createSlot(inventory, Material.LANTERN, 2,  slot(2, 6), "Lantern", new String[]{
+        createSlot(inventory, Material.LANTERN, 2, slot(2, 6), "Lantern", new String[]{
                 FrontBackSymmetryText, "Can be any Lantern."
         });
 

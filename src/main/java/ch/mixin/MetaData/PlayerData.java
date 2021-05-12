@@ -8,12 +8,14 @@ import java.util.UUID;
 public class PlayerData {
     private UUID playerId;
     private int dreamCooldown;
+    private int antiLighthouseTimer;
     private HashMap<AspectType, Integer> aspects;
     private TerrorData terrorData;
 
     public PlayerData(UUID playerId) {
         this.playerId = playerId;
         dreamCooldown = 0;
+        antiLighthouseTimer = 0;
         aspects = new HashMap<>();
         fillAspects();
         terrorData = new TerrorData();
@@ -53,6 +55,14 @@ public class PlayerData {
 
     public void setDreamCooldown(int dreamCooldown) {
         this.dreamCooldown = dreamCooldown;
+    }
+
+    public int getAntiLighthouseTimer() {
+        return antiLighthouseTimer;
+    }
+
+    public void setAntiLighthouseTimer(int antiLighthouseTimer) {
+        this.antiLighthouseTimer = antiLighthouseTimer;
     }
 
     public HashMap<AspectType, Integer> getAspects() {

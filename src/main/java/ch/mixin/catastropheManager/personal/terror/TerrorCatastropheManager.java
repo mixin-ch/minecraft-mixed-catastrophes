@@ -33,6 +33,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     @Override
+    @Deprecated
     public void initializeMetaData() {
     }
 
@@ -69,6 +70,22 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
+        HashMap<Location, Integer> lighthouseMap = new HashMap<>();
+
+        for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+
+            if (lightHouseWorld == null)
+                continue;
+
+            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
+
+            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+                continue;
+
+            lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());
+        }
+
         playerLoop:
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!plugin.getAffectedWorlds().contains(player.getWorld()))
@@ -77,22 +94,14 @@ public class TerrorCatastropheManager extends CatastropheManager {
             World world = player.getWorld();
             Location playerLocation = player.getLocation();
 
-            for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
-                World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
-
-                if (lightHouseWorld == null)
+            for (Location lighthouseLocation : lighthouseMap.keySet()) {
+                if (world != lighthouseLocation.getWorld())
                     continue;
 
-                if (!world.getName().equals(lightHouseWorld.getName()))
+                if (lighthouseLocation.distance(playerLocation) > lighthouseMap.get(lighthouseLocation))
                     continue;
 
-                Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
-
-                if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
-                    continue;
-
-                if (lighthouseLocation.distance(playerLocation) <= 10 * lighthouseData.getLevel())
-                    continue playerLoop;
+                continue playerLoop;
             }
 
             TerrorData terrorData = metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData();
