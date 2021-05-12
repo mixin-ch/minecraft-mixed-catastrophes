@@ -43,7 +43,7 @@ public class ConsequenceListener implements Listener {
 
         int natureConspiracy = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
         double probability = (natureConspiracy) / (natureConspiracy + 20.0);
-        probability /= 4.0;
+        probability /= 5.0;
 
         if (new Random().nextDouble() < probability) {
             player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (10 + natureConspiracy) * 20, 0));
@@ -89,7 +89,8 @@ public class ConsequenceListener implements Listener {
             return;
 
         int misfortune = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
-        double probability = (misfortune) / (misfortune + 50.0);
+        double probability = (misfortune) / (misfortune + 30.0);
+        probability /= 2.0;
 
         if (new Random().nextDouble() >= probability)
             return;
@@ -118,7 +119,8 @@ public class ConsequenceListener implements Listener {
             return;
 
         int misfortune = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
-        double probability = (misfortune) / (misfortune + 50.0);
+        double probability = (misfortune) / (misfortune + 30.0);
+        probability /= 2.0;
 
         if (new Random().nextDouble() >= probability)
             return;
