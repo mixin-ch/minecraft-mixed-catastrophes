@@ -369,13 +369,13 @@ public class HelpInventoryManager {
                 "Cancels the Dream.", "Chance to occur scales with Greyhat Debt.", "10 Minute Cooldown."
         });
         createSlot(inventory, Material.RED_BED, 1, slot(2, 3), "Serene Dreams (Default)", new String[]{
-                "Terror -(1+10%)", "Secrets +10", "10 Minute Cooldown."
+                "Slight Terror Loss.", "Secrets +10", "10 Minute Cooldown."
         });
         createSlot(inventory, Material.LAPIS_BLOCK, 1, slot(2, 4), "Sky Dreams (Lapis Lazuli)", new String[]{
-                "Terror -(10+20%)", "Secrets -(2 * Lost Terror)", "Jump Boost 2, Slow Falling 1", "10 Minute Cooldown."
+                "Moderate Terror Loss.", "Moderate Secret Loss.", "Jump Boost 2, Slow Falling 1", "10 Minute Cooldown."
         });
         createSlot(inventory, Material.REDSTONE_BLOCK, 1, slot(2, 5), "Bloodstained Dreams (Redstone)", new String[]{
-                "Terror +(10+10%)", "Secrets +(30+Terror)", "10 Minute Cooldown."
+                "Slight Terror Gain.", "Slight Secret Gain.", "10 Minute Cooldown."
         });
         createSlot(inventory, Material.IRON_BLOCK, 1, slot(2, 6), "Clockwork Dreams (Iron)", new String[]{
                 "Secrets -30", "Speed 1, Haste 1, Strength 1, Resistance 1", "10 Minute Cooldown."
@@ -422,7 +422,7 @@ public class HelpInventoryManager {
                 "Construct in the following Configuration.", "Use Ender Eyes to Level up.", "Spawns Flowers when possible.", "Spawns Logs on Flowers spawn."
         });
         createSlot(inventory, Material.ENDER_EYE, 1, true, slot(2, 2), "Ender Eye", new String[]{
-                "Click on the Water with Ender Eye.", "Costs 1 Ender Eye per 2 Levels.", "Secrets - (160 + 80 * Level)"
+                "Click on the Water with Ender Eye.", "Costs Ender Eyes and Secrets."
         });
         for (int row = 1; row <= 3; row++) {
             for (int col = 4; col <= 6; col++) {
@@ -447,7 +447,7 @@ public class HelpInventoryManager {
                 "Construct in the following Configuration.", "Use Quartz to Level up.", "Attracts Lightning within Range."
         });
         createSlot(inventory, Material.QUARTZ, 1, true, slot(5, 2), "Quartz", new String[]{
-                "Click on the Quartz Block with Quartz.", "Costs (Level^2) Quartz.", "Secrets - (100 * Level^2)"
+                "Click on the Quartz Block with Quartz.", "Costs Quartz and Secrets."
         });
         createSlot(inventory, Material.QUARTZ_BLOCK, 1,  slot(5, 5), "Quartz Block", new String[]{
         });
@@ -479,7 +479,7 @@ public class HelpInventoryManager {
                 "Construct in the following Configuration.", "Use Glowstone Dust to Level up.", "No Terror Events within Range."
         });
         createSlot(inventory, Material.GLOWSTONE_DUST, 1, true, slot(5, 2), "Glowstone Dust", new String[]{
-                "Click on the Glowstone Block with Glowstone Dust.", "Costs (Level^1.5) Glowstone Dust.", "Secrets - (100 * Level^1.5)"
+                "Click on the Glowstone Block with Glowstone Dust.", "Costs Glowstone Dust and Secrets."
         });
         createSlot(inventory, Material.GLOWSTONE, 1,  slot(5, 5), "Glowstone Block", new String[]{
         });
