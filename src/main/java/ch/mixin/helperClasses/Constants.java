@@ -48,6 +48,8 @@ public class Constants {
         Logs.add(Material.JUNGLE_LOG);
         Logs.add(Material.OAK_LOG);
         Logs.add(Material.SPRUCE_LOG);
+        Logs.add(Material.CRIMSON_STEM);
+        Logs.add(Material.WARPED_STEM);
 
         Flowers = new ArrayList<>();
         Flowers.add(Material.DANDELION);
