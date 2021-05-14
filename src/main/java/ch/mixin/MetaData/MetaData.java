@@ -19,6 +19,7 @@ public class MetaData {
     private List<GreenWellData> greenWellDataList;
     private List<BlitzardData> blitzardDataList;
     private List<LighthouseData> lighthouseDataList;
+    private List<BlazeReactorData> blazeReactorDataList;
 
     public MetaData() {
         save();
@@ -98,5 +99,21 @@ public class MetaData {
 
     public void setLightHouseDataList(List<LighthouseData> lighthouseDataList) {
         this.lighthouseDataList = lighthouseDataList;
+    }
+
+    public List<LighthouseData> getLighthouseDataList() {
+        return lighthouseDataList;
+    }
+
+    public void setLighthouseDataList(List<LighthouseData> lighthouseDataList) {
+        this.lighthouseDataList = lighthouseDataList;
+    }
+
+    public List<BlazeReactorData> getBlazeReactorList() {
+        return blazeReactorDataList;
+    }
+
+    public void setBlazeReactorList(List<BlazeReactorData> blazeReactorDataList) {
+        this.blazeReactorDataList = blazeReactorDataList;
     }
 }

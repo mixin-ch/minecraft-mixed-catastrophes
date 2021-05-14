@@ -249,7 +249,7 @@ public class DreamManager {
 
             Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
 
-            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
             if (lighthouseLocation.distance(player.getLocation()) > 10 * lighthouseData.getLevel())

@@ -10,7 +10,6 @@ import ch.mixin.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheM
 import ch.mixin.catastropheManager.personal.terror.stalker.StalkerCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
-import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.helperClasses.Functions;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
@@ -80,7 +79,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
             Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
 
-            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
             lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());

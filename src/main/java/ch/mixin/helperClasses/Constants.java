@@ -25,6 +25,7 @@ public class Constants {
     public static final ConstructShape GreenWell;
     public static final ConstructShape Blitzard;
     public static final ConstructShape Lighthouse;
+    public static final ConstructShape BlazeReactor;
 
     static {
         AspectThemes = new HashMap<>();
@@ -158,7 +159,7 @@ public class Constants {
         Lanterns.add(Material.LANTERN);
         Lanterns.add(Material.SOUL_LANTERN);
 
-        GreenWell = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
+        GreenWell = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.WATER);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
             put(new Coordinate3D(-1, 0, -1), Logs);
@@ -171,7 +172,7 @@ public class Constants {
             put(new Coordinate3D(1, 0, 1), Logs);
         }});
 
-        Blitzard = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
+        Blitzard = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.QUARTZ_BLOCK);
             put(new Coordinate3D(0, 1, 0), Material.IRON_BARS);
             put(new Coordinate3D(0, 2, 0), Material.IRON_BARS);
@@ -183,7 +184,7 @@ public class Constants {
             put(new Coordinate3D(0, 4, 0), Material.IRON_BARS);
         }});
 
-        Lighthouse = new ConstructShape(new HashMap<Coordinate3D, Material>() {{
+        Lighthouse = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.GLOWSTONE);
             put(new Coordinate3D(0, 1, 0), Material.STONE_BRICK_WALL);
             put(new Coordinate3D(0, 2, 0), Material.STONE_BRICK_WALL);

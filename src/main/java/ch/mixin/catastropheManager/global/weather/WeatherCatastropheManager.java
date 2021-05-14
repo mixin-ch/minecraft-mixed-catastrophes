@@ -313,7 +313,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
             Location location = blitzardData.getPosition().toLocation(world);
 
-            if (!Constants.Blitzard.isConstructed(location))
+            if (!Constants.Blitzard.checkConstructed(location).isConstructed())
                 continue;
 
             blitzardMap.put(location, blitzardData.getLevel() * 10);

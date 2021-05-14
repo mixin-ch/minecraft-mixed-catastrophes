@@ -219,7 +219,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
 
             Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
 
-            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
             lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());

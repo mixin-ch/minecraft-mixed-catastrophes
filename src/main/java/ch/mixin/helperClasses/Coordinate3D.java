@@ -70,6 +70,23 @@ public class Coordinate3D {
         return divide(length());
     }
 
+    public Coordinate3D rotateY90() {
+        double newX = -z;
+        double newZ = x;
+
+        return new Coordinate3D(newX, y, newZ);
+    }
+
+    public Coordinate3D rotateY90(int times) {
+        Coordinate3D coordinate3D = clone();
+
+        for (int i = 0; i < times; i++) {
+            coordinate3D = coordinate3D.rotateY90();
+        }
+
+        return coordinate3D;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

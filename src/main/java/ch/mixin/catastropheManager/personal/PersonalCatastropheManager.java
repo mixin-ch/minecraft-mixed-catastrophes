@@ -7,7 +7,6 @@ import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.catastropheManager.personal.dream.DreamManager;
 import ch.mixin.catastropheManager.personal.rite.RiteManager;
 import ch.mixin.catastropheManager.personal.terror.TerrorCatastropheManager;
-import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.ChatColor;
@@ -86,7 +85,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
             Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
 
-            if (!Constants.Lighthouse.isConstructed(lighthouseLocation))
+            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
             lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());
