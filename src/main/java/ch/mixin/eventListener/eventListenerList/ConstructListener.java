@@ -97,7 +97,7 @@ public class ConstructListener implements Listener {
 
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int cost = 160 + 80 * greenWellData.getLevel();
-        int costEyes = 1 + (int) Math.floor(0.5 * greenWellData.getLevel());
+        int costEyes = 1 + greenWellData.getLevel();
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {

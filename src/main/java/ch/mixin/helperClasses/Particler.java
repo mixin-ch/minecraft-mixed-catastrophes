@@ -17,7 +17,7 @@ public class Particler {
 
 
     public void spawnParticles(Particle particle, List<Coordinate3D> positionList, World world, double amount, int steps, int stepSize) {
-        spawnParticles(particle, positionList, world, new Coordinate3D(0, 0, 0), amount, steps, stepSize);
+        spawnParticles(particle, positionList, world, null, amount, steps, stepSize);
     }
 
     public void spawnParticles(Particle particle, List<Coordinate3D> positionList, World world, Coordinate3D velocity, double amount, int steps, int stepSize) {
@@ -29,8 +29,12 @@ public class Particler {
         while (sum > 0) {
             if (random.nextDouble() < sum) {
                 Location location = positionList.get(random.nextInt(size)).sum(random.nextDouble(), random.nextDouble(), random.nextDouble()).toLocation(world);
-                //location.getWorld().spawnParticle(particle, location, 1);
-                location.getWorld().spawnParticle(particle, location.getX(), location.getY(), location.getZ(), 0, velocity.getX(), velocity.getY(), velocity.getZ(), velocity.length(), null);
+
+                if (velocity != null) {
+                    location.getWorld().spawnParticle(particle, location, 0, velocity.getX(), velocity.getY(), velocity.getZ(), velocity.length(), null);
+                } else {
+                    location.getWorld().spawnParticle(particle, location, 1);
+                }
             }
 
             sum--;

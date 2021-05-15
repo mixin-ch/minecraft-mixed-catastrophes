@@ -3,13 +3,18 @@ package ch.mixin.catastropheManager.personal.rite;
 import ch.mixin.MetaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
+import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class RiteManager {
     private final MixedCatastrophesPlugin plugin;
@@ -92,6 +97,8 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), multiplier * 4);
     }
 
     private void produceResources(Player player, Block blockN1, Block blockN2) {
@@ -159,6 +166,8 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), multiplier * 4);
     }
 
     private void removeCurse(Player player, Block blockN1, Block blockN2) {
@@ -214,6 +223,8 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
     }
 
     private void removeMisfortune(Player player, Block blockN1, Block blockN2) {
@@ -252,6 +263,8 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
     }
 
     private void removeTerror(Player player, Block blockN1, Block blockN2) {
@@ -290,6 +303,8 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
     }
 
     private void receiveBlessing(Player player, Block blockN1, Block blockN2) {
@@ -336,6 +351,8 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
     }
 
     private void gainTerror(Player player, Block blockN1, Block blockN2) {
@@ -380,5 +397,15 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
+    }
+
+    private void ritesParticles(World world, Coordinate3D topBlock, double multiplier) {
+        double root = Math.pow(multiplier, 0.5);
+        List<Coordinate3D> particles = new ArrayList<>();
+        particles.add(topBlock);
+        particles.add(topBlock.sum(0, -1, 0));
+        plugin.getParticler().spawnParticles(Particle.ENCHANTMENT_TABLE, particles, world, root, (int) Math.ceil(root * 4), 5);
     }
 }
