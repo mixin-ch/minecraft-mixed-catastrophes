@@ -79,7 +79,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, Math.pow(level, 1.5) * 0.2, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
 
             if (!Constants.GreenWell.checkConstructed(locationCenter).isConstructed())
                 return;
@@ -150,7 +150,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, Math.pow(level, 1.5) * 0.2, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, Math.pow(level, 1.25) * 0.2, 4, 5);
         }
     }
 
@@ -170,7 +170,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.LAVA, particles, world, Math.pow(level, 1.5) * 0.2, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.LAVA, particles, world, Math.pow(level, 1.1) * 0.25, 4, 5);
         }
     }
 
@@ -199,7 +199,7 @@ public class ConstructManager extends CatastropheManager {
                 particles.add(i, particle.sum(center));
             }
 
-            plugin.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, new Coordinate3D(0, 0.2 + level * 0.02, 0), Math.pow(level, 1.5) * 0.2, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, new Coordinate3D(0, 0.2 + level * 0.02, 0), Math.pow(level, 1.5) * 0.15, 4, 5);
 
 
             if (!shapeCompareResult.isConstructed())
