@@ -202,10 +202,12 @@ public class Constants {
         }});
 
         BlazeReactor = new ConstructShape(RotationSymmetry.Degrees360, new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(2, 0, 0), Material.LAVA);
             put(new Coordinate3D(1, 0, -1), Material.MAGMA_BLOCK);
+            put(new Coordinate3D(1, 0, 0), Material.LAVA);
             put(new Coordinate3D(1, 0, 1), Material.MAGMA_BLOCK);
-            put(new Coordinate3D(0, 0, 0), Material.LAVA);
             put(new Coordinate3D(0, 0, -1), Material.BRICKS);
+            put(new Coordinate3D(0, 0, 0), Material.LAVA);
             put(new Coordinate3D(0, 0, 1), Material.BRICKS);
             put(new Coordinate3D(-1, 0, -1), Material.BRICKS);
             put(new Coordinate3D(-1, 0, 0), Material.BRICKS);
@@ -214,6 +216,7 @@ public class Constants {
             put(new Coordinate3D(3, -1, 0), Material.CAULDRON);
             put(new Coordinate3D(3, -1, 1), Material.CAULDRON);
             put(new Coordinate3D(2, -1, -1), Material.CAULDRON);
+            put(new Coordinate3D(2, -1, 0), Material.LAVA);
             put(new Coordinate3D(2, -1, 1), Material.CAULDRON);
             put(new Coordinate3D(1, -1, -1), Material.BRICKS);
             put(new Coordinate3D(1, -1, 0), Material.BRICKS);
@@ -224,9 +227,6 @@ public class Constants {
             put(new Coordinate3D(-1, -1, -1), Material.BRICKS);
             put(new Coordinate3D(-1, -1, 1), Material.BRICKS);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
-            put(new Coordinate3D(2, 0, 0), Airs);
-            put(new Coordinate3D(1, 0, 0), Airs);
-            put(new Coordinate3D(2, -1, 0), Airs);
             put(new Coordinate3D(-1, -1, 0), Airs);
         }});
     }

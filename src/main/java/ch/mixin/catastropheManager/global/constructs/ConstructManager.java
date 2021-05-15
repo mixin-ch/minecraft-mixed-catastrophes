@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
 import org.bukkit.inventory.ItemStack;
 
@@ -78,7 +79,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, Math.pow(level, 1.5) * 0.2, 4, 5);
 
             if (!Constants.GreenWell.checkConstructed(locationCenter).isConstructed())
                 return;
@@ -149,7 +150,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, level * 0.25, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, Math.pow(level, 1.5) * 0.2, 4, 5);
         }
     }
 
@@ -169,7 +170,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.LAVA, particles, world, level * 0.25, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.LAVA, particles, world, Math.pow(level, 1.5) * 0.2, 4, 5);
         }
     }
 
@@ -183,44 +184,52 @@ public class ConstructManager extends CatastropheManager {
                 return;
 
             Coordinate3D center = blazeReactorData.getPosition();
+            Location locationCenter = center.toLocation(world);
+            ShapeCompareResult shapeCompareResult = Constants.BlazeReactor.checkConstructed(locationCenter);
             int level = blazeReactorData.getLevel();
             int fuel = blazeReactorData.getFuel();
 
             List<Coordinate3D> particles = new ArrayList<>();
-            particles.add(center);
-            particles.add(center.sum(2, -1, 0));
+            particles.add(new Coordinate3D(0,0,0));
+            particles.add(new Coordinate3D(2, -1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, level * 0.25, 4, 5);
+            for (int i = 0; i < particles.size(); i++) {
+                Coordinate3D particle = particles.get(i).rotateY90Clockwise(shapeCompareResult.getRotations());
+                particles.remove(i);
+                particles.add(i, particle.sum(center));
+            }
 
-            Location locationCenter = center.toLocation(world);
-            ShapeCompareResult shapeCompareResult = Constants.BlazeReactor.checkConstructed(locationCenter);
+            plugin.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, new Coordinate3D(0, 0.2 + level * 0.02, 0), Math.pow(level, 1.5) * 0.2, 4, 5);
+
 
             if (!shapeCompareResult.isConstructed())
                 return;
 
             if (fuel == 0) {
                 List<Coordinate3D> relativeCauldronList = new ArrayList<>();
-                relativeCauldronList.add(center.sum(2, -1, -1));
-                relativeCauldronList.add(center.sum(3, -1, -1));
-                relativeCauldronList.add(center.sum(3, -1, 0));
-                relativeCauldronList.add(center.sum(3, -1, 1));
-                relativeCauldronList.add(center.sum(2, -1, 1));
+                relativeCauldronList.add(new Coordinate3D(3, -1, -1));
+                relativeCauldronList.add(new Coordinate3D(3, -1, 0));
+                relativeCauldronList.add(new Coordinate3D(3, -1, 1));
+                relativeCauldronList.add(new Coordinate3D(2, -1, -1));
+                relativeCauldronList.add(new Coordinate3D(2, -1, 1));
 
                 List<Location> cauldronList = new ArrayList<>();
 
                 for (Coordinate3D relativeCauldron : relativeCauldronList) {
-                    cauldronList.add(relativeCauldron.rotateY90Clockwise(shapeCompareResult.getRotations()).toLocation(world));
+                    cauldronList.add(relativeCauldron.rotateY90Clockwise(shapeCompareResult.getRotations()).sum(center).toLocation(world));
                 }
 
                 while (cauldronList.size() > 0) {
                     int index = new Random().nextInt(cauldronList.size());
+                    Block cauldron = cauldronList.get(index).getBlock();
+                    Levelled cauldronData = (Levelled) cauldron.getBlockData();
                     cauldronList.remove(index);
-                    Levelled cauldronData = (Levelled) cauldronList.get(index).getBlock().getBlockData();
 
                     if (cauldronData.getLevel() == 0)
                         continue;
 
                     cauldronData.setLevel(cauldronData.getLevel() - 1);
+                    cauldron.setBlockData(cauldronData);
                     fuel += 20 * blazeReactorData.getLevel();
                     break;
                 }
@@ -240,7 +249,9 @@ public class ConstructManager extends CatastropheManager {
                 amount++;
 
             if (amount > 0) {
-                world.dropItem(center.sum(-1, -1, 0).toLocation(world), new ItemStack(Material.COBBLESTONE, amount));
+                Coordinate3D relativeDrop = new Coordinate3D(-1, -1, 0).rotateY90Clockwise(shapeCompareResult.getRotations());
+                Location dropLocation = relativeDrop.sum(center).sum(0.5, 0.5, 0.5).toLocation(world);
+                world.dropItem(dropLocation, new ItemStack(Material.COBBLESTONE, amount));
             }
         }
     }
