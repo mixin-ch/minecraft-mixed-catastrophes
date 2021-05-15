@@ -53,6 +53,16 @@ public class AssaultCatastropheManager extends CatastropheManager {
                 , 8.5
         ), 1.0);
         entitySummonDayWeights.put(new AssaultPremise(
+                EntityType.MAGMA_CUBE
+                , "The leaping liquid Fire."
+                , 4
+        ), 1.0);
+        entitySummonDayWeights.put(new AssaultPremise(
+                EntityType.SLIME
+                , "Green, and greedy for Flesh."
+                , 8
+        ), 1.0);
+        entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.PILLAGER
                 , "To pillage is their only Desire."
                 , 2.5
@@ -190,7 +200,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
         AssaultPremise assaultPremise = null;
 
         while (amount == 0 && possibleAssaults.size() > 0) {
-            assaultPremise = Functions.getRandomWithWeights(entitySummonNightWeights);
+            assaultPremise = Functions.getRandomWithWeights(possibleAssaults);
             amount = (int) Math.floor(modifier * assaultPremise.getAmount());
         }
 
