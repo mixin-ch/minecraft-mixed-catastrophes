@@ -116,6 +116,7 @@ public class HelpInventoryManager {
         helpInventoryMap.put(HelpInventoryType.Constructs_GreenWell, makeConstructsGreenWellInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_Blitzard, makeConstructsBlitzardInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_Lighthouse, makeConstructsLighthouseInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_BlazeReactor, makeConstructsBlazeReactorInventory());
     }
 
     private HelpInventory makeHelpInventory() {
@@ -400,7 +401,7 @@ public class HelpInventoryManager {
                 "Place Blocks in certain Configurations."
         });
         createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 4), "Green Well", new String[]{
-                "regularly Drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
+                "Regularly drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
         }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
         createSlotLink(inventory, Material.IRON_BARS, 1, slot(2, 5), "Blitzard", new String[]{
                 "Attracts Lightning."
@@ -408,6 +409,9 @@ public class HelpInventoryManager {
         createSlotLink(inventory, Material.LANTERN, 1, slot(2, 6), "Lighthouse", new String[]{
                 "Protects against any Terror Event."
         }, linkInventoryMap, HelpInventoryType.Constructs_Lighthouse);
+        createSlotLink(inventory, Material.MAGMA_BLOCK, 1, slot(2, 7), "Blaze Reactor", new String[]{
+                "Regularly drops Cobblestone."
+        }, linkInventoryMap, HelpInventoryType.Constructs_BlazeReactor);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -507,6 +511,52 @@ public class HelpInventoryManager {
         return new HelpInventory(inventory, linkInventoryMap);
     }
 
+    private HelpInventory makeConstructsBlazeReactorInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 6 * 9, "Blaze Reactor");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration.", "Use Magma Cream to Level up.", "Drops Cobblestone."
+        });
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Layer 1", new String[]{});
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Layer 2", new String[]{});
+        createSlot(inventory, Material.MAGMA_CREAM, 1, true, slot(1, 5), "Magma Cream", new String[]{
+                "Click on the Lava with Magma Cream.", "Costs  Magma Cream and Secrets."
+        });
+
+        for (int row = 2; row <= 3; row++) {
+            for (int col = 2; col <= 4; col++) {
+                createSlot(inventory, Material.CAULDRON, 1, slot(row, col), "Cauldron", new String[]{});
+            }
+        }
+
+        createSlot(inventory, Material.AIR, 0, slot(3, 3), "", new String[]{});
+
+        for (int row = 4; row <= 6; row++) {
+            for (int col = 2; col <= 4; col++) {
+                createSlot(inventory, Material.BRICKS, 1, slot(row, col), "Bricks", new String[]{});
+            }
+        }
+
+        createSlot(inventory, Material.AIR, 0, slot(6, 3), "", new String[]{});
+
+
+        for (int row = 4; row <= 6; row++) {
+            for (int col = 6; col <= 8; col++) {
+                createSlot(inventory, Material.BRICKS, 1, slot(row, col), "Bricks", new String[]{});
+            }
+        }
+
+        createSlot(inventory, Material.MAGMA_BLOCK, 1, slot(4, 6), "Magma Block", new String[]{});
+        createSlot(inventory, Material.AIR, 0, slot(4, 7), "", new String[]{});
+        createSlot(inventory, Material.MAGMA_BLOCK, 1, slot(4, 8), "Magma Block", new String[]{});
+        createSlot(inventory, Material.LAVA_BUCKET, 1, slot(5, 7), "Lava", new String[]{});
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
     private void createSlot(Inventory inventory, Material material, int amount, int slot, String name, String[] lores) {
         createSlot(inventory, material, amount, false, slot, name, lores, false);
     }
@@ -522,25 +572,29 @@ public class HelpInventoryManager {
     private void createSlot(Inventory inventory, Material material, int amount, boolean glowing, int slot, String name, String[] lores, boolean clickable) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + name);
 
-        if (glowing) {
-            meta.addEnchant(Enchantment.LOYALTY, 1, true);
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        if (meta != null) {
+            meta.setDisplayName(ChatColor.GOLD + name);
+
+            if (glowing) {
+                meta.addEnchant(Enchantment.LOYALTY, 1, true);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            }
+
+            ArrayList<String> Lore = new ArrayList<>();
+
+            if (clickable) {
+                Lore.add(ChatColor.LIGHT_PURPLE + "" + ChatColor.ITALIC + "Clickable");
+            }
+
+            for (String l : lores) {
+                Lore.add(ChatColor.WHITE + l);
+            }
+
+            meta.setLore(Lore);
+            item.setItemMeta(meta);
         }
 
-        ArrayList<String> Lore = new ArrayList<>();
-
-        if (clickable) {
-            Lore.add(ChatColor.LIGHT_PURPLE + "" + ChatColor.ITALIC + "Clickable");
-        }
-
-        for (String l : lores) {
-            Lore.add(ChatColor.WHITE + l);
-        }
-
-        meta.setLore(Lore);
-        item.setItemMeta(meta);
         inventory.setItem(slot, item);
     }
 

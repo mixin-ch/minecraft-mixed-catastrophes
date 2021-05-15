@@ -14,4 +14,5 @@ public enum HelpInventoryType {
     Constructs_GreenWell,
     Constructs_Blitzard,
     Constructs_Lighthouse,
+    Constructs_BlazeReactor,
 }
