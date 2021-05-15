@@ -70,18 +70,18 @@ public class Coordinate3D {
         return divide(length());
     }
 
-    public Coordinate3D rotateY90() {
+    public Coordinate3D rotateY90Clockwise() {
         double newX = -z;
         double newZ = x;
 
         return new Coordinate3D(newX, y, newZ);
     }
 
-    public Coordinate3D rotateY90(int times) {
+    public Coordinate3D rotateY90Clockwise(int times) {
         Coordinate3D coordinate3D = clone();
 
         for (int i = 0; i < times; i++) {
-            coordinate3D = coordinate3D.rotateY90();
+            coordinate3D = coordinate3D.rotateY90Clockwise();
         }
 
         return coordinate3D;

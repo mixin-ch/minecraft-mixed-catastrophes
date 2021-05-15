@@ -209,7 +209,7 @@ public class ConstructManager extends CatastropheManager {
                 List<Location> cauldronList = new ArrayList<>();
 
                 for (Coordinate3D relativeCauldron : relativeCauldronList) {
-                    cauldronList.add(relativeCauldron.rotateY90(shapeCompareResult.getRotations()).toLocation(world));
+                    cauldronList.add(relativeCauldron.rotateY90Clockwise(shapeCompareResult.getRotations()).toLocation(world));
                 }
 
                 while (cauldronList.size() > 0) {

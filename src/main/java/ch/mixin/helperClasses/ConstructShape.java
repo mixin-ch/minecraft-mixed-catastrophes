@@ -54,14 +54,14 @@ public class ConstructShape {
         for (Coordinate3D cd3 : materialMap.keySet()) {
             Material material = materialMap.get(cd3);
 
-            if (!center.sum(cd3.rotateY90(rotation)).toLocation(world).getBlock().getType().equals(material))
+            if (!center.sum(cd3.rotateY90Clockwise(rotation)).toLocation(world).getBlock().getType().equals(material))
                 return false;
         }
 
         for (Coordinate3D cd3 : materialSetMap.keySet()) {
             List<Material> materialList = materialSetMap.get(cd3);
 
-            if (!materialList.contains(center.sum(cd3.rotateY90(rotation)).toLocation(world).getBlock().getType()))
+            if (!materialList.contains(center.sum(cd3.rotateY90Clockwise(rotation)).toLocation(world).getBlock().getType()))
                 return false;
         }
 
