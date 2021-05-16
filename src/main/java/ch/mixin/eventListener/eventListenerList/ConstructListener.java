@@ -1,10 +1,11 @@
 package ch.mixin.eventListener.eventListenerList;
 
-import ch.mixin.MetaData.*;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Coordinate3D;
 import ch.mixin.main.MixedCatastrophesPlugin;
+import ch.mixin.metaData.PlayerData;
+import ch.mixin.metaData.constructs.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -57,6 +58,9 @@ public class ConstructListener implements Listener {
             case MAGMA_CREAM:
                 makeBlazeReactor(event);
                 break;
+            case PUMPKIN_PIE:
+                makeScarecrow(event);
+                break;
         }
     }
 
@@ -90,14 +94,16 @@ public class ConstructListener implements Listener {
             }
         }
 
+        boolean isNew = false;
+
         if (greenWellData == null) {
             greenWellData = new GreenWellData(center, world.getName(), 0);
-            plugin.getMetaData().getGreenWellDataList().add(greenWellData);
+            isNew = true;
         }
 
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int cost = 160 + 80 * greenWellData.getLevel();
-        int costEyes = 1 + greenWellData.getLevel();
+        int costItem = 1 + greenWellData.getLevel();
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
@@ -110,10 +116,10 @@ public class ConstructListener implements Listener {
             success = false;
         }
 
-        if (itemStack.getAmount() < costEyes) {
+        if (itemStack.getAmount() < costItem) {
             plugin.getEventChangeManager()
                     .eventChange(player)
-                    .withEventMessage("You need at least " + costEyes + " Ender Eyes to do this.")
+                    .withEventMessage("You need at least " + costItem + " Ender Eyes to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets))
                     .finish()
                     .execute();
@@ -123,8 +129,11 @@ public class ConstructListener implements Listener {
         if (!success)
             return;
 
+        if (isNew)
+            plugin.getMetaData().getGreenWellDataList().add(greenWellData);
+
         greenWellData.setLevel(greenWellData.getLevel() + 1);
-        itemStack.setAmount(itemStack.getAmount() - costEyes);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
@@ -149,6 +158,9 @@ public class ConstructListener implements Listener {
         if (block == null)
             return;
 
+        if (block .getType() != Material.QUARTZ_BLOCK)
+            return;
+
         if (!Constants.Blitzard.checkConstructed(block.getLocation()).isConstructed())
             return;
 
@@ -162,9 +174,11 @@ public class ConstructListener implements Listener {
             }
         }
 
+        boolean isNew = false;
+
         if (blitzardData == null) {
             blitzardData = new BlitzardData(center, world.getName(), 0);
-            plugin.getMetaData().getBlitzardDataList().add(blitzardData);
+            isNew = true;
         }
 
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
@@ -196,6 +210,9 @@ public class ConstructListener implements Listener {
         if (!success)
             return;
 
+        if (isNew)
+            plugin.getMetaData().getBlitzardDataList().add(blitzardData);
+
         blitzardData.setLevel(blitzardData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);
 
@@ -222,22 +239,27 @@ public class ConstructListener implements Listener {
         if (block == null)
             return;
 
+        if (block .getType() != Material.GLOWSTONE)
+            return;
+
         if (!Constants.Lighthouse.checkConstructed(block.getLocation()).isConstructed())
             return;
 
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         LighthouseData lighthouseData = null;
 
-        for (LighthouseData ld : plugin.getMetaData().getLightHouseDataList()) {
+        for (LighthouseData ld : plugin.getMetaData().getLighthouseDataList()) {
             if (center.equals(ld.getPosition())) {
                 lighthouseData = ld;
                 break;
             }
         }
 
+        boolean isNew = false;
+
         if (lighthouseData == null) {
             lighthouseData = new LighthouseData(center, world.getName(), 0);
-            plugin.getMetaData().getLightHouseDataList().add(lighthouseData);
+            isNew = true;
         }
 
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
@@ -268,6 +290,9 @@ public class ConstructListener implements Listener {
 
         if (!success)
             return;
+
+        if (isNew)
+            plugin.getMetaData().getLighthouseDataList().add(lighthouseData);
 
         lighthouseData.setLevel(lighthouseData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);
@@ -317,15 +342,17 @@ public class ConstructListener implements Listener {
             }
         }
 
+        boolean isNew = false;
+
         if (blazeReactorData == null) {
             blazeReactorData = new BlazeReactorData(center, world.getName(), 0, 0);
-            plugin.getMetaData().getBlazeReactorList().add(blazeReactorData);
+            isNew = true;
         }
 
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int multiplier = (int) Math.pow((1 + blazeReactorData.getLevel()), 2);
         int cost = 250 * multiplier;
-        int costMagma = 1 * multiplier;
+        int costItem = 1 * multiplier;
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
@@ -338,10 +365,10 @@ public class ConstructListener implements Listener {
             success = false;
         }
 
-        if (itemStack.getAmount() < costMagma) {
+        if (itemStack.getAmount() < costItem) {
             plugin.getEventChangeManager()
                     .eventChange(player)
-                    .withEventMessage("You need at least " + costMagma + " Magma Cream to do this.")
+                    .withEventMessage("You need at least " + costItem + " Magma Cream to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets))
                     .finish()
                     .execute();
@@ -351,8 +378,11 @@ public class ConstructListener implements Listener {
         if (!success)
             return;
 
+        if (isNew)
+            plugin.getMetaData().getBlazeReactorList().add(blazeReactorData);
+
         blazeReactorData.setLevel(blazeReactorData.getLevel() + 1);
-        itemStack.setAmount(itemStack.getAmount() - costMagma);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
@@ -363,6 +393,74 @@ public class ConstructListener implements Listener {
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Blaze Reactor has heat " + blazeReactorData.getLevel() + ".")
                 .withColor(Constants.AspectThemes.get(AspectType.Misfortune))
+                .withTitle(true)
+                .finish()
+                .execute();
+    }
+
+    private void makeScarecrow(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (block .getType() != Material.JACK_O_LANTERN)
+            return;
+
+        if (!Constants.Scarecrow.checkConstructed(block.getLocation()).isConstructed())
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+
+        for (ScarecrowData sd : plugin.getMetaData().getScarecrowDataList()) {
+            if (center.equals(sd.getPosition()))
+                return;
+        }
+
+        ScarecrowData scarecrowData = new ScarecrowData(center, world.getName(), 0);
+        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int cost = 500;
+        int costItem = 1;
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Pumpkin Pie to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        plugin.getMetaData().getScarecrowDataList().add(scarecrowData);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("You hear a faint Scream far away.")
+                .withColor(Constants.AspectThemes.get(AspectType.Terror))
                 .withTitle(true)
                 .finish()
                 .execute();

@@ -1,10 +1,9 @@
 package ch.mixin.command.commandList;
 
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.main.MixedCatastrophesPlugin;
-import ch.mixin.eventChange.message.Messager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;

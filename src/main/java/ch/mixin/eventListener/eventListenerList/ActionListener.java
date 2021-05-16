@@ -1,10 +1,5 @@
 package ch.mixin.eventListener.eventListenerList;
 
-import ch.mixin.MetaData.BlitzardData;
-import ch.mixin.MetaData.GreenWellData;
-import ch.mixin.MetaData.LighthouseData;
-import ch.mixin.MetaData.PlayerData;
-import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helpInventory.HelpInventoryManager;
 import ch.mixin.helperClasses.*;
 import ch.mixin.main.MixedCatastrophesPlugin;
@@ -16,11 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class ActionListener implements Listener {
     protected final MixedCatastrophesPlugin plugin;

@@ -1,8 +1,8 @@
 package ch.mixin.catastropheManager.personal.terror;
 
-import ch.mixin.MetaData.LighthouseData;
-import ch.mixin.MetaData.PlayerData;
-import ch.mixin.MetaData.TerrorData;
+import ch.mixin.metaData.constructs.LighthouseData;
+import ch.mixin.metaData.PlayerData;
+import ch.mixin.metaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.catastropheManager.personal.terror.assault.AssaultCatastropheManager;
@@ -12,6 +12,7 @@ import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Functions;
 import ch.mixin.main.MixedCatastrophesPlugin;
+import ch.mixin.metaData.constructs.ScarecrowData;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -70,8 +71,9 @@ public class TerrorCatastropheManager extends CatastropheManager {
     @Override
     public void tick() {
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
+        HashMap<ScarecrowData, Location> scarecrowMap = makeActiveScarecrowMap();
 
-        for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+        for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
             World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)
@@ -110,7 +112,8 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
             if (timer <= 0) {
                 timer = terrorTimer();
-                causeTerror(player);
+                ScarecrowData strongestScarecrow = getStrongestScarecrow(scarecrowMap, player);
+                executeHorrificWhispers(player, strongestScarecrow);
             }
 
             terrorData.setTerrorTimer(timer);
@@ -125,18 +128,37 @@ public class TerrorCatastropheManager extends CatastropheManager {
         return Functions.random(8 * 60, 12 * 60);
     }
 
-    public void causeTerror(Player player) {
+    public void triggerHorrificWhispers(Player player) {
+        executeHorrificWhispers(player, getStrongestScarecrow(makeActiveScarecrowMap(), player));
+    }
+
+    private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData) {
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
 
+        int terrorPlus = 8 + new Random().nextInt(4 + 1);
+        int secretsPlus = 20 + playerData.getAspect(AspectType.Terror);
+        String text = "The horrific Whispers grow louder.";
+
+        if (scarecrowData != null) {
+            int playerTerror = playerData.getAspect(AspectType.Terror);
+            int lackingTerror = scarecrowData.getCollectedTerror() - playerTerror;
+            int scarecrowExtra = (int) Math.max(0, Math.floor(lackingTerror * 0.2));
+            terrorPlus += 10 + scarecrowExtra;
+            secretsPlus += 10 + scarecrowExtra;
+            text = "The Screams of the Scarecrow grow louder.";
+            int collectedTerror = (int) Math.ceil(0.9 * scarecrowData.getCollectedTerror() + 0.1 * playerData.getAspect(AspectType.Terror));
+            scarecrowData.setCollectedTerror(collectedTerror);
+        }
+
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
-        changeMap.put(AspectType.Terror, 8 + new Random().nextInt(4 + 1));
-        changeMap.put(AspectType.Secrets, 20 + playerData.getAspect(AspectType.Terror));
+        changeMap.put(AspectType.Terror, terrorPlus);
+        changeMap.put(AspectType.Secrets, secretsPlus);
 
         plugin.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("The horrific Whispers grow louder.")
+                .withEventMessage(text)
                 .withColor(Constants.AspectThemes.get(AspectType.Terror))
                 .withTitle(true)
                 .finish()
@@ -156,6 +178,51 @@ public class TerrorCatastropheManager extends CatastropheManager {
                 .withColor(Constants.AspectThemes.get(AspectType.Terror))
                 .finish()
                 .execute();
+    }
+
+    private HashMap<ScarecrowData, Location> makeActiveScarecrowMap() {
+        HashMap<ScarecrowData, Location> scarecrowMap = new HashMap<>();
+
+        for (ScarecrowData scarecrowData : metaData.getScarecrowDataList()) {
+            World scarecrowWorld = plugin.getServer().getWorld(scarecrowData.getWorldName());
+
+            if (scarecrowWorld == null)
+                continue;
+
+            Location scarecrowLocation = scarecrowData.getPosition().toLocation(scarecrowWorld);
+
+            if (!Constants.Scarecrow.checkConstructed(scarecrowLocation).isConstructed())
+                continue;
+
+            scarecrowMap.put(scarecrowData, scarecrowLocation);
+        }
+
+        return scarecrowMap;
+    }
+
+    private ScarecrowData getStrongestScarecrow(HashMap<ScarecrowData, Location> scarecrowMap, Player player) {
+        ScarecrowData strongestScarecrow = null;
+        double strongestPull = -1;
+
+        for (ScarecrowData scarecrowData : scarecrowMap.keySet()) {
+            Location scarecrowLocation = scarecrowMap.get(scarecrowData);
+
+            if (player.getWorld() != scarecrowLocation.getWorld())
+                continue;
+
+            double pull = 50 - scarecrowLocation.distance(player.getLocation());
+
+            if (pull < 0)
+                continue;
+
+            if (pull <= strongestPull)
+                continue;
+
+            strongestPull = pull;
+            strongestScarecrow = scarecrowData;
+        }
+
+        return strongestScarecrow;
     }
 
     public AssaultCatastropheManager getAssaultCatastropheManager() {

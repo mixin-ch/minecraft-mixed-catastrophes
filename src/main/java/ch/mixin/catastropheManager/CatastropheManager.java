@@ -1,6 +1,6 @@
 package ch.mixin.catastropheManager;
 
-import ch.mixin.MetaData.MetaData;
+import ch.mixin.metaData.MetaData;
 import ch.mixin.main.MixedCatastrophesPlugin;
 
 public abstract class CatastropheManager {

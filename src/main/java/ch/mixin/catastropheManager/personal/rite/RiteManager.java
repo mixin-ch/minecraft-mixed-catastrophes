@@ -1,6 +1,6 @@
 package ch.mixin.catastropheManager.personal.rite;
 
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Coordinate3D;

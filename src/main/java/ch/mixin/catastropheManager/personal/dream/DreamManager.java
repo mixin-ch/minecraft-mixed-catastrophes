@@ -1,7 +1,7 @@
 package ch.mixin.catastropheManager.personal.dream;
 
-import ch.mixin.MetaData.LighthouseData;
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.constructs.LighthouseData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.helperClasses.Coordinate3D;
@@ -238,7 +238,7 @@ public class DreamManager {
 
         boolean nearLighthouse = false;
 
-        for (LighthouseData lighthouseData : plugin.getMetaData().getLightHouseDataList()) {
+        for (LighthouseData lighthouseData : plugin.getMetaData().getLighthouseDataList()) {
             World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)

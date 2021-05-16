@@ -1,8 +1,8 @@
 package ch.mixin.catastropheManager.personal.terror.stalker;
 
-import ch.mixin.MetaData.PlayerData;
-import ch.mixin.MetaData.StalkerData;
-import ch.mixin.MetaData.TerrorData;
+import ch.mixin.metaData.PlayerData;
+import ch.mixin.metaData.StalkerData;
+import ch.mixin.metaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;

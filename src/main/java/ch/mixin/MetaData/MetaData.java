@@ -1,5 +1,6 @@
-package ch.mixin.MetaData;
+package ch.mixin.metaData;
 
+import ch.mixin.metaData.constructs.*;
 import com.google.gson.Gson;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import ch.mixin.catastropheManager.global.weather.WeatherCatastropheType;
@@ -20,6 +21,7 @@ public class MetaData {
     private List<BlitzardData> blitzardDataList;
     private List<LighthouseData> lighthouseDataList;
     private List<BlazeReactorData> blazeReactorDataList;
+    private List<ScarecrowData> scarecrowDataList;
 
     public MetaData() {
         save();
@@ -93,14 +95,6 @@ public class MetaData {
         this.blitzardDataList = blitzardDataList;
     }
 
-    public List<LighthouseData> getLightHouseDataList() {
-        return lighthouseDataList;
-    }
-
-    public void setLightHouseDataList(List<LighthouseData> lighthouseDataList) {
-        this.lighthouseDataList = lighthouseDataList;
-    }
-
     public List<LighthouseData> getLighthouseDataList() {
         return lighthouseDataList;
     }
@@ -115,5 +109,21 @@ public class MetaData {
 
     public void setBlazeReactorList(List<BlazeReactorData> blazeReactorDataList) {
         this.blazeReactorDataList = blazeReactorDataList;
+    }
+
+    public List<BlazeReactorData> getBlazeReactorDataList() {
+        return blazeReactorDataList;
+    }
+
+    public void setBlazeReactorDataList(List<BlazeReactorData> blazeReactorDataList) {
+        this.blazeReactorDataList = blazeReactorDataList;
+    }
+
+    public List<ScarecrowData> getScarecrowDataList() {
+        return scarecrowDataList;
+    }
+
+    public void setScarecrowDataList(List<ScarecrowData> scarecrowDataList) {
+        this.scarecrowDataList = scarecrowDataList;
     }
 }

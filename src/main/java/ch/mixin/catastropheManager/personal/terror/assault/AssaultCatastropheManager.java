@@ -1,8 +1,8 @@
 package ch.mixin.catastropheManager.personal.terror.assault;
 
-import ch.mixin.MetaData.LighthouseData;
-import ch.mixin.MetaData.PlayerData;
-import ch.mixin.MetaData.TerrorData;
+import ch.mixin.metaData.constructs.LighthouseData;
+import ch.mixin.metaData.PlayerData;
+import ch.mixin.metaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
@@ -218,7 +218,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
 
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
 
-        for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+        for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
             World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)

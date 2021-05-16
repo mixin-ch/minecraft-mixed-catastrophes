@@ -4,7 +4,7 @@ import ch.mixin.eventChange.EventChangeManager;
 import ch.mixin.helpInventory.HelpInventoryManager;
 import ch.mixin.helperClasses.Particler;
 import com.google.gson.Gson;
-import ch.mixin.MetaData.MetaData;
+import ch.mixin.metaData.MetaData;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.command.CommandInitializer;
 import ch.mixin.eventListener.EventListenerInitializer;

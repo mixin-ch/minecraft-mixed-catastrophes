@@ -1,6 +1,6 @@
 package ch.mixin.eventListener.eventListenerList;
 
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helpInventory.HelpInventoryManager;

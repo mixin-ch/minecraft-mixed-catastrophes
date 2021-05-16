@@ -1,6 +1,6 @@
 package ch.mixin.catastropheManager;
 
-import ch.mixin.MetaData.MetaData;
+import ch.mixin.metaData.MetaData;
 import ch.mixin.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.catastropheManager.global.timeDistortion.TimeDistortionManager;

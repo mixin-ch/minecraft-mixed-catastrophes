@@ -21,11 +21,14 @@ public class Constants {
     public static final ArrayList<Material> Fires;
     public static final ArrayList<Material> HotItems;
     public static final ArrayList<Material> Lanterns;
+    public static final ArrayList<Material> Torches;
+    public static final ArrayList<Material> Fences;
 
     public static final ConstructShape GreenWell;
     public static final ConstructShape Blitzard;
     public static final ConstructShape Lighthouse;
     public static final ConstructShape BlazeReactor;
+    public static final ConstructShape Scarecrow;
 
     static {
         AspectThemes = new HashMap<>();
@@ -159,6 +162,25 @@ public class Constants {
         Lanterns.add(Material.LANTERN);
         Lanterns.add(Material.SOUL_LANTERN);
 
+        Torches = new ArrayList<>();
+        Torches.add(Material.TORCH);
+        Torches.add(Material.WALL_TORCH);
+        Torches.add(Material.SOUL_TORCH);
+        Torches.add(Material.SOUL_WALL_TORCH);
+        Torches.add(Material.REDSTONE_TORCH);
+        Torches.add(Material.REDSTONE_WALL_TORCH);
+
+        Fences = new ArrayList<>();
+        Fences.add(Material.ACACIA_FENCE);
+        Fences.add(Material.BIRCH_FENCE);
+        Fences.add(Material.CRIMSON_FENCE);
+        Fences.add(Material.DARK_OAK_FENCE);
+        Fences.add(Material.JUNGLE_FENCE);
+        Fences.add(Material.NETHER_BRICK_FENCE);
+        Fences.add(Material.OAK_FENCE);
+        Fences.add(Material.SPRUCE_FENCE);
+        Fences.add(Material.WARPED_FENCE);
+
         GreenWell = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.WATER);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
@@ -228,6 +250,27 @@ public class Constants {
             put(new Coordinate3D(-1, -1, 1), Material.BRICKS);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
             put(new Coordinate3D(-1, -1, 0), Airs);
+        }});
+
+        Scarecrow = new ConstructShape(RotationSymmetry.Degrees180, new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(0, 0, 0), Material.JACK_O_LANTERN);
+            put(new Coordinate3D(0, -1, 0), Material.HAY_BLOCK);
+            put(new Coordinate3D(0, -2, -2), Material.CHAIN);
+            put(new Coordinate3D(0, -2, -1), Material.CHAIN);
+            put(new Coordinate3D(0, -2, 1), Material.CHAIN);
+            put(new Coordinate3D(0, -2, 2), Material.CHAIN);
+            put(new Coordinate3D(0, -3, -2), Material.CHAIN);
+            put(new Coordinate3D(0, -3, 2), Material.CHAIN);
+            put(new Coordinate3D(0, -4, 0), Material.SOUL_SAND);
+        }}, new HashMap<Coordinate3D, List<Material>>() {{
+            put(new Coordinate3D(0, 0, -2), Torches);
+            put(new Coordinate3D(0, 0, 2), Torches);
+            put(new Coordinate3D(0, -1, -2), Fences);
+            put(new Coordinate3D(0, -1, -1), Fences);
+            put(new Coordinate3D(0, -1, 1), Fences);
+            put(new Coordinate3D(0, -1, 2), Fences);
+            put(new Coordinate3D(0, -2, 0), Fences);
+            put(new Coordinate3D(0, -3, 0), Fences);
         }});
     }
 }

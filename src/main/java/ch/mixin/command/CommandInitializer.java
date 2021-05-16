@@ -21,6 +21,7 @@ public class CommandInitializer {
         plugin.getCommand(prefix + "starSplinter").setExecutor(new StarSplinterCommand(plugin, prefix + "starSplinter"));
         plugin.getCommand(prefix + "causeStalker").setExecutor(new CauseStalkerCommand(plugin, prefix + "causeStalker"));
         plugin.getCommand(prefix + "clearStalker").setExecutor(new ClearStalkerCommand(plugin, prefix + "clearStalker"));
+        plugin.getCommand(prefix + "causeHorrificWhispers").setExecutor(new CauseHorrificWhispersCommand(plugin, prefix + "causeHorrificWhispers"));
 
         plugin.getCommand(prefix + "aspect").setTabCompleter(new AspectCompleter(plugin));
         plugin.getCommand(prefix + "weatherCatastrophe").setTabCompleter(new WeatherCatastropheCompleter(plugin));

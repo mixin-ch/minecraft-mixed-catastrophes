@@ -1,4 +1,4 @@
-package ch.mixin.MetaData;
+package ch.mixin.metaData;
 
 import ch.mixin.eventChange.aspect.AspectType;
 

@@ -1,7 +1,7 @@
 package ch.mixin.catastropheManager.personal;
 
-import ch.mixin.MetaData.LighthouseData;
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.constructs.LighthouseData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.catastropheManager.personal.dream.DreamManager;
@@ -77,7 +77,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
         HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
 
-        for (LighthouseData lighthouseData : metaData.getLightHouseDataList()) {
+        for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
             World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)

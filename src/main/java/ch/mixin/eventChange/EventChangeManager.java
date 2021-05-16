@@ -1,7 +1,7 @@
 package ch.mixin.eventChange;
 
 
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.eventChange.aspect.AspectChange;
 import ch.mixin.eventChange.aspect.AspectScoreManager;
 import ch.mixin.eventChange.aspect.AspectType;

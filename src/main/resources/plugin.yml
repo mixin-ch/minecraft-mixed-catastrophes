@@ -26,3 +26,5 @@ commands:
     description: Causes Stalker.
   mx-cs-clearStalker:
     description: Clears Stalker.
+  mx-cs-causeHorrificWhispers:
+    description: Causes Horrific Whispers.

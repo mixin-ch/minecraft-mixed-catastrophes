@@ -1,7 +1,7 @@
 package ch.mixin.catastropheManager.global.weather;
 
-import ch.mixin.MetaData.BlitzardData;
-import ch.mixin.MetaData.PlayerData;
+import ch.mixin.metaData.constructs.BlitzardData;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
@@ -358,6 +358,9 @@ public class WeatherCatastropheManager extends CatastropheManager {
         double strongestPull = -1;
 
         for (Location blitzardLocation : blitzardMap.keySet()) {
+            if (blitzardLocation.getWorld() != baseLocation.getWorld())
+                continue;
+
             double pull = blitzardMap.get(blitzardLocation) - blitzardLocation.distance(baseLocation);
 
             if (pull < 0)

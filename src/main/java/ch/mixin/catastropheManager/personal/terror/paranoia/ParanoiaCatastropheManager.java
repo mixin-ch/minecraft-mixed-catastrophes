@@ -1,7 +1,7 @@
 package ch.mixin.catastropheManager.personal.terror.paranoia;
 
-import ch.mixin.MetaData.PlayerData;
-import ch.mixin.MetaData.TerrorData;
+import ch.mixin.metaData.PlayerData;
+import ch.mixin.metaData.TerrorData;
 import ch.mixin.catastropheManager.CatastropheManager;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.eventChange.aspect.AspectType;
@@ -13,9 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
-import java.util.UUID;
 
 public class ParanoiaCatastropheManager extends CatastropheManager {
     private final static ArrayList<ParanoiaType> paranoiaOrder;

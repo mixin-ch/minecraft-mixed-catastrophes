@@ -1,7 +1,6 @@
 package ch.mixin.eventChange.aspect;
 
-import ch.mixin.MetaData.PlayerData;
-import ch.mixin.eventChange.aspect.AspectType;
+import ch.mixin.metaData.PlayerData;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Bukkit;
