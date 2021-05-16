@@ -190,7 +190,7 @@ public class ConstructManager extends CatastropheManager {
             int fuel = blazeReactorData.getFuel();
 
             List<Coordinate3D> particles = new ArrayList<>();
-            particles.add(new Coordinate3D(0,0,0));
+            particles.add(new Coordinate3D(0, 0, 0));
             particles.add(new Coordinate3D(2, -1, 0));
 
             for (int i = 0; i < particles.size(); i++) {
@@ -272,7 +272,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            plugin.getParticler().spawnParticles(Particle.SOUL, particles, world, terror * 0.01, 4, 5);
+            plugin.getParticler().spawnParticles(Particle.SOUL, particles, world, new Coordinate3D(0, 0.1 + Math.pow(terror, 0.5) * 0.01, 0), 0.1 + terror * 0.01, 4, 5);
         }
     }
 }
