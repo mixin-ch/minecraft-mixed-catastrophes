@@ -71,6 +71,11 @@ public class ConstructManager extends CatastropheManager {
                 return;
 
             Coordinate3D center = greenWellData.getPosition();
+            ShapeCompareResult shapeCompareResult = Constants.GreenWell.checkConstructed(center.toLocation(world));
+
+            if (!shapeCompareResult.isConstructed())
+                return;
+
             int level = greenWellData.getLevel();
             Location locationCenter = center.toLocation(world);
             Location locationCenterMiddle = center.sum(0.5, 0.5, 0.5).toLocation(world);
@@ -144,6 +149,11 @@ public class ConstructManager extends CatastropheManager {
                 return;
 
             Coordinate3D center = blitzardData.getPosition();
+            ShapeCompareResult shapeCompareResult = Constants.Blitzard.checkConstructed(center.toLocation(world));
+
+            if (!shapeCompareResult.isConstructed())
+                return;
+
             int level = blitzardData.getLevel();
 
             List<Coordinate3D> particles = new ArrayList<>();
@@ -164,6 +174,11 @@ public class ConstructManager extends CatastropheManager {
                 return;
 
             Coordinate3D center = lighthouseData.getPosition();
+            ShapeCompareResult shapeCompareResult = Constants.Lighthouse.checkConstructed(center.toLocation(world));
+
+            if (!shapeCompareResult.isConstructed())
+                return;
+
             int level = lighthouseData.getLevel();
 
             List<Coordinate3D> particles = new ArrayList<>();
@@ -186,6 +201,10 @@ public class ConstructManager extends CatastropheManager {
             Coordinate3D center = blazeReactorData.getPosition();
             Location locationCenter = center.toLocation(world);
             ShapeCompareResult shapeCompareResult = Constants.BlazeReactor.checkConstructed(locationCenter);
+
+            if (!shapeCompareResult.isConstructed())
+                return;
+
             int level = blazeReactorData.getLevel();
             int fuel = blazeReactorData.getFuel();
 
@@ -200,10 +219,6 @@ public class ConstructManager extends CatastropheManager {
             }
 
             plugin.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, new Coordinate3D(0, 0.2 + level * 0.02, 0), Math.pow(level, 1.5) * 0.15, 4, 5);
-
-
-            if (!shapeCompareResult.isConstructed())
-                return;
 
             if (fuel == 0) {
                 List<Coordinate3D> relativeCauldronList = new ArrayList<>();
@@ -266,12 +281,22 @@ public class ConstructManager extends CatastropheManager {
                 return;
 
             Coordinate3D center = scarecrowData.getPosition();
-            int terror = scarecrowData.getCollectedTerror();
+            ShapeCompareResult shapeCompareResult = Constants.Scarecrow.checkConstructed(center.toLocation(world));
+
+            if (!shapeCompareResult.isConstructed())
+                return;
 
             List<Coordinate3D> particles = new ArrayList<>();
-            particles.add(center);
-            particles.add(center.sum(0, 1, 0));
+            particles.add(new Coordinate3D(0, 0, -2));
+            particles.add(new Coordinate3D(0, 0, 2));
 
+            for (int i = 0; i < particles.size(); i++) {
+                Coordinate3D particle = particles.get(i).rotateY90Clockwise(shapeCompareResult.getRotations());
+                particles.remove(i);
+                particles.add(i, particle.sum(center));
+            }
+
+            int terror = scarecrowData.getCollectedTerror();
             plugin.getParticler().spawnParticles(Particle.SOUL, particles, world, new Coordinate3D(0, 0.1 + Math.pow(terror, 0.5) * 0.01, 0), 0.1 + terror * 0.01, 4, 5);
         }
     }
