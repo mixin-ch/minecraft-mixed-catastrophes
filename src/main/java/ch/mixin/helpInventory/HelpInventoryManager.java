@@ -117,6 +117,7 @@ public class HelpInventoryManager {
         helpInventoryMap.put(HelpInventoryType.Constructs_Blitzard, makeConstructsBlitzardInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_Lighthouse, makeConstructsLighthouseInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_BlazeReactor, makeConstructsBlazeReactorInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_Scarecrow, makeConstructsScarecrowInventory());
     }
 
     private HelpInventory makeHelpInventory() {
@@ -400,18 +401,21 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Place Blocks in certain Configurations."
         });
-        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 4), "Green Well", new String[]{
+        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 3), "Green Well", new String[]{
                 "Regularly drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
         }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
-        createSlotLink(inventory, Material.IRON_BARS, 1, slot(2, 5), "Blitzard", new String[]{
+        createSlotLink(inventory, Material.IRON_BARS, 1, slot(2, 4), "Blitzard", new String[]{
                 "Attracts Lightning."
         }, linkInventoryMap, HelpInventoryType.Constructs_Blitzard);
-        createSlotLink(inventory, Material.LANTERN, 1, slot(2, 6), "Lighthouse", new String[]{
+        createSlotLink(inventory, Material.LANTERN, 1, slot(2, 5), "Lighthouse", new String[]{
                 "Protects against any Terror Event."
         }, linkInventoryMap, HelpInventoryType.Constructs_Lighthouse);
-        createSlotLink(inventory, Material.MAGMA_BLOCK, 1, slot(2, 7), "Blaze Reactor", new String[]{
+        createSlotLink(inventory, Material.MAGMA_BLOCK, 1, slot(2, 6), "Blaze Reactor", new String[]{
                 "Regularly drops Cobblestone."
         }, linkInventoryMap, HelpInventoryType.Constructs_BlazeReactor);
+        createSlotLink(inventory, Material.CARVED_PUMPKIN, 1, slot(2, 7), "Scarecrow", new String[]{
+                "Increases Terror and Secrets from Horrific Whispers."
+        }, linkInventoryMap, HelpInventoryType.Constructs_Scarecrow);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -523,7 +527,7 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Layer 1", new String[]{});
         createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Layer 2", new String[]{});
         createSlot(inventory, Material.MAGMA_CREAM, 1, true, slot(1, 5), "Magma Cream", new String[]{
-                "Click on the Lava with Magma Cream.", "Costs  Magma Cream and Secrets."
+                "Click on the Lava with Magma Cream.", "Costs Magma Cream and Secrets."
         });
 
         for (int row = 2; row <= 3; row++) {
@@ -553,6 +557,52 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.AIR, 0, slot(4, 7), "", new String[]{});
         createSlot(inventory, Material.MAGMA_BLOCK, 1, slot(4, 8), "Magma Block", new String[]{});
         createSlot(inventory, Material.LAVA_BUCKET, 1, slot(5, 7), "Lava", new String[]{});
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeConstructsScarecrowInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 6 * 9, "Scarecrow");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration.", "Use Pumpkin Pie to activate.", "More Secrets and Terror from Horrific Whispers."
+        });
+        createSlot(inventory, Material.PUMPKIN_PIE, 1, true, slot(1, 5), "Pumpkin Pie", new String[]{
+                "Click on the Pumpkin with Pumpkin Pie.", "Costs Pumpkin Pie and Secrets."
+        });
+        createSlot(inventory, Material.JACK_O_LANTERN, 1, slot(2, 5), "Jack o' Lantern", new String[]{});
+        createSlot(inventory, Material.TORCH, 1, slot(2, 3), "", new String[]{
+                "Can be any Torch."
+        });
+        createSlot(inventory, Material.TORCH, 1, slot(2, 7), "", new String[]{
+                "Can be any Torch."
+        });
+
+        for (int col = 3; col <= 7; col++) {
+            createSlot(inventory, Material.OAK_FENCE, 1, slot(3, col), "Fence", new String[]{
+                    "Can be any Fence."
+            });
+        }
+
+        createSlot(inventory, Material.HAY_BLOCK, 1, slot(3, 5), "Hay Block", new String[]{});
+
+        for (int col = 3; col <= 7; col++) {
+            createSlot(inventory, Material.CHAIN, 1, slot(4, col), "Chain", new String[]{});
+        }
+
+        createSlot(inventory, Material.OAK_FENCE, 1, slot(4, 5), "Fence", new String[]{
+                "Can be any Fence."
+        });
+        createSlot(inventory, Material.CHAIN, 1, slot(5, 3), "Chain", new String[]{});
+        createSlot(inventory, Material.OAK_FENCE, 1, slot(5, 5), "Fence", new String[]{
+                "Can be any Fence."
+        });
+        createSlot(inventory, Material.CHAIN, 1, slot(5, 7), "Chain", new String[]{});
+
+        createSlot(inventory, Material.SOUL_SAND, 1, slot(6, 5), "Soul Sand", new String[]{});
 
         return new HelpInventory(inventory, linkInventoryMap);
     }

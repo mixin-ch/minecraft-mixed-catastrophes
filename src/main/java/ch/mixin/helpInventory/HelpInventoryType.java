@@ -15,4 +15,5 @@ public enum HelpInventoryType {
     Constructs_Blitzard,
     Constructs_Lighthouse,
     Constructs_BlazeReactor,
+    Constructs_Scarecrow,
 }
