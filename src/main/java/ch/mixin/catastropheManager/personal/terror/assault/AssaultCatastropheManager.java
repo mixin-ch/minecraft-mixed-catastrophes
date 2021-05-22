@@ -201,6 +201,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
 
         while (amount == 0 && possibleAssaults.size() > 0) {
             assaultPremise = Functions.getRandomWithWeights(possibleAssaults);
+            possibleAssaults.remove(assaultPremise);
             amount = (int) Math.floor(modifier * assaultPremise.getAmount());
         }
 
