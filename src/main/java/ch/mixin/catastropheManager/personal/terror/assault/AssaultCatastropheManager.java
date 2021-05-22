@@ -205,7 +205,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             amount = (int) Math.floor(modifier * assaultPremise.getAmount());
         }
 
-        if (assaultPremise == null)
+        if (amount == 0)
             return;
 
         Coordinate2D center = new Coordinate2D(mainPlayerLocation.getBlockX(), mainPlayerLocation.getBlockZ());
