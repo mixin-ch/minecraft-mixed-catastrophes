@@ -1,6 +1,5 @@
 package ch.mixin.command.mxCs;
 
-import ch.mixin.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.command.SubCommand;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.ChatColor;

@@ -24,6 +24,15 @@ permissions:
   mixedCatastrophes.starSplinter:
     description: Trigger Star Splinters.
     default: op
+  mixedCatastrophes.whispers:
+    description: Trigger Horriffic Whispers.
+    default: op
+  mixedCatastrophes.assault:
+    description: Trigger Assault.
+    default: op
+  mixedCatastrophes.stalker:
+    description: Cause and clear Stalkers.
+    default: op
   mixedCatastrophes.*:
     description: All MixedCatastrophes Permissions.
     default: op
@@ -33,3 +42,6 @@ permissions:
       mixedCatastrophes.weather: true
       mixedCatastrophes.timeDistortion: true
       mixedCatastrophes.starSplinter: true
+      mixedCatastrophes.whispers: true
+      mixedCatastrophes.assault: true
+      mixedCatastrophes.stalker: true

@@ -1,6 +1,5 @@
 package ch.mixin.command.mxCs;
 
-import ch.mixin.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.command.SubCommand;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.main.MixedCatastrophesPlugin;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class AspectCommand extends SubCommand {
     public AspectCommand(MixedCatastrophesPlugin plugin) {

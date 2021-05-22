@@ -1,4 +1,4 @@
-package ch.mixin.command.mxCs;
+package ch.mixin.command.mxCs.terror.stalker;
 
 import ch.mixin.command.SubCommand;
 import ch.mixin.main.MixedCatastrophesPlugin;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class StarSplinterCommand extends SubCommand {
-    public StarSplinterCommand(MixedCatastrophesPlugin plugin) {
+public class StalkerClearCommand extends SubCommand {
+    public StalkerClearCommand(MixedCatastrophesPlugin plugin) {
         super(plugin);
     }
 
@@ -28,7 +28,7 @@ public class StarSplinterCommand extends SubCommand {
             return;
         }
 
-        if (!sender.hasPermission("mixedCatastrophes.starSplinter")) {
+        if (!sender.hasPermission("mixedCatastrophes.stalker")) {
             sender.sendMessage(ChatColor.RED + "You lack Permission.");
             return;
         }
@@ -38,20 +38,26 @@ public class StarSplinterCommand extends SubCommand {
             return;
         }
 
-        if (arguments.size() == 1) {
-            Player player = plugin.getServer().getPlayer(arguments.get(0));
+        Player player;
+
+        if (arguments.size() == 0) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You are not a Player.");
+                return;
+            }
+
+            player = (Player) sender;
+        } else {
+            player = plugin.getServer().getPlayer(arguments.get(0));
 
             if (player == null) {
                 sender.sendMessage(ChatColor.RED + "Player not found.");
                 return;
             }
-
-            plugin.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter(player);
-        } else {
-            plugin.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter();
         }
 
-        sender.sendMessage(ChatColor.GREEN + "Triggered Star-Splinter.");
+        plugin.getMetaData().getPlayerDataMap().get((player).getUniqueId()).getTerrorData().getStalkerDatas().clear();
+        sender.sendMessage(ChatColor.GREEN + "Stalkers cleared.");
     }
 
     @Override
