@@ -33,6 +33,9 @@ public class RootCatastropheManager {
         constructManager = new ConstructManager(plugin, this);
         personalCatastropheManager = new PersonalCatastropheManager(plugin, this);
         metaDataSaveTimer = 0;
+        initializeMetaData();
+        plugin.getEventChangeManager().updateScoreBoard();
+        initializeCauser();
     }
 
     private void initializeMetaData() {
@@ -55,9 +58,6 @@ public class RootCatastropheManager {
         if (!started) {
             started = true;
             System.out.println("Catastrophes started.");
-            initializeMetaData();
-            plugin.getEventChangeManager().updateScoreBoard();
-            initializeCauser();
             tickTrigger();
             metaData.setActive(true);
         }

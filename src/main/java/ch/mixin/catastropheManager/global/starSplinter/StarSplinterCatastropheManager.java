@@ -98,6 +98,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         starSplinterTimer--;
 
         if (starSplinterTimer <= 0) {
+            starSplinterTimer = starSplinterTimer();
             ArrayList<Player> playerList = new ArrayList<>();
 
             for (Player p : plugin.getServer().getOnlinePlayers()) {
@@ -111,15 +112,11 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
             if (new Random().nextDouble() < probability) {
                 causeStarSplinter();
-            } else {
-                starSplinterTimer = starSplinterTimer();
             }
         }
     }
 
     public void causeStarSplinter() {
-        starSplinterTimer = starSplinterTimer();
-
         ArrayList<Player> playerList = new ArrayList<>();
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
@@ -132,10 +129,20 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             return;
 
         Player player = playerList.get(new Random().nextInt(playerList.size()));
+        causeStarSplinter(player);
+    }
 
+    public void causeStarSplinter(Player player) {
         StarSplinterPremise starSplinterPremise = Functions.getRandomWithWeights(starSplinterWeights);
         World world = player.getWorld();
         List<Location> locations = new ArrayList<>();
+        ArrayList<Player> playerList = new ArrayList<>();
+
+        for (Player p : plugin.getServer().getOnlinePlayers()) {
+            if (world == p.getWorld()) {
+                playerList.add(p);
+            }
+        }
 
         for (Coordinate2D space : Functions.getSphere2D(Coordinate2D.convert(player.getLocation()), 50)) {
             Location roof = Functions.absoluteRoof(world, space);

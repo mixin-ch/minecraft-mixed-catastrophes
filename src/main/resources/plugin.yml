@@ -4,27 +4,32 @@ main: ch.mixin.main.MixedCatastrophesPlugin
 api-version: 1.16
 
 commands:
-  mx-help:
-    description: Opens the Help Inventory.
-  mx-dealWithDevil:
-    description: Initiates a Deal.
-  mx-cs-startCatastrophes:
-    description: Activates the Catastrophe.
-  mx-cs-stopCatastrophes:
-    description: Deactivates the Catastrophe.
-  mx-cs-aspect:
-    description: Sets an Aspect.
-  mx-cs-timeDistortion:
-    description: Causes a TimeDistorton.
-  mx-cs-weatherCatastrophe:
-    description: Sets the WeatherCatastrophe.
-  mx-cs-assault:
-    description: Triggers an Assault.
-  mx-cs-starSplinter:
-    description: Triggers a Star-Splinter.
-  mx-cs-causeStalker:
-    description: Causes Stalker.
-  mx-cs-clearStalker:
-    description: Clears Stalker.
-  mx-cs-causeHorrificWhispers:
-    description: Causes Horrific Whispers.
+  mx:
+    description: The Root Command for MixedCatastrophes with Prefix mx.
+  mx-cs:
+    description: The Root Command for MixedCatastrophes with Prefix mx-cs.
+permissions:
+  mixedCatastrophes.catastrophes:
+    description: Activate and deactivate Catastrophes.
+    default: op
+  mixedCatastrophes.aspect:
+    description: Change Aspect Values.
+    default: op
+  mixedCatastrophes.weather:
+    description: Change the Weather Catastrophes.
+    default: op
+  mixedCatastrophes.timeDistortion:
+    description: Trigger Time Distortions.
+    default: op
+  mixedCatastrophes.starSplinter:
+    description: Trigger Star Splinters.
+    default: op
+  mixedCatastrophes.*:
+    description: All MixedCatastrophes Permissions.
+    default: op
+    children:
+      mixedCatastrophes.catastrophes: true
+      mixedCatastrophes.aspect: true
+      mixedCatastrophes.weather: true
+      mixedCatastrophes.timeDistortion: true
+      mixedCatastrophes.starSplinter: true

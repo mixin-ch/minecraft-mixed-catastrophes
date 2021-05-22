@@ -1,54 +1,50 @@
-package ch.mixin.command.commandList;
+package ch.mixin.command.mx;
 
-import ch.mixin.metaData.PlayerData;
+import ch.mixin.catastropheManager.global.weather.WeatherCatastropheType;
+import ch.mixin.command.SubCommand;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;
 import ch.mixin.main.MixedCatastrophesPlugin;
+import ch.mixin.metaData.PlayerData;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-public class DealWithDevilCommand implements CommandExecutor {
-    private final MixedCatastrophesPlugin plugin;
-    private final String commandName;
-
-    public DealWithDevilCommand(MixedCatastrophesPlugin plugin, String commandName) {
-        this.plugin = plugin;
-        this.commandName = commandName;
+public class DealWithDevilCommand extends SubCommand {
+    public DealWithDevilCommand(MixedCatastrophesPlugin plugin) {
+        super(plugin);
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!plugin.isPluginFlawless()) {
-            sender.sendMessage(ChatColor.RED + "Plugin has Problems.");
-            return true;
+    public SubCommand fetchCommand(List<String> arguments) {
+        return this;
+    }
+
+    @Override
+    public void execute(CommandSender sender, List<String> arguments) {
+        if (!plugin.getMetaData().isActive()) {
+            sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
+            return;
         }
 
-        if (!command.getName().equalsIgnoreCase(commandName)) {
-            sender.sendMessage(ChatColor.RED + "Command does not match.");
-            return true;
+        if (arguments.size() != 0) {
+            sender.sendMessage(ChatColor.RED + "Invalid Argument Number.");
+            return;
         }
-
-        if (args.length != 0) {
-            sender.sendMessage(ChatColor.RED + "/" + commandName);
-            return true;
-        }
-
-        Player player;
 
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You are not a Player.");
-            return true;
+            return;
         }
 
-        player = (Player) sender;
+        Player player = (Player) sender;
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int limit = 5 + playerData.getAspect(AspectType.Death_Seeker);
@@ -59,7 +55,7 @@ public class DealWithDevilCommand implements CommandExecutor {
                     .withColor(ChatColor.WHITE)
                     .finish()
                     .execute();
-            return true;
+            return;
         }
 
         player.getInventory().addItem(new ItemStack(Material.OAK_SAPLING, 10));
@@ -81,6 +77,10 @@ public class DealWithDevilCommand implements CommandExecutor {
                 .withTitle(true)
                 .finish()
                 .execute();
-        return true;
+    }
+
+    @Override
+    public List<String> getOptions(List<String> arguments) {
+        return new ArrayList<>();
     }
 }

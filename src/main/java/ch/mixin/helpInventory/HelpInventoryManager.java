@@ -127,6 +127,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Click on the various Icons to gain Info about them."
         });
+        createSlot(inventory, Material.PAPER,1, true, slot(1, 2), "/mx dealWithDevil", new String[]{
+                "Type this Command when Stuck somewhere with no Resources."
+        });
         createSlotLink(inventory, Material.CLOCK, 1, slot(2, 1), "Weathers", new String[]{
                 "Fire, Ice and Lightning falling from the Sky."
         }, linkInventoryMap, HelpInventoryType.Weathers);

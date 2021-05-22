@@ -208,14 +208,4 @@ public class Functions {
 
         return new Location(world, x, y, z);
     }
-
-    public static AspectType toAspectType(String string) {
-        for (AspectType aspectType : AspectType.values()) {
-            if (aspectType.toString().equalsIgnoreCase(string)) {
-                return aspectType;
-            }
-        }
-
-        return null;
-    }
 }

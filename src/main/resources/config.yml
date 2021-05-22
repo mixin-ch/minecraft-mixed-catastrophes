@@ -1,7 +1,7 @@
 worlds:
   - world
 hintList:
-  - Type "/mx-cs-dealWithDevil" if you are stranded on an Island.
+  - Type "/mx dealWithDevil" if you are stranded on an Island.
   - Radiant Sky blinds you, if you have no shelter.
   - Radiant Sky is harmless at Night.
   - Stay near Fire or other Sources of Warmth, to protect against Seering Cold.
