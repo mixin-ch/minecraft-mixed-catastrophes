@@ -22,7 +22,7 @@ public class HelpInventoryManager {
     static {
         HelpBookItem = new ItemStack(Material.ENCHANTED_BOOK, 1);
         ItemMeta meta = HelpBookItem.getItemMeta();
-        meta.setDisplayName(ChatColor.GOLD + "MixIsland Dictionary");
+        meta.setDisplayName(ChatColor.GOLD + "Mixed Catastrophes Dictionary");
         HelpBookItem.setItemMeta(meta);
     }
 
