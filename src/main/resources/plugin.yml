@@ -2,6 +2,7 @@ name: MixedCatastrophes
 version: ${project.version}
 main: ch.mixin.main.MixedCatastrophesPlugin
 api-version: 1.16
+softdepend: [ IslandGenerator ]
 
 commands:
   mx:
@@ -9,6 +10,9 @@ commands:
   mx-cs:
     description: The Root Command for MixedCatastrophes with Prefix mx-cs.
 permissions:
+  mixedCatastrophes.reload:
+    description: Reaload the Plugin.
+    default: op
   mixedCatastrophes.catastrophes:
     description: Activate and deactivate Catastrophes.
     default: op
@@ -37,6 +41,7 @@ permissions:
     description: All MixedCatastrophes Permissions.
     default: op
     children:
+      mixedCatastrophes.reload: true
       mixedCatastrophes.catastrophes: true
       mixedCatastrophes.aspect: true
       mixedCatastrophes.weather: true

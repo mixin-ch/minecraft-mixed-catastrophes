@@ -3,11 +3,13 @@ package ch.mixin.main;
 import ch.mixin.eventChange.EventChangeManager;
 import ch.mixin.helpInventory.HelpInventoryManager;
 import ch.mixin.helperClasses.Particler;
+import ch.mixin.islandgenerator.main.IslandGeneratorPlugin;
 import com.google.gson.Gson;
 import ch.mixin.metaData.MetaData;
 import ch.mixin.catastropheManager.RootCatastropheManager;
 import ch.mixin.command.CommandInitializer;
 import ch.mixin.eventListener.EventListenerInitializer;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +25,9 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     public static String METADATA_DIRECTORY_PATH;
     public static String METADATA_FILE_PATH;
     public static File METADATA_FILE;
+
+    public static IslandGeneratorPlugin IslandGeneratorPlugin = (IslandGeneratorPlugin) Bukkit.getServer().getPluginManager().getPlugin("IslandGenerator");
+    public static boolean useIslandGeneratorPlugin;
 
     static {
         String urlPath = MixedCatastrophesPlugin.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -61,7 +66,12 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         metaData.save();
     }
 
-    public void loadConfig() {
+    public void reload() {
+        super.reloadConfig();
+        initialize();
+    }
+
+    private void loadConfig() {
         getConfig().options().copyDefaults(true);
         saveConfig();
     }
@@ -102,12 +112,15 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
             }
         }
 
+        useIslandGeneratorPlugin = IslandGeneratorPlugin != null;
+        System.out.println("IslandGeneratorPlugin: " + useIslandGeneratorPlugin);
+
         CommandInitializer.setupCommands(this);
         EventListenerInitializer.setupEventListener(this);
     }
 
     private void start() {
-        if (metaData.isActive()){
+        if (metaData.isActive()) {
             rootCatastropheManager.start();
         }
 

@@ -1,9 +1,11 @@
 package ch.mixin.helpInventory;
 
+import ch.mixin.command.mx.DealWithDevilCommand;
 import ch.mixin.main.MixedCatastrophesPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -127,9 +129,17 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Click on the various Icons to gain Info about them."
         });
-        createSlot(inventory, Material.PAPER,1, true, slot(1, 2), "/mx dealWithDevil", new String[]{
-                "Type this Command when Stuck somewhere with no Resources."
-        });
+
+        ConfigurationSection commandsSection = plugin.getConfig().getConfigurationSection("commands");
+
+        if (commandsSection != null) {
+            if (commandsSection.getBoolean("dealWithDevil")) {
+                createSlot(inventory, Material.PAPER, 1, true, slot(1, 2), "/mx dealWithDevil", new String[]{
+                        "Type this Command when Stuck somewhere with no Resources."
+                });
+            }
+        }
+
         createSlotLink(inventory, Material.CLOCK, 1, slot(2, 1), "Weathers", new String[]{
                 "Fire, Ice and Lightning falling from the Sky."
         }, linkInventoryMap, HelpInventoryType.Weathers);

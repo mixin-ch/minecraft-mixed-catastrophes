@@ -8,6 +8,7 @@ import java.util.HashMap;
 public class MxCsCommand extends RootCommand {
     public MxCsCommand(MixedCatastrophesPlugin plugin) {
         super(plugin, "mx-cs", new HashMap<>());
+        subCommandMap.put("reload", new ReloadCommand(plugin));
         subCommandMap.put("catastrophes", new CatastrophesCommand(plugin));
         subCommandMap.put("aspect", new AspectCommand(plugin));
         subCommandMap.put("weather", new WeatherCommand(plugin));

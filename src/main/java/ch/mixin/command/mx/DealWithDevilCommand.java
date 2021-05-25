@@ -1,6 +1,5 @@
 package ch.mixin.command.mx;
 
-import ch.mixin.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.command.SubCommand;
 import ch.mixin.eventChange.aspect.AspectType;
 import ch.mixin.helperClasses.Constants;

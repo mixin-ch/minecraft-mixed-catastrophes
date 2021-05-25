@@ -1,3 +1,5 @@
+commands:
+  dealWithDevil: true
 worlds:
   - world
 hintList:
