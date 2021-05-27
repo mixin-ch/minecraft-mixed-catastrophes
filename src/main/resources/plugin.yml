@@ -1,12 +1,10 @@
 name: MixedCatastrophes
 version: ${project.version}
-main: ch.mixin.main.MixedCatastrophesPlugin
+main: ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin
 api-version: 1.16
-softdepend: [ IslandGenerator ]
+softdepend: [ IslandGenerator, MixedAchievements ]
 
 commands:
-  mx:
-    description: The Root Command for MixedCatastrophes with Prefix mx.
   mx-cs:
     description: The Root Command for MixedCatastrophes with Prefix mx-cs.
 permissions:

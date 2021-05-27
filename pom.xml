@@ -6,7 +6,7 @@
 
     <groupId>ch.mixin</groupId>
     <artifactId>MixedCatastrophes</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.1-p</version>
     <packaging>jar</packaging>
 
     <name>MixedCatastrophes</name>
@@ -79,7 +79,14 @@
             <artifactId>IslandGenerator</artifactId>
             <version>1.1.6</version>
             <scope>system</scope>
-            <systemPath>${mixinPluginExport}/IslandGenerator/IslandGenerator-1.1.6.jar</systemPath>
+            <systemPath>${mixinPluginExport}/IslandGenerator/IslandGenerator-1.1.7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>ch.mixin</groupId>
+            <artifactId>MixedAchievements</artifactId>
+            <version>0.0.1</version>
+            <scope>system</scope>
+            <systemPath>${mixinPluginExport}/MixedAchievements/MixedAchievements-0.0.1.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
