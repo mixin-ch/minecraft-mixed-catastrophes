@@ -107,6 +107,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void startWeather(WeatherCatastropheType weatherCatastropheType) {
+        ChatColor color = Constants.WeatherThemes.get(weatherCatastropheType).getColor();
+
         switch (weatherCatastropheType) {
             case Nothing:
                 break;
@@ -114,36 +116,38 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The Sky is scattered with Rays of Radiance."
-                        , ChatColor.GOLD);
+                        , color);
                 break;
             case ThunderStorm:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "Erratic Lightning licks across the Heavens."
-                        , ChatColor.DARK_AQUA);
+                        , color);
                 break;
             case SearingCold:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The creeping Cold tears the Flesh."
-                        , ChatColor.AQUA);
+                        , color);
                 break;
             case GravityLoss:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The Ground can not hold you."
-                        , ChatColor.WHITE);
+                        , color);
                 break;
             case CatsAndDogs:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "It is raining Cats and Dogs."
-                        , ChatColor.WHITE);
+                        , color);
                 break;
         }
     }
 
     private void stopWeather(WeatherCatastropheType weatherCatastropheType) {
+        ChatColor color = Constants.WeatherThemes.get(weatherCatastropheType).getColor();
+
         switch (weatherCatastropheType) {
             case Nothing:
                 break;
@@ -151,31 +155,31 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The Sky is no longer radiant."
-                        , ChatColor.GOLD);
+                        , color);
                 break;
             case ThunderStorm:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The thunderous Roaring ceases."
-                        , ChatColor.DARK_AQUA);
+                        , color);
                 break;
             case SearingCold:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The icy Winds vanish."
-                        , ChatColor.AQUA);
+                        , color);
                 break;
             case GravityLoss:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "Gravity grips you again."
-                        , ChatColor.WHITE);
+                        , color);
                 break;
             case CatsAndDogs:
                 playEffect(
                         Sound.AMBIENT_CAVE
                         , "The last Barks pass by."
-                        , ChatColor.WHITE);
+                        , color);
                 break;
         }
     }

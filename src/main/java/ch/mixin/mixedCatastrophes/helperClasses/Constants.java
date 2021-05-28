@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.helperClasses;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -9,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Constants {
+    public static final Theme TimeDistortionTheme;
+    public static final HashMap<WeatherCatastropheType, Theme> WeatherThemes;
     public static final HashMap<AspectType, Theme> AspectThemes;
 
     public static final ArrayList<Material> Airs;
@@ -31,6 +34,16 @@ public class Constants {
     public static final ConstructShape Scarecrow;
 
     static {
+        TimeDistortionTheme = new Theme(ChatColor.of("7f7fff"), Material.CLOCK);
+
+        WeatherThemes = new HashMap<>();
+        WeatherThemes.put(WeatherCatastropheType.Nothing, new Theme(ChatColor.of("ffffff"), Material.AIR));
+        WeatherThemes.put(WeatherCatastropheType.RadiantSky, new Theme(ChatColor.of("ffff00"), Material.GLOWSTONE));
+        WeatherThemes.put(WeatherCatastropheType.SearingCold, new Theme(ChatColor.of("3f7fff"), Material.ICE));
+        WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("00bf7f"), Material.CHAIN));
+        WeatherThemes.put(WeatherCatastropheType.GravityLoss, new Theme(ChatColor.of("bfbfbf"), Material.FEATHER));
+        WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("7f5f3f"), Material.BONE));
+
         AspectThemes = new HashMap<>();
         AspectThemes.put(AspectType.Death_Seeker, new Theme(ChatColor.of("3f3f3f"), Material.WITHER_SKELETON_SKULL));
         AspectThemes.put(AspectType.Secrets, new Theme(ChatColor.of("bf3fbf"), Material.ENCHANTED_BOOK));

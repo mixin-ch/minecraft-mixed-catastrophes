@@ -1,8 +1,10 @@
 package ch.mixin.mixedCatastrophes.helpInventory;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
+import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import org.bukkit.Bukkit;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
@@ -167,22 +169,22 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Special Weathers can happen at random Times, lasting a random Duration."
         });
-        createSlot(inventory, Material.CLOCK, 1, slot(2, 2), "Time Distortion", new String[]{
+        createSlot(inventory, Constants.TimeDistortionTheme.getMaterial(), 1, slot(2, 2), "Time Distortion", new String[]{
                 "Time shifts forward or backward."
         });
-        createSlot(inventory, Material.GLOWSTONE, 1, slot(2, 3), "Radiant Sky", new String[]{
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.RadiantSky).getMaterial(), 1, slot(2, 3), "Radiant Sky", new String[]{
                 "Hot Rays pierce the Sky.", "Seek Shelter, or be burned and blinded.", "No Danger at Night."
         });
-        createSlot(inventory, Material.ICE, 1, slot(2, 4), "Searing Cold", new String[]{
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.SearingCold).getMaterial(), 1, slot(2, 4), "Searing Cold", new String[]{
                 "It is freezing Cold.", "Stay near Fire or other Sources of Heat.", "Less Danger at Day."
         });
-        createSlot(inventory, Material.CHAIN, 1, slot(2, 5), "Thunderstorm", new String[]{
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.ThunderStorm).getMaterial(), 1, slot(2, 5), "Thunderstorm", new String[]{
                 "Lightning strikes, a lot of it.", "Seek Shelter, or be hit.", "Misfortune attracts Lightning."
         });
-        createSlot(inventory, Material.FEATHER, 1, slot(2, 6), "Gravity Loss", new String[]{
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.GravityLoss).getMaterial(), 1, slot(2, 6), "Gravity Loss", new String[]{
                 "The Laws of Gravity are temporarily broken.", "Fly up high and land soft."
         });
-        createSlot(inventory, Material.CAT_SPAWN_EGG, 1, slot(2, 7), "Cats and Dogs", new String[]{
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CatsAndDogs).getMaterial(), 1, slot(2, 7), "Cats and Dogs", new String[]{
                 "It is raining Cats and Dogs."
         });
 
