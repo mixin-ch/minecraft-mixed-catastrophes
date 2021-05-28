@@ -4,7 +4,7 @@ import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
@@ -39,7 +39,7 @@ public class AspectScoreManager {
         }
 
         if (antiLighthouseTimer > 0) {
-            makeScore(objective, hierarchy, Constants.AspectThemes.get(AspectType.Terror), "Red Eye", antiLighthouseTimer, "s");
+            makeScore(objective, hierarchy, Constants.AspectThemes.get(AspectType.Terror).getColor(), "Red Eye", antiLighthouseTimer, "s");
             hierarchy--;
             hasTimers = true;
         }
@@ -53,7 +53,7 @@ public class AspectScoreManager {
             int value = aspects.get(aspectType);
 
             if (value > 0) {
-                makeScore(objective, hierarchy, Constants.AspectThemes.get(aspectType), aspectType.getLabel(), value);
+                makeScore(objective, hierarchy, Constants.AspectThemes.get(aspectType).getColor(), aspectType.getLabel(), value);
                 hierarchy--;
             }
         }

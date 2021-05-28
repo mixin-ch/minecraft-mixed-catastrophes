@@ -9,7 +9,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.personal.rite.RiteManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.TerrorCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;

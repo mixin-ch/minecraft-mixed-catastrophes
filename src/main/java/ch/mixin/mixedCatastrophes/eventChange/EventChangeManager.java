@@ -10,7 +10,7 @@ import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
 import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -69,7 +69,7 @@ public class EventChangeManager {
 
         if (color == null) {
             if (cause != null) {
-                color = Constants.AspectThemes.get(eventMessage.getCause());
+                color = Constants.AspectThemes.get(eventMessage.getCause()).getColor();
             } else {
                 color = ChatColor.WHITE;
             }

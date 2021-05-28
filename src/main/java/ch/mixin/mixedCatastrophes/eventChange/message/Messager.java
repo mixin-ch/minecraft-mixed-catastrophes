@@ -2,7 +2,7 @@ package ch.mixin.mixedCatastrophes.eventChange.message;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class Messager {
 
             for (AspectType aspectType : changeMap.keySet()) {
                 int value = changeMap.get(aspectType);
-                ChatColor color = Constants.AspectThemes.get(aspectType);
+                ChatColor color = Constants.AspectThemes.get(aspectType).getColor();
                 changes.add(color + (value >= 0 ? "+" : "") + value + " " + aspectType.getLabel());
             }
 

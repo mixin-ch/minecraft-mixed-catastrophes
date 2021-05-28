@@ -1,11 +1,11 @@
 package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -75,7 +75,7 @@ public class StatusListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You lose yourself in the grand Emptiness.")
-                .withColor(Constants.AspectThemes.get(AspectType.Death_Seeker))
+                .withColor(Constants.AspectThemes.get(AspectType.Death_Seeker).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();

@@ -2,7 +2,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs.terror.stalker;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

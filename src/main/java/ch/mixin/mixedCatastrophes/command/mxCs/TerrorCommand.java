@@ -5,7 +5,7 @@ import ch.mixin.mixedCatastrophes.command.mxCs.terror.AssaultCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.StalkerCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.WhispersCommand;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

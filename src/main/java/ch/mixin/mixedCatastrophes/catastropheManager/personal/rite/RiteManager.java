@@ -1,10 +1,10 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.rite;
 
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -93,7 +93,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You gain Insight in the World.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -146,7 +146,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -162,7 +162,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You traded Secrets for material Gain.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -199,7 +199,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -219,7 +219,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Green Ones accept your Sacrifice.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -239,7 +239,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -259,7 +259,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("With the Books burns also your tainted Fate.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -279,7 +279,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -299,7 +299,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Terrors of the World diminish.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -329,7 +329,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -347,7 +347,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You gained the Favor of an ambitious Star.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -365,7 +365,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You can have at most " + limit + " Terror to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -375,7 +375,7 @@ public class RiteManager {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             return;
@@ -393,7 +393,7 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The burning Symbols reveal the Terror of the World.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();

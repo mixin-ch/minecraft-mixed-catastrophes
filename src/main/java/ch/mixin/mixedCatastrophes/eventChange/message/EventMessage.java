@@ -2,7 +2,7 @@ package ch.mixin.mixedCatastrophes.eventChange.message;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.eventChange.EventChange;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 
 public class EventMessage {
     private final EventChange eventChange;

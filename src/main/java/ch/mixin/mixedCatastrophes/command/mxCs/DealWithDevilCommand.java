@@ -5,7 +5,7 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -72,7 +72,7 @@ public class DealWithDevilCommand extends SubCommand {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("An Individual with a grey Hat accepts the Deal.")
-                .withColor(Constants.AspectThemes.get(AspectType.Greyhat_Debt))
+                .withColor(Constants.AspectThemes.get(AspectType.Greyhat_Debt).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();

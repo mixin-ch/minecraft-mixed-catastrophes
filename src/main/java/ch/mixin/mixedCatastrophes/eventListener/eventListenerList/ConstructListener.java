@@ -6,7 +6,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -110,7 +110,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -120,7 +120,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Ender Eyes to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -143,7 +143,7 @@ public class ConstructListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Green Well has Depth " + greenWellData.getLevel() + ".")
-                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy))
+                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -191,7 +191,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -201,7 +201,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Quartz to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -272,7 +272,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -282,7 +282,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Glowstone to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -359,7 +359,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -369,7 +369,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Magma Cream to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -392,7 +392,7 @@ public class ConstructListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Blaze Reactor has heat " + blazeReactorData.getLevel() + ".")
-                .withColor(Constants.AspectThemes.get(AspectType.Misfortune))
+                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -430,7 +430,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -440,7 +440,7 @@ public class ConstructListener implements Listener {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Pumpkin Pie to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets))
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
             success = false;
@@ -460,7 +460,7 @@ public class ConstructListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You hear a faint Scream far away.")
-                .withColor(Constants.AspectThemes.get(AspectType.Terror))
+                .withColor(Constants.AspectThemes.get(AspectType.Terror).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();

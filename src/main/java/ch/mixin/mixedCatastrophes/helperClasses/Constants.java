@@ -1,7 +1,7 @@
 package ch.mixin.mixedCatastrophes.helperClasses;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Constants {
-    public static final HashMap<AspectType, ChatColor> AspectThemes;
+    public static final HashMap<AspectType, Theme> AspectThemes;
 
     public static final ArrayList<Material> Airs;
     public static final ArrayList<Material> Logs;
@@ -32,13 +32,13 @@ public class Constants {
 
     static {
         AspectThemes = new HashMap<>();
-        AspectThemes.put(AspectType.Death_Seeker, ChatColor.BLACK);
-        AspectThemes.put(AspectType.Secrets, ChatColor.DARK_PURPLE);
-        AspectThemes.put(AspectType.Terror, ChatColor.DARK_RED);
-        AspectThemes.put(AspectType.Nature_Conspiracy, ChatColor.DARK_GREEN);
-        AspectThemes.put(AspectType.Misfortune, ChatColor.DARK_BLUE);
-        AspectThemes.put(AspectType.Greyhat_Debt, ChatColor.DARK_GRAY);
-        AspectThemes.put(AspectType.Celestial_Favor, ChatColor.AQUA);
+        AspectThemes.put(AspectType.Death_Seeker, new Theme(ChatColor.of("3f3f3f"), Material.WITHER_SKELETON_SKULL));
+        AspectThemes.put(AspectType.Secrets, new Theme(ChatColor.of("bf3fbf"), Material.ENCHANTED_BOOK));
+        AspectThemes.put(AspectType.Terror, new Theme(ChatColor.of("bf0000"), Material.BEETROOT_SOUP));
+        AspectThemes.put(AspectType.Nature_Conspiracy, new Theme(ChatColor.of("00bf00"), Material.DANDELION));
+        AspectThemes.put(AspectType.Misfortune, new Theme(ChatColor.of("bf007f"), Material.FLINT));
+        AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("7f7f7f"), Material.IRON_HELMET));
+        AspectThemes.put(AspectType.Celestial_Favor, new Theme(ChatColor.of("7fffff"), Material.NETHER_STAR));
 
         Airs = new ArrayList<>();
         Airs.add(Material.AIR);

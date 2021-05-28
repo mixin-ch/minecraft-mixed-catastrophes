@@ -159,7 +159,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage(text)
-                .withColor(Constants.AspectThemes.get(AspectType.Terror))
+                .withColor(Constants.AspectThemes.get(AspectType.Terror).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -175,7 +175,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("They Whisper: " + hint)
-                .withColor(Constants.AspectThemes.get(AspectType.Terror))
+                .withColor(Constants.AspectThemes.get(AspectType.Terror).getColor())
                 .finish()
                 .execute();
     }

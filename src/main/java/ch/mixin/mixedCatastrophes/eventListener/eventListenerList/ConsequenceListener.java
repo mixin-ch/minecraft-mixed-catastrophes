@@ -70,7 +70,7 @@ public class ConsequenceListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.BLOCK_BREWING_STAND_BREW)
                 .withEventMessage("The Green Ones have claimed this Milk.")
-                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy))
+                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();

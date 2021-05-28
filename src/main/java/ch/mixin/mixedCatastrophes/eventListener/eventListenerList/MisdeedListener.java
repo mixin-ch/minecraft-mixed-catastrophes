@@ -54,7 +54,7 @@ public class MisdeedListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Trees conspire against you.")
-                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy))
+                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -72,7 +72,7 @@ public class MisdeedListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("Something Terrible escaped from the Glass.")
-                .withColor(Constants.AspectThemes.get(AspectType.Misfortune))
+                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -90,7 +90,7 @@ public class MisdeedListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You unearthed something Terrible from the Stone.")
-                .withColor(Constants.AspectThemes.get(AspectType.Misfortune))
+                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -128,7 +128,7 @@ public class MisdeedListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Animals conspire against you.")
-                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy))
+                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
