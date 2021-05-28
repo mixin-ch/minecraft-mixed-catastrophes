@@ -2,6 +2,8 @@ package ch.mixin.mixedCatastrophes.helpInventory;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
+import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
+import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
@@ -382,25 +384,25 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Click on a Bed to Dream.", "Blocks next to the Bed can cause certain Dreams.", "After dreaming, wait a certain Time to dream again."
         });
-        createSlot(inventory, Material.IRON_HELMET, 1, slot(2, 2), "Greyhat", new String[]{
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Greyhat_Debt).getMaterial(), 1, slot(2, 2), "Greyhat", new String[]{
                 "Cancels the Dream.", "Chance to occur scales with Greyhat Debt.", "10 Minute Cooldown."
         });
-        createSlot(inventory, Material.RED_BED, 1, slot(2, 3), "Serene Dreams (Default)", new String[]{
+        createSlot(inventory, Constants.DreamThemes.get(DreamType.SereneDreams).getMaterial(), 1, slot(2, 3), "Serene Dreams (Default)", new String[]{
                 "Slight Terror Loss.", "Secrets +10", "10 Minute Cooldown."
         });
-        createSlot(inventory, Material.LAPIS_BLOCK, 1, slot(2, 4), "Sky Dreams (Lapis Lazuli)", new String[]{
+        createSlot(inventory, Constants.DreamThemes.get(DreamType.SkyDreams).getMaterial(), 1, slot(2, 4), "Sky Dreams (Lapis Lazuli)", new String[]{
                 "Moderate Terror Loss.", "Moderate Secret Loss.", "Jump Boost 2, Slow Falling 1", "10 Minute Cooldown."
         });
-        createSlot(inventory, Material.REDSTONE_BLOCK, 1, slot(2, 5), "Bloodstained Dreams (Redstone)", new String[]{
+        createSlot(inventory, Constants.DreamThemes.get(DreamType.BloodstainedDreams).getMaterial(), 1, slot(2, 5), "Bloodstained Dreams (Redstone)", new String[]{
                 "Slight Terror Gain.", "Moderate Secret Gain.", "10 Minute Cooldown.", "10 Minutes of damage while near a Lighthouse."
         });
-        createSlot(inventory, Material.IRON_BLOCK, 1, slot(2, 6), "Clockwork Dreams (Iron)", new String[]{
+        createSlot(inventory, Constants.DreamThemes.get(DreamType.ClockworkDreams).getMaterial(), 1, slot(2, 6), "Clockwork Dreams (Iron)", new String[]{
                 "Secrets -30", "Speed 1, Haste 1, Strength 1, Resistance 1", "10 Minute Cooldown."
         });
-        createSlot(inventory, Material.GOLD_BLOCK, 1, slot(2, 7), "Glory Dreams (Gold)", new String[]{
+        createSlot(inventory, Constants.DreamThemes.get(DreamType.GloryDreams).getMaterial(), 1, slot(2, 7), "Glory Dreams (Gold)", new String[]{
                 "Secrets -120", "Speed 2, Haste 2, Strength 2, Resistance 2", "10 Minute Cooldown."
         });
-        createSlot(inventory, Material.DIAMOND_BLOCK, 1, slot(2, 8), "Perfect Dreams (Diamond)", new String[]{
+        createSlot(inventory, Constants.DreamThemes.get(DreamType.PerfectDreams).getMaterial(), 1, slot(2, 8), "Perfect Dreams (Diamond)", new String[]{
                 "Secrets -480", "Speed 3, Haste 3, Strength 3, Resistance 3", "10 Minute Cooldown."
         });
 

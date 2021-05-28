@@ -2,6 +2,7 @@ package ch.mixin.mixedCatastrophes.helperClasses;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
+import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -14,6 +15,7 @@ public class Constants {
     public static final Theme TimeDistortionTheme;
     public static final HashMap<WeatherCatastropheType, Theme> WeatherThemes;
     public static final HashMap<AspectType, Theme> AspectThemes;
+    public static final HashMap<DreamType, Theme> DreamThemes;
     public static final HashMap<ConstructType, Theme> ConstructThemes;
 
     public static final ArrayList<Material> Airs;
@@ -54,6 +56,14 @@ public class Constants {
         AspectThemes.put(AspectType.Misfortune, new Theme(ChatColor.of("bf007f"), Material.FLINT));
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("7f7f7f"), Material.IRON_HELMET));
         AspectThemes.put(AspectType.Celestial_Favor, new Theme(ChatColor.of("7fffff"), Material.NETHER_STAR));
+
+        DreamThemes = new HashMap<>();
+        DreamThemes.put(DreamType.SereneDreams, new Theme(ChatColor.of("ff7fbf"), Material.WHITE_BED));
+        DreamThemes.put(DreamType.SkyDreams, new Theme(ChatColor.of("0000ff"), Material.LAPIS_BLOCK));
+        DreamThemes.put(DreamType.BloodstainedDreams, new Theme(AspectThemes.get(AspectType.Terror).getColor(), Material.REDSTONE_BLOCK));
+        DreamThemes.put(DreamType.ClockworkDreams, new Theme(ChatColor.of("0000ff"), Material.IRON_BLOCK));
+        DreamThemes.put(DreamType.GloryDreams, new Theme(ChatColor.of("ffbf00"), Material.GOLD_BLOCK));
+        DreamThemes.put(DreamType.PerfectDreams, new Theme(ChatColor.of("bfffff"), Material.DIAMOND_BLOCK));
 
         ConstructThemes = new HashMap<>();
         ConstructThemes.put(ConstructType.GreenWell, new Theme(AspectThemes.get(AspectType.Nature_Conspiracy).getColor(), Material.OAK_LOG));

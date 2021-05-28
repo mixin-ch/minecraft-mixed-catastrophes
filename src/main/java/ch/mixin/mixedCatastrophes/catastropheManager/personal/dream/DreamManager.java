@@ -179,7 +179,7 @@ public class DreamManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The World is quiet for a short Moment.")
-                .withColor(ChatColor.AQUA)
+                .withColor(Constants.DreamThemes.get(DreamType.SereneDreams).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -219,7 +219,7 @@ public class DreamManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You fly high above the World's Laws.")
-                .withColor(ChatColor.BLUE)
+                .withColor(Constants.DreamThemes.get(DreamType.SkyDreams).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -263,7 +263,7 @@ public class DreamManager {
             break;
         }
 
-        if (nearLighthouse){
+        if (nearLighthouse) {
             plugin.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You can't have Bloodstained Dreams in Lighthouse Range.")
@@ -292,7 +292,7 @@ public class DreamManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("There is a Curtain of Blood, and an Eye behind it.")
-                .withColor(ChatColor.DARK_RED)
+                .withColor(Constants.DreamThemes.get(DreamType.BloodstainedDreams).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -332,7 +332,7 @@ public class DreamManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You hear the rhythmic Ticking, you sense the Iron Efficiency.")
-                .withColor(ChatColor.GRAY)
+                .withColor(Constants.DreamThemes.get(DreamType.ClockworkDreams).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -372,7 +372,7 @@ public class DreamManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("Your Thoughts are full of Gold and Glory.")
-                .withColor(ChatColor.GOLD)
+                .withColor(Constants.DreamThemes.get(DreamType.GloryDreams).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -412,7 +412,7 @@ public class DreamManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You have witnessed Perfection, and know how to achieve it.")
-                .withColor(ChatColor.WHITE)
+                .withColor(Constants.DreamThemes.get(DreamType.PerfectDreams).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
