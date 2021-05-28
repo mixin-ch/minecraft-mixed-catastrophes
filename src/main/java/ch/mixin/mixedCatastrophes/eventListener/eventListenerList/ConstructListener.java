@@ -1,12 +1,12 @@
 package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -49,14 +49,14 @@ public class ConstructListener implements Listener {
             case ENDER_EYE:
                 makeGreenWell(event);
                 break;
+            case MAGMA_CREAM:
+                makeBlazeReactor(event);
+                break;
             case QUARTZ:
                 makeBlitzard(event);
                 break;
             case GLOWSTONE_DUST:
                 makeLighthouse(event);
-                break;
-            case MAGMA_CREAM:
-                makeBlazeReactor(event);
                 break;
             case PUMPKIN_PIE:
                 makeScarecrow(event);
@@ -143,169 +143,7 @@ public class ConstructListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Green Well has Depth " + greenWellData.getLevel() + ".")
-                .withColor(Constants.AspectThemes.get(AspectType.Nature_Conspiracy).getColor())
-                .withTitle(true)
-                .finish()
-                .execute();
-    }
-
-    private void makeBlitzard(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        Block block = event.getClickedBlock();
-
-        if (block == null)
-            return;
-
-        if (block .getType() != Material.QUARTZ_BLOCK)
-            return;
-
-        if (!Constants.Blitzard.checkConstructed(block.getLocation()).isConstructed())
-            return;
-
-        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
-        BlitzardData blitzardData = null;
-
-        for (BlitzardData bd : plugin.getMetaData().getBlitzardDataList()) {
-            if (center.equals(bd.getPosition())) {
-                blitzardData = bd;
-                break;
-            }
-        }
-
-        boolean isNew = false;
-
-        if (blitzardData == null) {
-            blitzardData = new BlitzardData(center, world.getName(), 0);
-            isNew = true;
-        }
-
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-        int multiplier = (int) Math.pow(1 + blitzardData.getLevel(), 2);
-        int cost = 100 * multiplier;
-        int costItem = multiplier;
-        boolean success = true;
-
-        if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
-                    .eventChange(player)
-                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
-                    .finish()
-                    .execute();
-            success = false;
-        }
-
-        if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
-                    .eventChange(player)
-                    .withEventMessage("You need at least " + costItem + " Quartz to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
-                    .finish()
-                    .execute();
-            success = false;
-        }
-
-        if (!success)
-            return;
-
-        if (isNew)
-            plugin.getMetaData().getBlitzardDataList().add(blitzardData);
-
-        blitzardData.setLevel(blitzardData.getLevel() + 1);
-        itemStack.setAmount(itemStack.getAmount() - costItem);
-
-        HashMap<AspectType, Integer> changeMap = new HashMap<>();
-        changeMap.put(AspectType.Secrets, -cost);
-
-        plugin.getEventChangeManager()
-                .eventChange(player)
-                .withAspectChange(changeMap)
-                .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("The Blitzard has Range " + blitzardData.getLevel() * 10 + ".")
-                .withColor(ChatColor.DARK_AQUA)
-                .withTitle(true)
-                .finish()
-                .execute();
-    }
-
-    private void makeLighthouse(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        World world = player.getWorld();
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        Block block = event.getClickedBlock();
-
-        if (block == null)
-            return;
-
-        if (block .getType() != Material.GLOWSTONE)
-            return;
-
-        if (!Constants.Lighthouse.checkConstructed(block.getLocation()).isConstructed())
-            return;
-
-        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
-        LighthouseData lighthouseData = null;
-
-        for (LighthouseData ld : plugin.getMetaData().getLighthouseDataList()) {
-            if (center.equals(ld.getPosition())) {
-                lighthouseData = ld;
-                break;
-            }
-        }
-
-        boolean isNew = false;
-
-        if (lighthouseData == null) {
-            lighthouseData = new LighthouseData(center, world.getName(), 0);
-            isNew = true;
-        }
-
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-        double multiplier = Math.pow(1 + lighthouseData.getLevel(), 1.5);
-        int cost = (int) Math.round(100 * multiplier);
-        int costItem = (int) Math.round(multiplier);
-        boolean success = true;
-
-        if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
-                    .eventChange(player)
-                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
-                    .finish()
-                    .execute();
-            success = false;
-        }
-
-        if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
-                    .eventChange(player)
-                    .withEventMessage("You need at least " + costItem + " Glowstone to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
-                    .finish()
-                    .execute();
-            success = false;
-        }
-
-        if (!success)
-            return;
-
-        if (isNew)
-            plugin.getMetaData().getLighthouseDataList().add(lighthouseData);
-
-        lighthouseData.setLevel(lighthouseData.getLevel() + 1);
-        itemStack.setAmount(itemStack.getAmount() - costItem);
-
-        HashMap<AspectType, Integer> changeMap = new HashMap<>();
-        changeMap.put(AspectType.Secrets, -cost);
-
-        plugin.getEventChangeManager()
-                .eventChange(player)
-                .withAspectChange(changeMap)
-                .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("The Lighthouse has Range " + lighthouseData.getLevel() * 10 + ".")
-                .withColor(ChatColor.GOLD)
+                .withColor(Constants.ConstructThemes.get(ConstructType.GreenWell).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -392,7 +230,169 @@ public class ConstructListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Blaze Reactor has heat " + blazeReactorData.getLevel() + ".")
-                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
+                .withColor(Constants.ConstructThemes.get(ConstructType.BlazeReactor).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
+    }
+
+    private void makeBlitzard(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (block.getType() != Material.QUARTZ_BLOCK)
+            return;
+
+        if (!Constants.Blitzard.checkConstructed(block.getLocation()).isConstructed())
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+        BlitzardData blitzardData = null;
+
+        for (BlitzardData bd : plugin.getMetaData().getBlitzardDataList()) {
+            if (center.equals(bd.getPosition())) {
+                blitzardData = bd;
+                break;
+            }
+        }
+
+        boolean isNew = false;
+
+        if (blitzardData == null) {
+            blitzardData = new BlitzardData(center, world.getName(), 0);
+            isNew = true;
+        }
+
+        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int multiplier = (int) Math.pow(1 + blitzardData.getLevel(), 2);
+        int cost = 100 * multiplier;
+        int costItem = multiplier;
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Quartz to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        if (isNew)
+            plugin.getMetaData().getBlitzardDataList().add(blitzardData);
+
+        blitzardData.setLevel(blitzardData.getLevel() + 1);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Blitzard has Range " + blitzardData.getLevel() * 10 + ".")
+                .withColor(Constants.ConstructThemes.get(ConstructType.Blitzard).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
+    }
+
+    private void makeLighthouse(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (block.getType() != Material.GLOWSTONE)
+            return;
+
+        if (!Constants.Lighthouse.checkConstructed(block.getLocation()).isConstructed())
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+        LighthouseData lighthouseData = null;
+
+        for (LighthouseData ld : plugin.getMetaData().getLighthouseDataList()) {
+            if (center.equals(ld.getPosition())) {
+                lighthouseData = ld;
+                break;
+            }
+        }
+
+        boolean isNew = false;
+
+        if (lighthouseData == null) {
+            lighthouseData = new LighthouseData(center, world.getName(), 0);
+            isNew = true;
+        }
+
+        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        double multiplier = Math.pow(1 + lighthouseData.getLevel(), 1.5);
+        int cost = (int) Math.round(100 * multiplier);
+        int costItem = (int) Math.round(multiplier);
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            plugin.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Glowstone to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        if (isNew)
+            plugin.getMetaData().getLighthouseDataList().add(lighthouseData);
+
+        lighthouseData.setLevel(lighthouseData.getLevel() + 1);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        plugin.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Lighthouse has Range " + lighthouseData.getLevel() * 10 + ".")
+                .withColor(Constants.ConstructThemes.get(ConstructType.Lighthouse).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();
@@ -407,7 +407,7 @@ public class ConstructListener implements Listener {
         if (block == null)
             return;
 
-        if (block .getType() != Material.JACK_O_LANTERN)
+        if (block.getType() != Material.JACK_O_LANTERN)
             return;
 
         if (!Constants.Scarecrow.checkConstructed(block.getLocation()).isConstructed())
@@ -460,7 +460,7 @@ public class ConstructListener implements Listener {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You hear a faint Scream far away.")
-                .withColor(Constants.AspectThemes.get(AspectType.Terror).getColor())
+                .withColor(Constants.ConstructThemes.get(ConstructType.Scarecrow).getColor())
                 .withTitle(true)
                 .finish()
                 .execute();

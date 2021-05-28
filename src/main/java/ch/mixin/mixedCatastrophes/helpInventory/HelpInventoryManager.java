@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.helpInventory;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
@@ -415,19 +416,19 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Place Blocks in certain Configurations."
         });
-        createSlotLink(inventory, Material.OAK_LOG, 1, slot(2, 3), "Green Well", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.GreenWell).getMaterial(), 1, slot(2, 3), "Green Well", new String[]{
                 "Regularly drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
         }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
-        createSlotLink(inventory, Material.IRON_BARS, 1, slot(2, 4), "Blitzard", new String[]{
-                "Attracts Lightning."
-        }, linkInventoryMap, HelpInventoryType.Constructs_Blitzard);
-        createSlotLink(inventory, Material.LANTERN, 1, slot(2, 5), "Lighthouse", new String[]{
-                "Protects against any Terror Event."
-        }, linkInventoryMap, HelpInventoryType.Constructs_Lighthouse);
-        createSlotLink(inventory, Material.MAGMA_BLOCK, 1, slot(2, 6), "Blaze Reactor", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.BlazeReactor).getMaterial(), 1, slot(2, 4), "Blaze Reactor", new String[]{
                 "Regularly drops Cobblestone."
         }, linkInventoryMap, HelpInventoryType.Constructs_BlazeReactor);
-        createSlotLink(inventory, Material.CARVED_PUMPKIN, 1, slot(2, 7), "Scarecrow", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Blitzard).getMaterial(), 1, slot(2, 5), "Blitzard", new String[]{
+                "Attracts Lightning."
+        }, linkInventoryMap, HelpInventoryType.Constructs_Blitzard);
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Lighthouse).getMaterial(), 1, slot(2, 6), "Lighthouse", new String[]{
+                "Protects against any Terror Event."
+        }, linkInventoryMap, HelpInventoryType.Constructs_Lighthouse);
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Scarecrow).getMaterial(), 1, slot(2, 7), "Scarecrow", new String[]{
                 "Increases Terror and Secrets from Horrific Whispers."
         }, linkInventoryMap, HelpInventoryType.Constructs_Scarecrow);
 

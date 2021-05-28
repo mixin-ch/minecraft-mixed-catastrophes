@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.helperClasses;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import net.md_5.bungee.api.ChatColor;
@@ -13,6 +14,7 @@ public class Constants {
     public static final Theme TimeDistortionTheme;
     public static final HashMap<WeatherCatastropheType, Theme> WeatherThemes;
     public static final HashMap<AspectType, Theme> AspectThemes;
+    public static final HashMap<ConstructType, Theme> ConstructThemes;
 
     public static final ArrayList<Material> Airs;
     public static final ArrayList<Material> Logs;
@@ -38,7 +40,7 @@ public class Constants {
 
         WeatherThemes = new HashMap<>();
         WeatherThemes.put(WeatherCatastropheType.Nothing, new Theme(ChatColor.of("ffffff"), Material.AIR));
-        WeatherThemes.put(WeatherCatastropheType.RadiantSky, new Theme(ChatColor.of("ffff00"), Material.GLOWSTONE));
+        WeatherThemes.put(WeatherCatastropheType.RadiantSky, new Theme(ChatColor.of("ffbf30"), Material.GLOWSTONE));
         WeatherThemes.put(WeatherCatastropheType.SearingCold, new Theme(ChatColor.of("3f7fff"), Material.ICE));
         WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("00bf7f"), Material.CHAIN));
         WeatherThemes.put(WeatherCatastropheType.GravityLoss, new Theme(ChatColor.of("bfbfbf"), Material.FEATHER));
@@ -52,6 +54,13 @@ public class Constants {
         AspectThemes.put(AspectType.Misfortune, new Theme(ChatColor.of("bf007f"), Material.FLINT));
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("7f7f7f"), Material.IRON_HELMET));
         AspectThemes.put(AspectType.Celestial_Favor, new Theme(ChatColor.of("7fffff"), Material.NETHER_STAR));
+
+        ConstructThemes = new HashMap<>();
+        ConstructThemes.put(ConstructType.GreenWell, new Theme(AspectThemes.get(AspectType.Nature_Conspiracy).getColor(), Material.OAK_LOG));
+        ConstructThemes.put(ConstructType.BlazeReactor, new Theme(ChatColor.of("ffbf00"), Material.MAGMA_BLOCK));
+        ConstructThemes.put(ConstructType.Blitzard, new Theme(WeatherThemes.get(WeatherCatastropheType.ThunderStorm).getColor(), Material.IRON_BARS));
+        ConstructThemes.put(ConstructType.Lighthouse, new Theme(ChatColor.of("ffff00"), Material.LANTERN));
+        ConstructThemes.put(ConstructType.Scarecrow, new Theme(AspectThemes.get(AspectType.Terror).getColor(), Material.CARVED_PUMPKIN));
 
         Airs = new ArrayList<>();
         Airs.add(Material.AIR);

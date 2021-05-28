@@ -1,10 +1,8 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror;
 
-import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault.AssaultCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker.StalkerCatastropheManager;
@@ -12,13 +10,19 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.TerrorData;
+import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class TerrorCatastropheManager extends CatastropheManager {
     private final AssaultCatastropheManager assaultCatastropheManager;
@@ -138,6 +142,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
         int terrorPlus = 8 + new Random().nextInt(4 + 1);
         int secretsPlus = 20 + playerData.getAspect(AspectType.Terror);
         String text = "The horrific Whispers grow louder.";
+        ChatColor color = Constants.AspectThemes.get(AspectType.Terror).getColor();
 
         if (scarecrowData != null) {
             int playerTerror = playerData.getAspect(AspectType.Terror);
@@ -146,6 +151,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
             terrorPlus += 10 + scarecrowExtra;
             secretsPlus += 10 + scarecrowExtra;
             text = "The Screams of the Scarecrow grow louder.";
+            color = Constants.ConstructThemes.get(ConstructType.Scarecrow).getColor();
             int collectedTerror = (int) Math.ceil(0.9 * scarecrowData.getCollectedTerror() + 0.1 * playerData.getAspect(AspectType.Terror));
             scarecrowData.setCollectedTerror(collectedTerror);
         }
@@ -159,7 +165,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage(text)
-                .withColor(Constants.AspectThemes.get(AspectType.Terror).getColor())
+                .withColor(color)
                 .withTitle(true)
                 .finish()
                 .execute();
