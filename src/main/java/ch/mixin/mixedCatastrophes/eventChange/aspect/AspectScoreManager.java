@@ -41,9 +41,19 @@ public class AspectScoreManager {
         int dreamCooldown = pcd.getDreamCooldown();
         int antiLighthouseTimer = pcd.getAntiLighthouseTimer();
 
-        Scoreboard scoreboard = scoreboardManager.getNewScoreboard();
-        Objective objective = scoreboard.registerNewObjective("Aspects", "dummy", ChatColor.GRAY + "Aspects");
-        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+        Scoreboard scoreboard = player.getScoreboard();
+
+//        if (scoreboard == null) {
+//            scoreboard = scoreboardManager.getNewScoreboard();
+//        }
+
+        Objective objective = scoreboard.getObjective("Aspects");
+
+        if (objective == null) {
+            objective = scoreboard.registerNewObjective("Aspects", "dummy", ChatColor.GRAY + "Aspects");
+            objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        }
 
         int index = 0;
 
@@ -82,15 +92,20 @@ public class AspectScoreManager {
 
     private void makeScore(Scoreboard scoreboard, Objective objective, int index, ChatColor chatColor, String label, int value, String valueUnit) {
         String indexString = Integer.toString(index);
-        Team team = scoreboard.registerNewTeam(indexString);
-        team.setSuffix(chatColor + label + ": " + value + valueUnit);
         StringBuilder scoreString = new StringBuilder();
 
         for (char c : indexString.toCharArray()) {
             scoreString.append(ChatColor.translateAlternateColorCodes('&', "&" + c));
         }
 
-        team.addEntry(scoreString.toString());
+        Team team = scoreboard.getTeam(indexString);
+
+        if (team == null) {
+            team = scoreboard.registerNewTeam(indexString);
+            team.addEntry(scoreString.toString());
+        }
+
+        team.setSuffix(chatColor + label + ": " + value + valueUnit);
         objective.getScore(scoreString.toString()).setScore(0);
     }
 
