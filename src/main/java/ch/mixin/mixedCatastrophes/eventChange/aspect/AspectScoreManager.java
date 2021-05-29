@@ -41,7 +41,6 @@ public class AspectScoreManager {
         int dreamCooldown = pcd.getDreamCooldown();
         int antiLighthouseTimer = pcd.getAntiLighthouseTimer();
 
-
         Scoreboard scoreboard = player.getScoreboard();
 
 //        if (scoreboard == null) {
@@ -99,7 +98,6 @@ public class AspectScoreManager {
     private void makeScore(Scoreboard scoreboard, Objective objective, int index, ChatColor chatColor, String label, int value, String valueUnit) {
         String indexString = Integer.toString(index);
         String scoreString = getScoreString(index);
-        resetScore(scoreboard, index);
         Team team = scoreboard.getTeam(indexString);
 
         if (team == null) {
