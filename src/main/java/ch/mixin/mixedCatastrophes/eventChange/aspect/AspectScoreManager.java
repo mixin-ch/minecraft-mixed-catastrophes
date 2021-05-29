@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.eventChange.aspect;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
@@ -8,9 +9,24 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class AspectScoreManager {
+    private static final List<AspectType> aspectOrder;
+
+    static {
+        aspectOrder = new ArrayList<>();
+        aspectOrder.add(AspectType.Secrets);
+        aspectOrder.add(AspectType.Terror);
+        aspectOrder.add(AspectType.Misfortune);
+        aspectOrder.add(AspectType.Nature_Conspiracy);
+        aspectOrder.add(AspectType.Celestial_Favor);
+        aspectOrder.add(AspectType.Death_Seeker);
+        aspectOrder.add(AspectType.Greyhat_Debt);
+    }
+
     private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     private final MixedCatastrophesPlugin plugin;
 
@@ -30,32 +46,31 @@ public class AspectScoreManager {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         int index = 0;
-        boolean hasTimers = false;
 
-        if (dreamCooldown > 0) {
-            makeScore(scoreboard, objective, index, ChatColor.DARK_AQUA, "Dreamless", dreamCooldown, "s");
-            index++;
-            hasTimers = true;
-        }
-
-        if (antiLighthouseTimer > 0) {
-            makeScore(scoreboard, objective, index, Constants.AspectThemes.get(AspectType.Terror).getColor(), "Red Eye", antiLighthouseTimer, "s");
-            index++;
-            hasTimers = true;
-        }
-
-        if (hasTimers) {
-            emptyScore(objective, index);
-            index++;
-        }
-
-        for (AspectType aspectType : AspectType.values()) {
+        for (AspectType aspectType : aspectOrder) {
             int value = aspects.get(aspectType);
 
             if (value > 0) {
                 makeScore(scoreboard, objective, index, Constants.AspectThemes.get(aspectType).getColor(), aspectType.getLabel(), value);
                 index++;
             }
+        }
+
+        boolean hasTimers = dreamCooldown > 0 || antiLighthouseTimer > 0;
+
+        if (hasTimers) {
+            emptyScore(objective, index);
+            index++;
+        }
+
+        if (dreamCooldown > 0) {
+            makeScore(scoreboard, objective, index, Constants.DreamThemes.get(DreamType.SereneDreams).getColor(), "Dreamless", dreamCooldown, "s");
+            index++;
+        }
+
+        if (antiLighthouseTimer > 0) {
+            makeScore(scoreboard, objective, index, Constants.AspectThemes.get(AspectType.Terror).getColor(), "Red Eye", antiLighthouseTimer, "s");
+            index++;
         }
 
         player.setScoreboard(scoreboard);
