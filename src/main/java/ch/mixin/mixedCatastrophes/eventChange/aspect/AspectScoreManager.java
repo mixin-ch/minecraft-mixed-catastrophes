@@ -56,6 +56,7 @@ public class AspectScoreManager {
         }
 
         int index = 0;
+        int maxBoardSize = aspectOrder.size() + 2;
 
         for (AspectType aspectType : aspectOrder) {
             int value = aspects.get(aspectType);
@@ -66,12 +67,12 @@ public class AspectScoreManager {
             }
         }
 
-        boolean hasTimers = dreamCooldown > 0 || antiLighthouseTimer > 0;
-
-        if (hasTimers) {
-            emptyScore(objective, index);
-            index++;
-        }
+//        boolean hasTimers = dreamCooldown > 0 || antiLighthouseTimer > 0;
+//
+//        if (hasTimers) {
+//            emptyScore(scoreboard, objective, index);
+//            index++;
+//        }
 
         if (dreamCooldown > 0) {
             makeScore(scoreboard, objective, index, Constants.DreamThemes.get(DreamType.SereneDreams).getColor(), "Dreamless", dreamCooldown, "s");
@@ -80,6 +81,11 @@ public class AspectScoreManager {
 
         if (antiLighthouseTimer > 0) {
             makeScore(scoreboard, objective, index, Constants.AspectThemes.get(AspectType.Terror).getColor(), "Red Eye", antiLighthouseTimer, "s");
+            index++;
+        }
+
+        while (index < maxBoardSize) {
+            resetScore(scoreboard, index);
             index++;
         }
 
@@ -92,31 +98,37 @@ public class AspectScoreManager {
 
     private void makeScore(Scoreboard scoreboard, Objective objective, int index, ChatColor chatColor, String label, int value, String valueUnit) {
         String indexString = Integer.toString(index);
-        StringBuilder scoreString = new StringBuilder();
-
-        for (char c : indexString.toCharArray()) {
-            scoreString.append(ChatColor.translateAlternateColorCodes('&', "&" + c));
-        }
-
+        String scoreString = getScoreString(index);
+        resetScore(scoreboard, index);
         Team team = scoreboard.getTeam(indexString);
 
         if (team == null) {
             team = scoreboard.registerNewTeam(indexString);
-            team.addEntry(scoreString.toString());
+            team.addEntry(scoreString);
         }
 
         team.setSuffix(chatColor + label + ": " + value + valueUnit);
-        objective.getScore(scoreString.toString()).setScore(0);
+        objective.getScore(scoreString).setScore(0);
+    }
+//
+//    private void emptyScore(Objective objective, int index) {
+//        String scoreString = getScoreString(index);
+//        Score score = objective.getScore(scoreString);
+//        score.setScore(0);
+//    }
+
+    private void resetScore(Scoreboard scoreboard, int index) {
+        scoreboard.resetScores(getScoreString(index));
     }
 
-    private void emptyScore(Objective objective, int index) {
+    private String getScoreString(int index) {
         StringBuilder scoreString = new StringBuilder();
 
         for (char c : Integer.toString(index).toCharArray()) {
             scoreString.append(ChatColor.translateAlternateColorCodes('&', "&" + c));
         }
 
-        Score score = objective.getScore(scoreString.toString());
-        score.setScore(0);
+        return scoreString.toString();
     }
+
 }
