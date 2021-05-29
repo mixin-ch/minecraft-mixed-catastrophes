@@ -12,6 +12,7 @@ import org.bukkit.scoreboard.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class AspectScoreManager {
     private static final List<AspectType> aspectOrder;
@@ -27,7 +28,7 @@ public class AspectScoreManager {
         aspectOrder.add(AspectType.Greyhat_Debt);
     }
 
-    private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
+//    private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     private final MixedCatastrophesPlugin plugin;
 
     public AspectScoreManager(MixedCatastrophesPlugin plugin) {
@@ -35,18 +36,14 @@ public class AspectScoreManager {
     }
 
     public void updateScoreboard(Player player) {
-        PlayerData pcd = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        UUID playerId = player.getUniqueId();
+        PlayerData pcd = plugin.getMetaData().getPlayerDataMap().get(playerId);
         HashMap<AspectType, Integer> aspects = pcd.getAspects();
 
         int dreamCooldown = pcd.getDreamCooldown();
         int antiLighthouseTimer = pcd.getAntiLighthouseTimer();
 
         Scoreboard scoreboard = player.getScoreboard();
-
-//        if (scoreboard == null) {
-//            scoreboard = scoreboardManager.getNewScoreboard();
-//        }
-
         Objective objective = scoreboard.getObjective("Aspects");
 
         if (objective == null) {
@@ -61,25 +58,18 @@ public class AspectScoreManager {
             int value = aspects.get(aspectType);
 
             if (value > 0) {
-                makeScore(scoreboard, objective, index, Constants.AspectThemes.get(aspectType).getColor(), aspectType.getLabel(), value);
+                makeScore(scoreboard, objective, playerId, index, Constants.AspectThemes.get(aspectType).getColor(), aspectType.getLabel(), value);
                 index++;
             }
         }
 
-//        boolean hasTimers = dreamCooldown > 0 || antiLighthouseTimer > 0;
-//
-//        if (hasTimers) {
-//            emptyScore(scoreboard, objective, index);
-//            index++;
-//        }
-
         if (dreamCooldown > 0) {
-            makeScore(scoreboard, objective, index, Constants.DreamThemes.get(DreamType.SereneDreams).getColor(), "Dreamless", dreamCooldown, "s");
+            makeScore(scoreboard, objective, playerId, index, Constants.DreamThemes.get(DreamType.SereneDreams).getColor(), "Dreamless", dreamCooldown, "s");
             index++;
         }
 
         if (antiLighthouseTimer > 0) {
-            makeScore(scoreboard, objective, index, Constants.AspectThemes.get(AspectType.Terror).getColor(), "Red Eye", antiLighthouseTimer, "s");
+            makeScore(scoreboard, objective, playerId, index, Constants.AspectThemes.get(AspectType.Terror).getColor(), "Red Eye", antiLighthouseTimer, "s");
             index++;
         }
 
@@ -91,29 +81,23 @@ public class AspectScoreManager {
         player.setScoreboard(scoreboard);
     }
 
-    private void makeScore(Scoreboard scoreboard, Objective objective, int index, ChatColor chatColor, String label, int value) {
-        makeScore(scoreboard, objective, index, chatColor, label, value, "");
+    private void makeScore(Scoreboard scoreboard, Objective objective, UUID playerId, int index, ChatColor chatColor, String label, int value) {
+        makeScore(scoreboard, objective, playerId, index, chatColor, label, value, "");
     }
 
-    private void makeScore(Scoreboard scoreboard, Objective objective, int index, ChatColor chatColor, String label, int value, String valueUnit) {
-        String indexString = Integer.toString(index);
+    private void makeScore(Scoreboard scoreboard, Objective objective, UUID playerId, int index, ChatColor chatColor, String label, int value, String valueUnit) {
+        String teamIndexString = playerId + Integer.toString(index);
         String scoreString = getScoreString(index);
-        Team team = scoreboard.getTeam(indexString);
+        Team team = scoreboard.getTeam(teamIndexString);
 
         if (team == null) {
-            team = scoreboard.registerNewTeam(indexString);
+            team = scoreboard.registerNewTeam(teamIndexString);
             team.addEntry(scoreString);
         }
 
         team.setSuffix(chatColor + label + ": " + value + valueUnit);
         objective.getScore(scoreString).setScore(0);
     }
-//
-//    private void emptyScore(Objective objective, int index) {
-//        String scoreString = getScoreString(index);
-//        Score score = objective.getScore(scoreString);
-//        score.setScore(0);
-//    }
 
     private void resetScore(Scoreboard scoreboard, int index) {
         scoreboard.resetScores(getScoreString(index));
