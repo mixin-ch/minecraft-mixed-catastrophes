@@ -21,10 +21,10 @@ public class MixedAchievementsManager {
             return;
 
         MixedAchievementsPlugin mixedAchievementsPlugin = MixedCatastrophesPlugin.MixedAchievementsPlugin;
-        AchievementSetBlueprint achievementSetBlueprint = makeAchievementSetBlueprint();
+        BlueprintAchievementSet blueprintAchievementSet = makeBlueprintAchievementSet();
 
         try {
-            achievementApi = mixedAchievementsPlugin.makeAchievementSet(achievementSetBlueprint);
+            achievementApi = mixedAchievementsPlugin.makeAchievementSet(blueprintAchievementSet);
         } catch (ServiceUnavailableException e) {
             e.printStackTrace();
         }
@@ -32,24 +32,52 @@ public class MixedAchievementsManager {
         active = true;
     }
 
-    private AchievementSetBlueprint makeAchievementSetBlueprint() {
-        AchievementSetBlueprint achievementSetBlueprint = new AchievementSetBlueprint(
-                new AchievementItemSetup(Material.NETHER_STAR, ChatColor.of("#FFFFFF") + "Mixed Catastrophes", 1, new ArrayList<>())
-                , "MixedCatastrophes"
-                , "Mixed Catastrophes");
+    private BlueprintAchievementSet makeBlueprintAchievementSet() {
+        BlueprintAchievementSet achievementSetBlueprint = new BlueprintAchievementSet(
+                "MixedCatastrophes", "Mixed Catastrophes", new AchievementItemSetup(
+                Material.NETHER_STAR, ChatColor.of("#FFFFFF") + "Mixed Catastrophes", 1, new ArrayList<>()
+        ));
 
-        fillBlueprintAchievements(achievementSetBlueprint.getSubAchievementBlueprintElementMap());
+        fillBlueprintAchievements(achievementSetBlueprint.getBlueprintAchievementElementMap());
         return achievementSetBlueprint;
     }
 
-    private void fillBlueprintAchievements(HashMap<Integer, AchievementBlueprintElement> subAchievementBlueprintElementMap) {
-        subAchievementBlueprintElementMap.put(slot(1, 1), new AchievementBlueprintLeafElement(
-                new AchievementItemSetup(Material.OAK_PLANKS, ChatColor.of("#7F00FF") + "Test", 4, new ArrayList<>(Arrays.asList(
+    private void fillBlueprintAchievements(HashMap<Integer, BlueprintAchievementElement> BlueprintAchievementElementMap) {
+        BlueprintAchievementElementMap.put(slot(1, 1), new BlueprintAchievementLeaf("test1", new AchievementItemSetup(
+                Material.OAK_PLANKS, ChatColor.of("#FF007F") + "Test1", 1, new ArrayList<>(Arrays.asList(
+                "Do something."
+        )))));
+        BlueprintAchievementElementMap.put(slot(1, 2), new BlueprintAchievementLeaf("test2", new AchievementItemSetup(
+                Material.BIRCH_PLANKS, ChatColor.of("#FF007F") + "Test2", 2, new ArrayList<>(Arrays.asList(
+                "Do something."
+        )))
+                , 5
+        ));
+        BlueprintAchievementElementMap.put(slot(1, 3), new BlueprintAchievementLeaf("test3", new ArrayList<>(Arrays.asList(
+                new AchievementItemSetup(
+                        Material.SPRUCE_PLANKS, ChatColor.of("#FF007F") + "Test3.1", 31, new ArrayList<>(Arrays.asList(
                         "Do something."
                 )))
-                , "test"
-                , "test"
-                , 4
+                , new AchievementItemSetup(
+                        Material.DARK_OAK_PLANKS, ChatColor.of("#FF007F") + "Test3.2", 32, new ArrayList<>(Arrays.asList(
+                        "Do 2."
+                )))
+        ))));
+        BlueprintAchievementElementMap.put(slot(1, 4), new BlueprintAchievementLeaf("test4", new ArrayList<>(Arrays.asList(
+                new BlueprintAchievementStage(
+                        new AchievementItemSetup(
+                                Material.ACACIA_PLANKS, ChatColor.of("#FF007F") + "Test4.1", 41, new ArrayList<>(Arrays.asList(
+                                "Do something."
+                        ))), 3
+                )
+                , new BlueprintAchievementStage(
+                        new AchievementItemSetup(
+                                Material.JUNGLE_PLANKS, ChatColor.of("#FF007F") + "Test4.2", 42, new ArrayList<>(Arrays.asList(
+                                "Do 2."
+                        )))
+                )
+        )),
+                true
         ));
     }
 
