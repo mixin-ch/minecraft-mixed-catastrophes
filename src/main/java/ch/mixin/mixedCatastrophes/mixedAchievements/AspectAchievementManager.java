@@ -76,8 +76,11 @@ public class AspectAchievementManager {
     public List<BlueprintAchievementLeaf> makeAspectAchievements() {
         List<BlueprintAchievementLeaf> blueprintAchievementLeafList = new ArrayList<>();
 
-        for (AspectType aspectType : presetMap.keySet()) {
+        for (AspectType aspectType : Constants.AspectOrder) {
             AspectAchievementPreset preset = presetMap.get(aspectType);
+
+            if (preset == null)
+                continue;
 
             String achievementId = aspectType.toString();
             String achievementLabel = achievementId.replace("_", " ");

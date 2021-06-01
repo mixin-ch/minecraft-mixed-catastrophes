@@ -9,26 +9,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class AspectScoreManager {
-    private static final List<AspectType> aspectOrder;
-    //private final List<UUID> playerIdList = new ArrayList<>();
     private final HashMap<UUID, Scoreboard> playerMap = new HashMap<>();
-
-    static {
-        aspectOrder = new ArrayList<>();
-        aspectOrder.add(AspectType.Secrets);
-        aspectOrder.add(AspectType.Terror);
-        aspectOrder.add(AspectType.Misfortune);
-        aspectOrder.add(AspectType.Nature_Conspiracy);
-        aspectOrder.add(AspectType.Celestial_Favor);
-        aspectOrder.add(AspectType.Death_Seeker);
-        aspectOrder.add(AspectType.Greyhat_Debt);
-    }
 
     private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
     private final MixedCatastrophesPlugin plugin;
@@ -60,9 +45,9 @@ public class AspectScoreManager {
         }
 
         int index = 0;
-        int maxBoardSize = aspectOrder.size() + 2;
+        int maxBoardSize = Constants.AspectOrder.size() + 2;
 
-        for (AspectType aspectType : aspectOrder) {
+        for (AspectType aspectType : Constants.AspectOrder) {
             int value = aspects.get(aspectType);
 
             if (value > 0) {

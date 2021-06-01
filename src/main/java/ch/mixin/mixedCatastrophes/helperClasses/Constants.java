@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Constants {
+    public static final List<AspectType> AspectOrder;
+
     public static final Theme TimeDistortionTheme;
     public static final HashMap<WeatherCatastropheType, Theme> WeatherThemes;
     public static final HashMap<AspectType, Theme> AspectThemes;
@@ -38,6 +40,15 @@ public class Constants {
     public static final ConstructShape Scarecrow;
 
     static {
+        AspectOrder = new ArrayList<>();
+        AspectOrder.add(AspectType.Secrets);
+        AspectOrder.add(AspectType.Terror);
+        AspectOrder.add(AspectType.Misfortune);
+        AspectOrder.add(AspectType.Nature_Conspiracy);
+        AspectOrder.add(AspectType.Celestial_Favor);
+        AspectOrder.add(AspectType.Death_Seeker);
+        AspectOrder.add(AspectType.Greyhat_Debt);
+
         TimeDistortionTheme = new Theme(ChatColor.of("#7F7FFF"), Material.CLOCK);
 
         WeatherThemes = new HashMap<>();
