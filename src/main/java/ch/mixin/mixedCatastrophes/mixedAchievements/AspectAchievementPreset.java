@@ -1,5 +1,7 @@
 package ch.mixin.mixedCatastrophes.mixedAchievements;
 
+import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
+
 import java.util.List;
 
 public class AspectAchievementPreset {

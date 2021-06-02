@@ -29,6 +29,7 @@ public class StatusListener implements Listener {
         RootCatastropheManager rootCatastropheManager = plugin.getRootCatastropheManager();
         rootCatastropheManager.getPersonalCatastropheManager().initializePlayerData(player);
         plugin.getEventChangeManager().updateScoreBoard(player);
+        plugin.getEventChangeManager().updateAchievementProgress(player);
 
         if (!event.getPlayer().hasPlayedBefore()) {
             player.getInventory().addItem(HelpInventoryManager.HelpBookItem);

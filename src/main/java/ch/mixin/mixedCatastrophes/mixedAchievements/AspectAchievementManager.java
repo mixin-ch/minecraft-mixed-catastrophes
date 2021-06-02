@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.mixedAchievements;
 
+import ch.mixin.mixedAchievements.api.AchievementApi;
 import ch.mixin.mixedAchievements.blueprint.AchievementItemSetup;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementLeaf;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementStage;
@@ -7,6 +8,7 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Theme;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.*;
 
@@ -83,7 +85,7 @@ public class AspectAchievementManager {
                 continue;
 
             String achievementId = aspectType.toString();
-            String achievementLabel = achievementId.replace("_", " ");
+            String achievementLabel = aspectType.getLabel();
             Theme theme = Constants.AspectThemes.get(aspectType);
             List<BlueprintAchievementStage> blueprintAchievementStageList = new ArrayList<>();
 
@@ -97,7 +99,6 @@ public class AspectAchievementManager {
                     lore = "Collect " + stagePreset.getVerge() + " " + achievementLabel + ".";
                 }
 
-
                 blueprintAchievementStageList.add(
                         new BlueprintAchievementStage(
                                 new AchievementItemSetup(
@@ -109,11 +110,47 @@ public class AspectAchievementManager {
                         ));
             }
 
-            blueprintAchievementLeafList.add(new BlueprintAchievementLeaf(
-                    "achievementId", blueprintAchievementStageList, true));
-
+            blueprintAchievementLeafList.add(new BlueprintAchievementLeaf(achievementId, blueprintAchievementStageList));
         }
 
         return blueprintAchievementLeafList;
+    }
+
+    public void updateAchievementProgress(AchievementApi achievementApi, Player player, HashMap<AspectType, Integer> aspects, HashMap<AspectType, Integer> changeMap) {
+        String playerId = player.getUniqueId().toString();
+
+        for (AspectType aspectType : aspects.keySet()) {
+            AspectAchievementPreset preset = presetMap.get(aspectType);
+
+            if (preset == null)
+                continue;
+            if (!preset.isHoard())
+                continue;
+
+            int value = aspects.get(aspectType);
+
+            if (value < 0)
+                continue;
+
+            String achievementId = aspectType.toString();
+            achievementApi.setPoints(achievementId, playerId, value);
+        }
+
+        for (AspectType aspectType : changeMap.keySet()) {
+            AspectAchievementPreset preset = presetMap.get(aspectType);
+
+            if (preset == null)
+                continue;
+            if (preset.isHoard())
+                continue;
+
+            int value = changeMap.get(aspectType);
+
+            if (value <= 0)
+                continue;
+
+            String achievementId = aspectType.toString();
+            achievementApi.addPoints(achievementId, playerId, value);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package ch.mixin.mixedCatastrophes.eventChange;
 
 
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectChange;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectScoreManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
@@ -10,6 +9,8 @@ import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
 import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.mixedAchievements.MixedAchievementsManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -18,12 +19,17 @@ import java.util.HashMap;
 public class EventChangeManager {
     private final MixedCatastrophesPlugin plugin;
     private final AspectScoreManager aspectScoreManager;
+    private MixedAchievementsManager mixedAchievementsManager;
     private final Messager messager;
 
     public EventChangeManager(MixedCatastrophesPlugin plugin) {
         this.plugin = plugin;
         aspectScoreManager = new AspectScoreManager(plugin);
         messager = new Messager();
+    }
+
+    public void configureMixedAchievements(MixedAchievementsManager mixedAchievementsManager) {
+        this.mixedAchievementsManager = mixedAchievementsManager;
     }
 
     public void execute(EventChange eventChange) {
@@ -60,6 +66,31 @@ public class EventChangeManager {
         }
 
         aspectScoreManager.updateScoreboard(player);
+        updateAchievementProgress(player, aspectChange.getChangeMap());
+    }
+
+    private void updateAchievementProgress(Player player, HashMap<AspectType, Integer> changeMap) {
+        if (mixedAchievementsManager == null)
+            return;
+
+        HashMap<AspectType, Integer> aspects = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspects();
+        mixedAchievementsManager.updateAchievementProgress(player, aspects, changeMap);
+    }
+
+    public void updateAchievementProgress(Player player) {
+        if (mixedAchievementsManager == null)
+            return;
+
+        updateAchievementProgress(player, new HashMap<>());
+    }
+
+    public void updateAchievementProgress() {
+        if (mixedAchievementsManager == null)
+            return;
+
+        for (Player player : plugin.getServer().getOnlinePlayers()) {
+            updateAchievementProgress(player);
+        }
     }
 
     private void eventMessage(Player player, EventMessage eventMessage, HashMap<AspectType, Integer> changeMap) {

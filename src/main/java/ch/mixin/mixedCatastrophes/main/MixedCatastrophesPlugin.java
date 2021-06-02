@@ -147,6 +147,8 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     private void tickMixedAchievementsPlugin() {
         if (MixedAchievementsPlugin.isActive()) {
             MixedAchievementsManager.initializeAchievements();
+            eventChangeManager.configureMixedAchievements(MixedAchievementsManager);
+            eventChangeManager.updateAchievementProgress();
         } else {
             getServer().getScheduler().scheduleSyncDelayedTask(this
                     , this::tickMixedAchievementsPlugin
