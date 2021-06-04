@@ -203,26 +203,26 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Certain Events or Actions cause certain Aspects.", "Certain Aspects cause certain Things to happen."
         });
-        createSlot(inventory, Material.WITHER_SKELETON_SKULL, 1, slot(2, 2), "Death Seeker", new String[]{
-                "Causes Stalkers to appear.", "Gained by dying."
-        });
-        createSlot(inventory, Material.ENCHANTED_BOOK, 1, slot(2, 3), "Secrets", new String[]{
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Secrets).getMaterial(), 1, slot(2, 2), "Secrets", new String[]{
                 "Can be used for certain Rites or other Things.", "Gained by certain Rites.", "Gained by periodic horrific Whispers."
         });
-        createSlot(inventory, Material.BEETROOT_SOUP, 1, slot(2, 4), "Terror", new String[]{
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Terror).getMaterial(), 1, slot(2, 3), "Terror", new String[]{
                 "Causes various terrible Things to occur.", "Causes more Secrets from horrific Whispers.", "Gained by periodic horrific Whispers."
         });
-        createSlot(inventory, Material.FLINT, 1, slot(2, 5), "Misfortune", new String[]{
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Misfortune).getMaterial(), 1, slot(2, 4), "Misfortune", new String[]{
                 "Causes you to miss Attacks.", "Causes Lightning to hit you.", "Sometimes gained by breaking Glass.", "Sometimes gained by breaking Stone."
         });
-        createSlot(inventory, Material.DANDELION, 1, slot(2, 6), "Nature Conspiracy", new String[]{
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Nature_Conspiracy).getMaterial(), 1, slot(2, 5), "Nature Conspiracy", new String[]{
                 "Causes Killer Rabbits", "Causes your Food to eat you.", "Sometimes gained by breaking Logs.", "Sometimes gained by killing Animals."
         });
-        createSlot(inventory, Material.IRON_HELMET, 1, slot(2, 7), "Greyhat Debt", new String[]{
-                "Causes Dreams to be confiscated.", "Gained by making a certain Deal."
-        });
-        createSlot(inventory, Material.NETHER_STAR, 1, slot(2, 8), "Celestial Favor", new String[]{
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Celestial_Favor).getMaterial(), 1, slot(2, 6), "Celestial Favor", new String[]{
                 "Saves you from falling into the Void", "Saves your Inventory on Death.", "Gained by conducting a certain Rite."
+        });
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Death_Seeker).getMaterial(), 1, slot(2, 7), "Death Seeker", new String[]{
+                "Causes Stalkers to appear.", "Gained by dying."
+        });
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Greyhat_Debt).getMaterial(), 1, slot(2, 8), "Greyhat Debt", new String[]{
+                "Causes Dreams to be confiscated.", "Gained by making a certain Deal."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);

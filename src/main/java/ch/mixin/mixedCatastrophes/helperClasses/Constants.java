@@ -61,12 +61,12 @@ public class Constants {
 
         AspectThemes = new HashMap<>();
         AspectThemes.put(AspectType.Death_Seeker, new Theme(ChatColor.of("#3F007F"), Material.WITHER_SKELETON_SKULL));
-        AspectThemes.put(AspectType.Secrets, new Theme(ChatColor.of("#FF00FF"), Material.ENCHANTED_BOOK));
+        AspectThemes.put(AspectType.Secrets, new Theme(ChatColor.of("#FF00FF"), Material.WRITABLE_BOOK));
         AspectThemes.put(AspectType.Terror, new Theme(ChatColor.of("#FF0000"), Material.BEETROOT_SOUP));
         AspectThemes.put(AspectType.Nature_Conspiracy, new Theme(ChatColor.of("#3FFF00"), Material.DANDELION));
         AspectThemes.put(AspectType.Misfortune, new Theme(ChatColor.of("#FF7F00"), Material.FLINT));
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("#BFBFBF"), Material.IRON_HELMET));
-        AspectThemes.put(AspectType.Celestial_Favor, new Theme(ChatColor.of("#00FFFF"), Material.NETHER_STAR));
+        AspectThemes.put(AspectType.Celestial_Favor, new Theme(ChatColor.of("#00FFFF"), Material.GHAST_TEAR));
 
         DreamThemes = new HashMap<>();
         DreamThemes.put(DreamType.SereneDreams, new Theme(ChatColor.of("#FF7FBF"), Material.WHITE_BED));
