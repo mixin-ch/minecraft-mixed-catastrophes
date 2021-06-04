@@ -37,10 +37,6 @@ public class EventChangeManager {
         EventMessage eventMessage = eventChange.getEventMessage();
         EventSound eventSound = eventChange.getEventSound();
 
-        if (aspectChange != null) {
-            aspectChange(eventChange.getPlayer(), aspectChange);
-        }
-
         if (eventMessage != null) {
             HashMap<AspectType, Integer> changeMap;
 
@@ -55,6 +51,10 @@ public class EventChangeManager {
 
         if (eventSound != null) {
             eventSound(eventChange.getPlayer(), eventSound);
+        }
+
+        if (aspectChange != null) {
+            aspectChange(eventChange.getPlayer(), aspectChange);
         }
     }
 
