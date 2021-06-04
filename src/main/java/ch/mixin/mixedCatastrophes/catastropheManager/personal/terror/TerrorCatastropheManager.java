@@ -156,6 +156,11 @@ public class TerrorCatastropheManager extends CatastropheManager {
             scarecrowData.setCollectedTerror(collectedTerror);
         }
 
+        int nobility = playerData.getAspect(AspectType.Nobility);
+        double nobilityMultiplier = 1.0 + 0.005 * nobility;
+        double nobilityFlat = 0.2 * nobility;
+        secretsPlus = (int) Math.round(secretsPlus * nobilityMultiplier + nobilityFlat);
+
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Terror, terrorPlus);
         changeMap.put(AspectType.Secrets, secretsPlus);

@@ -37,13 +37,17 @@ public class AspectAchievementManager {
                 , new AspectAchievementStagePreset("Horror", 300)
                 , new AspectAchievementStagePreset("Terror", 500)
         ))));
-        presetMap.put(AspectType.Misfortune, new AspectAchievementPreset(
+        presetMap.put(AspectType.Nobility, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("no 4-Leaf Clover", 1)
-                , new AspectAchievementStagePreset("45% Coin Toss", 4)
-                , new AspectAchievementStagePreset("always wrong Guesses", 16)
-                , new AspectAchievementStagePreset("Dice roll only 1", 64)
+                new AspectAchievementStagePreset("Edler", 10)
+                , new AspectAchievementStagePreset("Knight", 20)
+                , new AspectAchievementStagePreset("Lord", 30)
+                , new AspectAchievementStagePreset("Baron", 40)
+                , new AspectAchievementStagePreset("Count", 50)
+                , new AspectAchievementStagePreset("Duke", 60)
+                , new AspectAchievementStagePreset("King", 70)
+                , new AspectAchievementStagePreset("Emperor", 80)
         ))));
         presetMap.put(AspectType.Nature_Conspiracy, new AspectAchievementPreset(
                 true
@@ -59,6 +63,14 @@ public class AspectAchievementManager {
                 new AspectAchievementStagePreset("make a Wish", 1)
                 , new AspectAchievementStagePreset("Guardian Star", 5)
                 , new AspectAchievementStagePreset("a Friend to Skies", 20)
+        ))));
+        presetMap.put(AspectType.Misfortune, new AspectAchievementPreset(
+                true
+                , new ArrayList<>(Arrays.asList(
+                new AspectAchievementStagePreset("no 4-Leaf Clover", 1)
+                , new AspectAchievementStagePreset("45% Coin Toss", 4)
+                , new AspectAchievementStagePreset("always wrong Guesses", 16)
+                , new AspectAchievementStagePreset("Dice roll only 1", 64)
         ))));
         presetMap.put(AspectType.Death_Seeker, new AspectAchievementPreset(
                 true

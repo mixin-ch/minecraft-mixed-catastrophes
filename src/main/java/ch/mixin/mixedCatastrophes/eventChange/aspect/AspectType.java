@@ -8,6 +8,7 @@ public enum AspectType {
     Nature_Conspiracy,
     Greyhat_Debt,
     Celestial_Favor,
+    Nobility,
     ;
 
     private final String label;

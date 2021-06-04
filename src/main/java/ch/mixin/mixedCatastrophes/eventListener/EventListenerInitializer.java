@@ -12,5 +12,6 @@ public class EventListenerInitializer {
         plugin.getServer().getPluginManager().registerEvents(new NeedListener(plugin), plugin);
         plugin.getServer().getPluginManager().registerEvents(new InventoryListener(plugin), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ConstructListener(plugin), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new MixedAchievementListener(plugin), plugin);
     }
 }

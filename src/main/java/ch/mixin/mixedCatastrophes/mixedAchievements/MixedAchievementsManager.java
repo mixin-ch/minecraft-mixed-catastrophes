@@ -39,7 +39,7 @@ public class MixedAchievementsManager {
 
     private BlueprintAchievementSet makeBlueprintAchievementSet() {
         BlueprintAchievementSet achievementSetBlueprint = new BlueprintAchievementSet(
-                "MixedCatastrophes", "Mixed Catastrophes", new AchievementItemSetup(
+                MixedCatastrophesPlugin.PLUGIN_NAME, "Mixed Catastrophes", new AchievementItemSetup(
                 Material.CLOCK, ChatColor.of("#FFFFFF") + "Mixed Catastrophes", 1, new ArrayList<>()
         ));
 
