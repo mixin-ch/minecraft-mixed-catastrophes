@@ -41,9 +41,9 @@ public class Constants {
 
     static {
         AspectOrder = new ArrayList<>();
+        AspectOrder.add(AspectType.Nobility);
         AspectOrder.add(AspectType.Secrets);
         AspectOrder.add(AspectType.Terror);
-        AspectOrder.add(AspectType.Nobility);
         AspectOrder.add(AspectType.Nature_Conspiracy);
         AspectOrder.add(AspectType.Celestial_Favor);
         AspectOrder.add(AspectType.Misfortune);
@@ -61,13 +61,13 @@ public class Constants {
         WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("#BF7F5F"), Material.BONE));
 
         AspectThemes = new HashMap<>();
+        AspectThemes.put(AspectType.Nobility, new Theme(ChatColor.of("#FFDF7F"), Material.GOLDEN_HELMET));
         AspectThemes.put(AspectType.Secrets, new Theme(ChatColor.of("#FF00FF"), Material.MAP));
         AspectThemes.put(AspectType.Terror, new Theme(ChatColor.of("#FF0000"), Material.BEETROOT_SOUP));
-        AspectThemes.put(AspectType.Nobility, new Theme(ChatColor.of("#FFBF00"), Material.GOLDEN_HELMET));
         AspectThemes.put(AspectType.Nature_Conspiracy, new Theme(ChatColor.of("#3FFF00"), Material.DANDELION));
         AspectThemes.put(AspectType.Celestial_Favor, new Theme(ChatColor.of("#00FFFF"), Material.GHAST_TEAR));
         AspectThemes.put(AspectType.Misfortune, new Theme(ChatColor.of("#3F00BF"), Material.FLINT));
-        AspectThemes.put(AspectType.Death_Seeker, new Theme(ChatColor.of("#3F007F"), Material.WITHER_SKELETON_SKULL));
+        AspectThemes.put(AspectType.Death_Seeker, new Theme(ChatColor.of("#3F005F"), Material.WITHER_SKELETON_SKULL));
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("#BFBFBF"), Material.IRON_HELMET));
 
         DreamThemes = new HashMap<>();
