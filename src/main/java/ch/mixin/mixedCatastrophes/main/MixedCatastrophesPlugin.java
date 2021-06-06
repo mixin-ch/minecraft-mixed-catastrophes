@@ -18,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.*;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public final class MixedCatastrophesPlugin extends JavaPlugin {
@@ -33,8 +34,6 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     public static MixedAchievementsPlugin MixedAchievementsPlugin;
     public static boolean UseMixedAchievementsPlugin;
 
-    public static MixedAchievementsManager MixedAchievementsManager;
-
     static {
         String urlPath = MixedCatastrophesPlugin.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String decodedPath = null;
@@ -49,12 +48,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     public boolean pluginFlawless;
-    private MetaData metaData;
-    private ArrayList<World> affectedWorlds;
-    private EventChangeManager eventChangeManager;
-    private RootCatastropheManager rootCatastropheManager;
-    private HelpInventoryManager helpInventoryManager;
-    private Particler particler;
+    MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
     @Override
     public void onEnable() {
@@ -69,7 +63,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         System.out.println(PLUGIN_NAME + " disabled");
-        metaData.save();
+        mixedCatastrophesManagerAccessor.getMetaData().save();
     }
 
     public void reload() {
@@ -83,13 +77,15 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void initialize() {
+        mixedCatastrophesManagerAccessor = new MixedCatastrophesManagerAccessor(this);
         initializeMetaData();
         initializeDependentPlugins();
-        eventChangeManager = new EventChangeManager(this);
-        rootCatastropheManager = new RootCatastropheManager(this);
-        helpInventoryManager = new HelpInventoryManager(this);
-        particler = new Particler(this);
-        affectedWorlds = new ArrayList<>();
+        mixedCatastrophesManagerAccessor.setEventChangeManager(new EventChangeManager(this));
+        mixedCatastrophesManagerAccessor.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesManagerAccessor));
+        mixedCatastrophesManagerAccessor.setHelpInventoryManager(new HelpInventoryManager(this));
+        mixedCatastrophesManagerAccessor.setParticler(new Particler(this));
+        List<World> affectedWorlds = new ArrayList<>();
+        mixedCatastrophesManagerAccessor.setAffectedWorlds(affectedWorlds);
 
         for (String worldName : getConfig().getStringList("worlds")) {
             World world = getServer().getWorld(worldName);
@@ -99,7 +95,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         }
 
         CommandInitializer.setupCommands(this);
-        EventListenerInitializer.setupEventListener(this);
+        EventListenerInitializer.setupEventListener(mixedCatastrophesManagerAccessor);
     }
 
     private void initializeMetaData() {
@@ -119,11 +115,14 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         }
 
         String jsonString = String.join("\n", readFile(METADATA_FILE));
+        MetaData metaData;
         if (jsonString.equals("")) {
             metaData = new MetaData();
         } else {
             metaData = new Gson().fromJson(jsonString, MetaData.class);
         }
+
+        mixedCatastrophesManagerAccessor.setMetaData(metaData);
     }
 
     private void initializeDependentPlugins() {
@@ -134,7 +133,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         MixedAchievementsPlugin = (MixedAchievementsPlugin) Bukkit.getServer().getPluginManager().getPlugin("MixedAchievements");
         UseMixedAchievementsPlugin = MixedAchievementsPlugin != null;
         System.out.println("MixedAchievementsPlugin: " + UseMixedAchievementsPlugin);
-        MixedAchievementsManager = new MixedAchievementsManager();
+        mixedCatastrophesManagerAccessor.setMixedAchievementsManager(new MixedAchievementsManager());
 
         if (UseMixedAchievementsPlugin) {
             getServer().getScheduler().scheduleSyncDelayedTask(this
@@ -146,9 +145,9 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
 
     private void tickMixedAchievementsPlugin() {
         if (MixedAchievementsPlugin.isActive()) {
-            MixedAchievementsManager.initializeAchievements();
-            eventChangeManager.configureMixedAchievements(MixedAchievementsManager);
-            eventChangeManager.updateAchievementProgress();
+            mixedCatastrophesManagerAccessor.getMixedAchievementsManager().initializeAchievements();
+            mixedCatastrophesManagerAccessor.getEventChangeManager().configureMixedAchievements(mixedCatastrophesManagerAccessor.getMixedAchievementsManager());
+            mixedCatastrophesManagerAccessor.getEventChangeManager().updateAchievementProgress();
         } else {
             getServer().getScheduler().scheduleSyncDelayedTask(this
                     , this::tickMixedAchievementsPlugin
@@ -157,8 +156,8 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void start() {
-        if (metaData.isActive()) {
-            rootCatastropheManager.start();
+        if (mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
+            mixedCatastrophesManagerAccessor.getRootCatastropheManager().start();
         }
 
         pluginFlawless = true;
@@ -193,26 +192,26 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     public MetaData getMetaData() {
-        return metaData;
+        return mixedCatastrophesManagerAccessor.getMetaData();
     }
 
-    public ArrayList<World> getAffectedWorlds() {
-        return affectedWorlds;
+    public List<World> getAffectedWorlds() {
+        return mixedCatastrophesManagerAccessor.getAffectedWorlds();
     }
 
     public EventChangeManager getEventChangeManager() {
-        return eventChangeManager;
+        return mixedCatastrophesManagerAccessor.getEventChangeManager();
     }
 
     public RootCatastropheManager getRootCatastropheManager() {
-        return rootCatastropheManager;
+        return mixedCatastrophesManagerAccessor.getRootCatastropheManager();
     }
 
     public HelpInventoryManager getHelpInventoryManager() {
-        return helpInventoryManager;
+        return mixedCatastrophesManagerAccessor.getHelpInventoryManager();
     }
 
     public Particler getParticler() {
-        return particler;
+        return mixedCatastrophesManagerAccessor.getParticler();
     }
 }

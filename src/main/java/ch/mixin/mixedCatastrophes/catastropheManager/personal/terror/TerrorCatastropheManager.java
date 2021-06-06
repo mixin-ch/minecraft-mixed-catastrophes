@@ -9,6 +9,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker.Sta
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
@@ -29,11 +30,11 @@ public class TerrorCatastropheManager extends CatastropheManager {
     private final StalkerCatastropheManager stalkerCatastropheManager;
     private final ParanoiaCatastropheManager paranoiaCatastropheManager;
 
-    public TerrorCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
-        assaultCatastropheManager = new AssaultCatastropheManager(plugin, rootCatastropheManager);
-        stalkerCatastropheManager = new StalkerCatastropheManager(plugin, rootCatastropheManager);
-        paranoiaCatastropheManager = new ParanoiaCatastropheManager(plugin, rootCatastropheManager);
+    public TerrorCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
+        assaultCatastropheManager = new AssaultCatastropheManager(mixedCatastrophesManagerAccessor);
+        stalkerCatastropheManager = new StalkerCatastropheManager(mixedCatastrophesManagerAccessor);
+        paranoiaCatastropheManager = new ParanoiaCatastropheManager(mixedCatastrophesManagerAccessor);
     }
 
     @Override

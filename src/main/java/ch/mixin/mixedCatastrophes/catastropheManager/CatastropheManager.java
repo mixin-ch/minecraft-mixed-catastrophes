@@ -1,17 +1,18 @@
 package ch.mixin.mixedCatastrophes.catastropheManager;
 
-import ch.mixin.mixedCatastrophes.metaData.MetaData;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.MetaData;
 
 public abstract class CatastropheManager {
+    protected final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
     protected final MixedCatastrophesPlugin plugin;
     protected final MetaData metaData;
-    protected final RootCatastropheManager rootCatastropheManager;
 
-    public CatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        this.plugin = plugin;
-        metaData = plugin.getMetaData();
-        this.rootCatastropheManager = rootCatastropheManager;
+    public CatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+        plugin = mixedCatastrophesManagerAccessor.getPlugin();
+        metaData = mixedCatastrophesManagerAccessor.getMetaData();
     }
 
     public abstract void initializeMetaData();

@@ -5,8 +5,11 @@ import ch.mixin.mixedAchievements.blueprint.AchievementItemSetup;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementElement;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementLeaf;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementSet;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.mixedAchievements.aspect.AspectAchievementManager;
+import ch.mixin.mixedCatastrophes.mixedAchievements.construct.ConstructAchievementManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,14 +21,16 @@ import java.util.List;
 
 public class MixedAchievementsManager {
     private boolean active = false;
-    private AspectAchievementManager aspectAchievementManager;
     private AchievementApi achievementApi;
+    private AspectAchievementManager aspectAchievementManager;
+    private ConstructAchievementManager constructAchievementManager;
 
     public void initializeAchievements() {
         if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
             return;
 
         aspectAchievementManager = new AspectAchievementManager();
+        constructAchievementManager = new ConstructAchievementManager();
         BlueprintAchievementSet blueprintAchievementSet = makeBlueprintAchievementSet();
 
         try {
@@ -43,26 +48,31 @@ public class MixedAchievementsManager {
                 Material.CLOCK, ChatColor.of("#FFFFFF") + "Mixed Catastrophes", 1, new ArrayList<>()
         ));
 
-        fillBlueprintAchievements(achievementSetBlueprint.getBlueprintAchievementElementMap());
+        List<BlueprintAchievementLeaf> achievementList = new ArrayList<>();
+        achievementList.addAll(aspectAchievementManager.makeAspectAchievements());
+        achievementList.addAll(constructAchievementManager.makeAspectAchievements());
+        fillBlueprintAchievements(achievementSetBlueprint.getBlueprintAchievementElementMap(), achievementList);
         return achievementSetBlueprint;
     }
 
-    private void fillBlueprintAchievements(HashMap<Integer, BlueprintAchievementElement> BlueprintAchievementElementMap) {
+    private void fillBlueprintAchievements(HashMap<Integer, BlueprintAchievementElement> BlueprintAchievementElementMap, List<BlueprintAchievementLeaf> achievementList) {
         int slot = 0;
-        List<BlueprintAchievementLeaf> aspectAchievementList = aspectAchievementManager.makeAspectAchievements();
 
-        for (BlueprintAchievementLeaf aspectAchievement : aspectAchievementList) {
+        for (BlueprintAchievementLeaf achievement : achievementList) {
             if (slot == 8)
                 slot++;
 
-            BlueprintAchievementElementMap.put(slot, aspectAchievement);
-
+            BlueprintAchievementElementMap.put(slot, achievement);
             slot++;
         }
     }
 
-    public void updateAchievementProgress(Player player, HashMap<AspectType, Integer> aspects, HashMap<AspectType, Integer> changeMap) {
+    public void updateAspectAchievementProgress(Player player, HashMap<AspectType, Integer> aspects, HashMap<AspectType, Integer> changeMap) {
         aspectAchievementManager.updateAchievementProgress(achievementApi, player, aspects, changeMap);
+    }
+
+    public void updateConstructAchievementProgress(Player player, ConstructType constructType, int value) {
+        constructAchievementManager.updateAchievementProgress(achievementApi, player, constructType, value);
     }
 
     private int slot(int row, int col) {

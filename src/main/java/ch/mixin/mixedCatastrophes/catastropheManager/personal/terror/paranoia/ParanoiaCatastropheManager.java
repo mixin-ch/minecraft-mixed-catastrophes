@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
@@ -39,8 +40,8 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         soundList.add(Sound.ENTITY_ARROW_SHOOT);
     }
 
-    public ParanoiaCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
+    public ParanoiaCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override

@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Constants {
     public static final List<AspectType> AspectOrder;
+    public static final List<ConstructType> ConstructOrder;
 
     public static final Theme TimeDistortionTheme;
     public static final HashMap<WeatherCatastropheType, Theme> WeatherThemes;
@@ -49,6 +50,13 @@ public class Constants {
         AspectOrder.add(AspectType.Misfortune);
         AspectOrder.add(AspectType.Death_Seeker);
         AspectOrder.add(AspectType.Greyhat_Debt);
+
+        ConstructOrder = new ArrayList<>();
+        ConstructOrder.add(ConstructType.GreenWell);
+        ConstructOrder.add(ConstructType.BlazeReactor);
+        ConstructOrder.add(ConstructType.Blitzard);
+        ConstructOrder.add(ConstructType.Lighthouse);
+        ConstructOrder.add(ConstructType.Scarecrow);
 
         TimeDistortionTheme = new Theme(ChatColor.of("#7F7FFF"), Material.CLOCK);
 

@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.StalkerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class StalkerCatastropheManager extends CatastropheManager {
-    public StalkerCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
+    public StalkerCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override

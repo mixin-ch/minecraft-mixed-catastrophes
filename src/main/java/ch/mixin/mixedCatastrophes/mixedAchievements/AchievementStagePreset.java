@@ -1,10 +1,10 @@
 package ch.mixin.mixedCatastrophes.mixedAchievements;
 
-public class AspectAchievementStagePreset {
+public class AchievementStagePreset {
     private final String name;
     private final int verge;
 
-    public AspectAchievementStagePreset(String name, int verge) {
+    public AchievementStagePreset(String name, int verge) {
         this.name = name;
         this.verge = verge;
     }

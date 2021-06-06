@@ -4,6 +4,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.Construct
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
@@ -23,10 +24,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ConstructListener implements Listener {
-    protected final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public ConstructListener(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public ConstructListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        plugin = mixedCatastrophesManagerAccessor.getPlugin();
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     @EventHandler
@@ -103,7 +106,7 @@ public class ConstructListener implements Listener {
 
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int cost = 160 + 80 * greenWellData.getLevel();
-        int costItem = 1 + greenWellData.getLevel();
+        int costItem = 2 + greenWellData.getLevel();
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
@@ -147,6 +150,12 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+            return;
+
+        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+                player, ConstructType.GreenWell, greenWellData.getLevel());
     }
 
 
@@ -234,6 +243,12 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+            return;
+
+        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+                player, ConstructType.BlazeReactor, blazeReactorData.getLevel());
     }
 
     private void makeBlitzard(PlayerInteractEvent event) {
@@ -271,7 +286,7 @@ public class ConstructListener implements Listener {
         PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int multiplier = (int) Math.pow(1 + blitzardData.getLevel(), 2);
         int cost = 100 * multiplier;
-        int costItem = multiplier;
+        int costItem = 1 * multiplier;
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
@@ -315,6 +330,12 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+            return;
+
+        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+                player, ConstructType.Blitzard, blitzardData.getLevel());
     }
 
     private void makeLighthouse(PlayerInteractEvent event) {
@@ -396,6 +417,12 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+            return;
+
+        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+                player, ConstructType.Lighthouse, lighthouseData.getLevel());
     }
 
     private void makeScarecrow(PlayerInteractEvent event) {
@@ -464,5 +491,11 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+            return;
+
+        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+                player, ConstructType.Scarecrow, 1);
     }
 }

@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
@@ -126,8 +127,8 @@ public class AssaultCatastropheManager extends CatastropheManager {
         ), 1.0);
     }
 
-    public AssaultCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
+    public AssaultCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override

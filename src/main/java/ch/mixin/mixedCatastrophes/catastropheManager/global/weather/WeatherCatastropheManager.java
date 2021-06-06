@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.weather;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
@@ -36,8 +37,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
     private int weatherTimer;
     private WeatherCatastropheType activeWeather;
 
-    public WeatherCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
+    public WeatherCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override

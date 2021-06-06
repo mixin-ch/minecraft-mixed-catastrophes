@@ -1,18 +1,20 @@
 package ch.mixin.mixedCatastrophes.catastropheManager;
 
-import ch.mixin.mixedCatastrophes.metaData.MetaData;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.timeDistortion.TimeDistortionManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.PersonalCatastropheManager;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.MetaData;
 
 public class RootCatastropheManager {
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
     private final MixedCatastrophesPlugin plugin;
     private final MetaData metaData;
 
-    private boolean started;
+    private boolean started = false;
 
     private final TimeDistortionManager timeDistortionManager;
     private final WeatherCatastropheManager weatherCatastropheManager;
@@ -23,18 +25,18 @@ public class RootCatastropheManager {
     private final int metaDataSaveDuration = 5 * 60;
     private int metaDataSaveTimer;
 
-    public RootCatastropheManager(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
-        metaData = plugin.getMetaData();
-        started = false;
-        timeDistortionManager = new TimeDistortionManager(plugin, this);
-        weatherCatastropheManager = new WeatherCatastropheManager(plugin, this);
-        starSplinterCatastropheManager = new StarSplinterCatastropheManager(plugin, this);
-        constructManager = new ConstructManager(plugin, this);
-        personalCatastropheManager = new PersonalCatastropheManager(plugin, this);
+    public RootCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+        plugin = mixedCatastrophesManagerAccessor.getPlugin();
+        metaData = mixedCatastrophesManagerAccessor.getMetaData();
+        timeDistortionManager = new TimeDistortionManager(mixedCatastrophesManagerAccessor);
+        weatherCatastropheManager = new WeatherCatastropheManager(mixedCatastrophesManagerAccessor);
+        starSplinterCatastropheManager = new StarSplinterCatastropheManager(mixedCatastrophesManagerAccessor);
+        constructManager = new ConstructManager(mixedCatastrophesManagerAccessor);
+        personalCatastropheManager = new PersonalCatastropheManager(mixedCatastrophesManagerAccessor);
         metaDataSaveTimer = 0;
         initializeMetaData();
-        plugin.getEventChangeManager().updateScoreBoard();
+        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard();
         initializeCauser();
     }
 

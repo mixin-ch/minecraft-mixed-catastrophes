@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.catastropheManager.global.constructs;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.*;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
 import org.bukkit.Location;
@@ -18,8 +19,8 @@ import java.util.List;
 import java.util.Random;
 
 public class ConstructManager extends CatastropheManager {
-    public ConstructManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
+    public ConstructManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override

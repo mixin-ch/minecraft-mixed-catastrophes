@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
@@ -25,9 +26,9 @@ public class PersonalCatastropheManager extends CatastropheManager {
     private final RiteManager riteManager;
     private final DreamManager dreamManager;
 
-    public PersonalCatastropheManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
-        terrorCatastropheManager = new TerrorCatastropheManager(plugin, rootCatastropheManager);
+    public PersonalCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
+        terrorCatastropheManager = new TerrorCatastropheManager(mixedCatastrophesManagerAccessor);
         riteManager = new RiteManager(plugin);
         dreamManager = new DreamManager(plugin);
     }

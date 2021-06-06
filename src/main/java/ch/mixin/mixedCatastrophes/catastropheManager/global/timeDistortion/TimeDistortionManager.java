@@ -1,22 +1,21 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.timeDistortion;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TimeDistortionManager extends CatastropheManager {
     private int timeDistortionTimer;
 
-    public TimeDistortionManager(MixedCatastrophesPlugin plugin, RootCatastropheManager rootCatastropheManager) {
-        super(plugin, rootCatastropheManager);
+    public TimeDistortionManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -53,7 +52,7 @@ public class TimeDistortionManager extends CatastropheManager {
         timeDistortionTimer = timeDistortionTimer();
         int momentum = (int) Math.round((new Random().nextDouble() * 0.5 + 0.25) * 24000);
         boolean forward = new Random().nextBoolean();
-        ArrayList<World> worlds = plugin.getAffectedWorlds();
+        List<World> worlds = mixedCatastrophesManagerAccessor.getAffectedWorlds();
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             player.playSound(player.getLocation(), Sound.AMBIENT_BASALT_DELTAS_ADDITIONS, 10.0f, 1.0f);
@@ -69,7 +68,7 @@ public class TimeDistortionManager extends CatastropheManager {
         partialTimeDistortion(worlds, momentum, forward);
     }
 
-    private void partialTimeDistortion(ArrayList<World> worlds, int momentum, boolean forward) {
+    private void partialTimeDistortion(List<World> worlds, int momentum, boolean forward) {
         int jumpAmount = Math.min(50, momentum);
 
         for (World world : worlds) {

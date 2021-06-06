@@ -74,7 +74,7 @@ public class EventChangeManager {
             return;
 
         HashMap<AspectType, Integer> aspects = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspects();
-        mixedAchievementsManager.updateAchievementProgress(player, aspects, changeMap);
+        mixedAchievementsManager.updateAspectAchievementProgress(player, aspects, changeMap);
     }
 
     public void updateAchievementProgress(Player player) {

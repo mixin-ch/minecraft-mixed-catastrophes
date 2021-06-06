@@ -1,4 +1,4 @@
-package ch.mixin.mixedCatastrophes.mixedAchievements;
+package ch.mixin.mixedCatastrophes.mixedAchievements.aspect;
 
 import ch.mixin.mixedAchievements.api.AchievementApi;
 import ch.mixin.mixedAchievements.blueprint.AchievementItemSetup;
@@ -7,6 +7,7 @@ import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementStage;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Theme;
+import ch.mixin.mixedCatastrophes.mixedAchievements.AchievementStagePreset;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -20,70 +21,70 @@ public class AspectAchievementManager {
         presetMap.put(AspectType.Secrets, new AspectAchievementPreset(
                 false
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("a Hint now fading", 100)
-                , new AspectAchievementStagePreset("a Clue so absurd", 500)
-                , new AspectAchievementStagePreset("a Puzzle yet unsolved", 2000)
-                , new AspectAchievementStagePreset("a Riddle simply cryptic", 6000)
-                , new AspectAchievementStagePreset("an Enigma too complex", 15000)
-                , new AspectAchievementStagePreset("a Mystery long forgotten", 30000)
-                , new AspectAchievementStagePreset("a Secret never known", 50000)
+                new AchievementStagePreset("a Hint now fading", 100)
+                , new AchievementStagePreset("a Clue so absurd", 500)
+                , new AchievementStagePreset("a Puzzle yet unsolved", 2000)
+                , new AchievementStagePreset("a Riddle simply cryptic", 6000)
+                , new AchievementStagePreset("an Enigma too complex", 15000)
+                , new AchievementStagePreset("a Mystery long forgotten", 30000)
+                , new AchievementStagePreset("a Secret never known", 50000)
         ))));
         presetMap.put(AspectType.Terror, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("Worry", 50)
-                , new AspectAchievementStagePreset("Anxiety", 100)
-                , new AspectAchievementStagePreset("Fear", 200)
-                , new AspectAchievementStagePreset("Horror", 300)
-                , new AspectAchievementStagePreset("Terror", 500)
+                new AchievementStagePreset("Worry", 50)
+                , new AchievementStagePreset("Anxiety", 100)
+                , new AchievementStagePreset("Fear", 200)
+                , new AchievementStagePreset("Horror", 300)
+                , new AchievementStagePreset("Terror", 500)
         ))));
         presetMap.put(AspectType.Nobility, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("Edler", 10)
-                , new AspectAchievementStagePreset("Knight", 20)
-                , new AspectAchievementStagePreset("Lord", 30)
-                , new AspectAchievementStagePreset("Baron", 40)
-                , new AspectAchievementStagePreset("Count", 50)
-                , new AspectAchievementStagePreset("Duke", 60)
-                , new AspectAchievementStagePreset("King", 70)
-                , new AspectAchievementStagePreset("Emperor", 80)
+                new AchievementStagePreset("Edler", 10)
+                , new AchievementStagePreset("Knight", 20)
+                , new AchievementStagePreset("Lord", 30)
+                , new AchievementStagePreset("Baron", 40)
+                , new AchievementStagePreset("Count", 50)
+                , new AchievementStagePreset("Duke", 60)
+                , new AchievementStagePreset("King", 70)
+                , new AchievementStagePreset("Emperor", 80)
         ))));
         presetMap.put(AspectType.Nature_Conspiracy, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("Natures Distaste", 1)
-                , new AspectAchievementStagePreset("Natures Dislike", 4)
-                , new AspectAchievementStagePreset("Natures Despise", 16)
-                , new AspectAchievementStagePreset("Natures Hatred", 64)
+                new AchievementStagePreset("Natures Distaste", 1)
+                , new AchievementStagePreset("Natures Dislike", 4)
+                , new AchievementStagePreset("Natures Despise", 16)
+                , new AchievementStagePreset("Natures Hatred", 64)
         ))));
         presetMap.put(AspectType.Celestial_Favor, new AspectAchievementPreset(
                 false
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("make a Wish", 1)
-                , new AspectAchievementStagePreset("Guardian Star", 5)
-                , new AspectAchievementStagePreset("a Friend to Skies", 20)
+                new AchievementStagePreset("make a Wish", 1)
+                , new AchievementStagePreset("Guardian Star", 5)
+                , new AchievementStagePreset("a Friend to Skies", 20)
         ))));
         presetMap.put(AspectType.Misfortune, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("no 4-Leaf Clover", 1)
-                , new AspectAchievementStagePreset("45% Coin Toss", 4)
-                , new AspectAchievementStagePreset("always wrong Guesses", 16)
-                , new AspectAchievementStagePreset("Dice roll only 1", 64)
+                new AchievementStagePreset("no 4-Leaf Clover", 1)
+                , new AchievementStagePreset("45% Coin Toss", 4)
+                , new AchievementStagePreset("always wrong Guesses", 16)
+                , new AchievementStagePreset("Dice roll only 1", 64)
         ))));
         presetMap.put(AspectType.Death_Seeker, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("the Day I died", 1)
-                , new AspectAchievementStagePreset("a Cat dies 9 Times", 9)
-                , new AspectAchievementStagePreset("the Answer to Death and Everything", 42)
+                new AchievementStagePreset("the Day I died", 1)
+                , new AchievementStagePreset("a Cat dies 9 Times", 9)
+                , new AchievementStagePreset("the Answer to Death and Everything", 42)
         ))));
         presetMap.put(AspectType.Greyhat_Debt, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AspectAchievementStagePreset("Business", 1)
-                , new AspectAchievementStagePreset("sold your Soul", 10)
+                new AchievementStagePreset("Business", 1)
+                , new AchievementStagePreset("sold your Soul", 10)
         ))));
     }
 
@@ -102,7 +103,7 @@ public class AspectAchievementManager {
             List<BlueprintAchievementStage> blueprintAchievementStageList = new ArrayList<>();
 
             for (int i = 0; i < preset.getStageList().size(); i++) {
-                AspectAchievementStagePreset stagePreset = preset.getStageList().get(i);
+                AchievementStagePreset stagePreset = preset.getStageList().get(i);
                 String lore;
 
                 if (preset.isHoard()) {
