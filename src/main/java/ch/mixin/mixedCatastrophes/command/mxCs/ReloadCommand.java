@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -9,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReloadCommand extends SubCommand {
-    public ReloadCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public ReloadCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override

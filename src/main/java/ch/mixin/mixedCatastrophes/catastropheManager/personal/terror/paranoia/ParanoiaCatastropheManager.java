@@ -155,7 +155,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void insomnia(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int time = 3 * 60;
 
@@ -163,7 +163,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
             playerData.setDreamCooldown(time);
         }
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Nightmares keep you from sleeping.")
@@ -174,7 +174,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void weakness(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 2 * 60;
@@ -184,7 +184,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, amplitude));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, amplitude));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Dread pulls on your Muscles.")
@@ -195,7 +195,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void vulnerability(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 2 * 60;
@@ -204,7 +204,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You feel so vulnerable.")
@@ -215,7 +215,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void paralysis(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 1 + (int) Math.round(Math.pow(0.05 * extent, 0.5));
@@ -227,7 +227,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, 10));
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, time * 20, 0));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("An icy Touch paralyzes you.")

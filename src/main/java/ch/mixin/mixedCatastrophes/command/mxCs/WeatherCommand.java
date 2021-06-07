@@ -2,6 +2,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class WeatherCommand extends SubCommand {
-    public WeatherCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public WeatherCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class WeatherCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -47,7 +48,7 @@ public class WeatherCommand extends SubCommand {
             return;
         }
 
-        plugin.getRootCatastropheManager().getWeatherCatastropheManager().changeWeather(weatherCatastropheType);
+        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getWeatherCatastropheManager().changeWeather(weatherCatastropheType);
         sender.sendMessage(ChatColor.GREEN + "You successfully caused " + weatherCatastropheType + ".");
     }
 

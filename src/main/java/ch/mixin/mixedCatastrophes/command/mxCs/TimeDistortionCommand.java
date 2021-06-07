@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -9,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TimeDistortionCommand extends SubCommand {
-    public TimeDistortionCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public TimeDistortionCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -20,7 +21,7 @@ public class TimeDistortionCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -35,7 +36,7 @@ public class TimeDistortionCommand extends SubCommand {
             return;
         }
 
-        plugin.getRootCatastropheManager().getTimeDistortionManager().causeTimeDistortion();
+        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getTimeDistortionManager().causeTimeDistortion();
         sender.sendMessage(ChatColor.GREEN + "Successfully caused TimeDistortion.");
     }
 

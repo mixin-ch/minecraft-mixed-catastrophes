@@ -271,7 +271,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             mob.setTarget(player);
         }
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage(assaultPremise.getMessage())

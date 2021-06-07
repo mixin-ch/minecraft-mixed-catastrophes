@@ -86,7 +86,7 @@ public class RootCatastropheManager {
         starSplinterCatastropheManager.tick();
         constructManager.tick();
         personalCatastropheManager.tick();
-        plugin.getEventChangeManager().updateScoreBoard();
+        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard();
 
         save();
         tickTrigger();

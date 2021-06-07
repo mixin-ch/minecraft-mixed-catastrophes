@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs.terror.stalker;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StalkerCauseCommand extends SubCommand {
-    public StalkerCauseCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public StalkerCauseCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class StalkerCauseCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -56,7 +57,7 @@ public class StalkerCauseCommand extends SubCommand {
             }
         }
 
-        plugin.getRootCatastropheManager().getPersonalCatastropheManager().getTerrorCatastropheManager().getStalkerCatastropheManager().causeStalker(player);
+        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getPersonalCatastropheManager().getTerrorCatastropheManager().getStalkerCatastropheManager().causeStalker(player);
         sender.sendMessage(ChatColor.GREEN + "Stalker caused.");
     }
 

@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.catastropheManager.personal.rite;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import org.bukkit.Material;
@@ -18,9 +19,11 @@ import java.util.List;
 
 public class RiteManager {
     private final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public RiteManager(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public RiteManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        plugin = mixedCatastrophesManagerAccessor.getPlugin();
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     public void performRite(Player player, Block blockN1, Block blockN2) {
@@ -88,7 +91,7 @@ public class RiteManager {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, gain);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -140,10 +143,10 @@ public class RiteManager {
         }
 
         int cost = (int) Math.round(400 * multiplier);
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -157,7 +160,7 @@ public class RiteManager {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -189,14 +192,14 @@ public class RiteManager {
 
     private void removeNatureConspiracy(Player player, Block blockN1, Block blockN2) {
         int cost = 1000;
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Nature_Conspiracy) <= 0) {
             return;
         }
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -214,7 +217,7 @@ public class RiteManager {
         changeMap.put(AspectType.Secrets, -cost);
         changeMap.put(AspectType.Nature_Conspiracy, curseMod);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -229,14 +232,14 @@ public class RiteManager {
 
     private void removeMisfortune(Player player, Block blockN1, Block blockN2) {
         int cost = 1000;
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Misfortune) <= 0) {
             return;
         }
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -254,7 +257,7 @@ public class RiteManager {
         changeMap.put(AspectType.Secrets, -cost);
         changeMap.put(AspectType.Misfortune, curseMod);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -269,14 +272,14 @@ public class RiteManager {
 
     private void removeTerror(Player player, Block blockN1, Block blockN2) {
         int cost = 500;
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Terror) <= 0) {
             return;
         }
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -294,7 +297,7 @@ public class RiteManager {
         changeMap.put(AspectType.Secrets, -cost);
         changeMap.put(AspectType.Terror, curseMod);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -323,10 +326,10 @@ public class RiteManager {
 
     private void gainCelestialFavor(Player player, Block blockN1, Block blockN2) {
         int cost = 750;
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -342,7 +345,7 @@ public class RiteManager {
         changeMap.put(AspectType.Secrets, -cost);
         changeMap.put(AspectType.Celestial_Favor, 1);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -356,13 +359,13 @@ public class RiteManager {
     }
 
     private void gainTerror(Player player, Block blockN1, Block blockN2) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int limit = 150;
         int cost = 50 + playerData.getAspect(AspectType.Terror);
 
         if (playerData.getAspect(AspectType.Terror) > limit) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You can have at most " + limit + " Terror to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -372,7 +375,7 @@ public class RiteManager {
         }
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -388,7 +391,7 @@ public class RiteManager {
         changeMap.put(AspectType.Secrets, -cost);
         changeMap.put(AspectType.Terror, 50);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -406,6 +409,6 @@ public class RiteManager {
         List<Coordinate3D> particles = new ArrayList<>();
         particles.add(topBlock);
         particles.add(topBlock.sum(0, -1, 0));
-        plugin.getParticler().spawnParticles(Particle.ENCHANTMENT_TABLE, particles, world, root, (int) Math.ceil(root * 4), 5);
+        mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.ENCHANTMENT_TABLE, particles, world, root, (int) Math.ceil(root * 4), 5);
     }
 }

@@ -2,6 +2,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import net.md_5.bungee.api.ChatColor;
@@ -15,8 +16,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AspectCommand extends SubCommand {
-    public AspectCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public AspectCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -76,12 +77,12 @@ public class AspectCommand extends SubCommand {
             return;
         }
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(aspectType, value - playerData.getAspect(aspectType));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .execute();

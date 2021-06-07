@@ -2,6 +2,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,17 +24,17 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class ConsequenceListener implements Listener {
-    protected final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public ConsequenceListener(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public ConsequenceListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     @EventHandler
     public void eat(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
 
-        if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
             return;
 
         if (event.getItem().getType() == Material.MILK_BUCKET) {
@@ -41,7 +42,7 @@ public class ConsequenceListener implements Listener {
             return;
         }
 
-        int natureConspiracy = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
+        int natureConspiracy = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
         double probability = (natureConspiracy) / (natureConspiracy + 20.0);
         probability /= 5.0;
 
@@ -50,7 +51,7 @@ public class ConsequenceListener implements Listener {
             player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (10 + natureConspiracy) * 20, 9));
             player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 3 * 20, 0));
 
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventSound(Sound.BLOCK_BREWING_STAND_BREW)
                     .withEventMessage("Your Food is eating you from the Inside.")
@@ -65,7 +66,7 @@ public class ConsequenceListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Nature_Conspiracy, 1);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.BLOCK_BREWING_STAND_BREW)
@@ -85,17 +86,17 @@ public class ConsequenceListener implements Listener {
 
         Player player = (Player) entity;
 
-        if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
             return;
 
-        int misfortune = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
+        int misfortune = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
         double probability = (misfortune) / (misfortune + 30.0);
         probability /= 2.0;
 
         if (new Random().nextDouble() >= probability)
             return;
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.ENTITY_ITEM_BREAK)
                 .withEventMessage("An unlucky Misfire.")
@@ -115,17 +116,17 @@ public class ConsequenceListener implements Listener {
 
         Player player = (Player) entity;
 
-        if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
             return;
 
-        int misfortune = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
+        int misfortune = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
         double probability = (misfortune) / (misfortune + 30.0);
         probability /= 2.0;
 
         if (new Random().nextDouble() >= probability)
             return;
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.ENTITY_ITEM_BREAK)
                 .withEventMessage("An unlucky Miss.")
@@ -140,7 +141,7 @@ public class ConsequenceListener implements Listener {
     public void harvestBlock(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
-        if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
             return;
 
         Material material = event.getBlock().getType();
@@ -151,7 +152,7 @@ public class ConsequenceListener implements Listener {
     }
 
     private void breakWood(Player player, Location targetLocation) {
-        int natureConspiracy = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
+        int natureConspiracy = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
         double probability = natureConspiracy / (natureConspiracy + 5.0);
         probability /= 25.0;
 
@@ -179,10 +180,10 @@ public class ConsequenceListener implements Listener {
         if (player == null)
             return;
 
-        if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
             return;
 
-        int natureConspiracy = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
+        int natureConspiracy = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
         double probability = natureConspiracy / (natureConspiracy + 5.0);
         probability /= 10.0;
 
@@ -194,7 +195,7 @@ public class ConsequenceListener implements Listener {
 
     private void summonKillerRabbits(Player player, Location targetLocation) {
         World world = player.getWorld();
-        int natureConspiracy = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
+        int natureConspiracy = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
 
         String name = "The Horde";
         int amount = (int) Math.floor(3 + natureConspiracy * 0.25);
@@ -209,7 +210,7 @@ public class ConsequenceListener implements Listener {
             rabbit.setTarget(player);
         }
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage(name + " enacts its Revenge.")

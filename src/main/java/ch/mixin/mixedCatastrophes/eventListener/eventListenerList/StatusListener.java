@@ -4,7 +4,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -17,19 +17,19 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.HashMap;
 
 public class StatusListener implements Listener {
-    protected final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public StatusListener(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public StatusListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     @EventHandler
     public void join(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        RootCatastropheManager rootCatastropheManager = plugin.getRootCatastropheManager();
+        RootCatastropheManager rootCatastropheManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager();
         rootCatastropheManager.getPersonalCatastropheManager().initializePlayerData(player);
-        plugin.getEventChangeManager().updateScoreBoard(player);
-        plugin.getEventChangeManager().updateAchievementProgress(player);
+        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard(player);
+        mixedCatastrophesManagerAccessor.getEventChangeManager().updateAchievementProgress(player);
 
         if (!event.getPlayer().hasPlayedBefore()) {
             player.getInventory().addItem(HelpInventoryManager.HelpBookItem);
@@ -46,10 +46,10 @@ public class StatusListener implements Listener {
     public void death(PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
             return;
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Celestial_Favor) > 0) {
             saveEssence(event);
@@ -60,7 +60,7 @@ public class StatusListener implements Listener {
 
     private void loseEssence(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         playerData.getTerrorData().getStalkerDatas().clear();
         playerData.setDreamCooldown(0);
@@ -71,7 +71,7 @@ public class StatusListener implements Listener {
         changeMap.put(AspectType.Secrets, 100);
         changeMap.put(AspectType.Terror, -(int) Math.floor(0.5 * playerData.getAspect(AspectType.Terror)));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -84,7 +84,7 @@ public class StatusListener implements Listener {
 
     private void saveEssence(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         playerData.getTerrorData().getStalkerDatas().clear();
         playerData.setDreamCooldown(0);
@@ -98,7 +98,7 @@ public class StatusListener implements Listener {
         changeMap.put(AspectType.Celestial_Favor, -1);
         changeMap.put(AspectType.Terror, -(int) Math.floor(0.2 * playerData.getAspect(AspectType.Terror)));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

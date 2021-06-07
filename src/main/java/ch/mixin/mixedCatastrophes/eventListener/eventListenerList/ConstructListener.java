@@ -8,6 +8,7 @@ import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
+import ch.mixin.mixedCatastrophes.mixedAchievements.MixedAchievementsManager;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -43,7 +44,7 @@ public class ConstructListener implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!plugin.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
             return;
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -90,7 +91,7 @@ public class ConstructListener implements Listener {
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         GreenWellData greenWellData = null;
 
-        for (GreenWellData gwd : plugin.getMetaData().getGreenWellDataList()) {
+        for (GreenWellData gwd : mixedCatastrophesManagerAccessor.getMetaData().getGreenWellDataList()) {
             if (center.equals(gwd.getPosition())) {
                 greenWellData = gwd;
                 break;
@@ -104,13 +105,13 @@ public class ConstructListener implements Listener {
             isNew = true;
         }
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int cost = 160 + 80 * greenWellData.getLevel();
         int costItem = 2 + greenWellData.getLevel();
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -120,7 +121,7 @@ public class ConstructListener implements Listener {
         }
 
         if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Ender Eyes to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -133,7 +134,7 @@ public class ConstructListener implements Listener {
             return;
 
         if (isNew)
-            plugin.getMetaData().getGreenWellDataList().add(greenWellData);
+            mixedCatastrophesManagerAccessor.getMetaData().getGreenWellDataList().add(greenWellData);
 
         greenWellData.setLevel(greenWellData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);
@@ -141,7 +142,7 @@ public class ConstructListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -151,10 +152,12 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
-        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesManagerAccessor.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
             return;
 
-        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+        mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.GreenWell, greenWellData.getLevel());
     }
 
@@ -182,7 +185,7 @@ public class ConstructListener implements Listener {
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         BlazeReactorData blazeReactorData = null;
 
-        for (BlazeReactorData brd : plugin.getMetaData().getBlazeReactorList()) {
+        for (BlazeReactorData brd : mixedCatastrophesManagerAccessor.getMetaData().getBlazeReactorList()) {
             if (center.equals(brd.getPosition())) {
                 blazeReactorData = brd;
                 break;
@@ -196,14 +199,14 @@ public class ConstructListener implements Listener {
             isNew = true;
         }
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int multiplier = (int) Math.pow((1 + blazeReactorData.getLevel()), 2);
         int cost = 250 * multiplier;
         int costItem = 1 * multiplier;
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -213,7 +216,7 @@ public class ConstructListener implements Listener {
         }
 
         if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Magma Cream to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -226,7 +229,7 @@ public class ConstructListener implements Listener {
             return;
 
         if (isNew)
-            plugin.getMetaData().getBlazeReactorList().add(blazeReactorData);
+            mixedCatastrophesManagerAccessor.getMetaData().getBlazeReactorList().add(blazeReactorData);
 
         blazeReactorData.setLevel(blazeReactorData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);
@@ -234,7 +237,7 @@ public class ConstructListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -244,10 +247,12 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
-        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesManagerAccessor.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
             return;
 
-        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+        mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.BlazeReactor, blazeReactorData.getLevel());
     }
 
@@ -269,7 +274,7 @@ public class ConstructListener implements Listener {
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         BlitzardData blitzardData = null;
 
-        for (BlitzardData bd : plugin.getMetaData().getBlitzardDataList()) {
+        for (BlitzardData bd : mixedCatastrophesManagerAccessor.getMetaData().getBlitzardDataList()) {
             if (center.equals(bd.getPosition())) {
                 blitzardData = bd;
                 break;
@@ -283,14 +288,14 @@ public class ConstructListener implements Listener {
             isNew = true;
         }
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int multiplier = (int) Math.pow(1 + blitzardData.getLevel(), 2);
         int cost = 100 * multiplier;
         int costItem = 1 * multiplier;
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -300,7 +305,7 @@ public class ConstructListener implements Listener {
         }
 
         if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Quartz to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -313,7 +318,7 @@ public class ConstructListener implements Listener {
             return;
 
         if (isNew)
-            plugin.getMetaData().getBlitzardDataList().add(blitzardData);
+            mixedCatastrophesManagerAccessor.getMetaData().getBlitzardDataList().add(blitzardData);
 
         blitzardData.setLevel(blitzardData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);
@@ -321,7 +326,7 @@ public class ConstructListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -331,10 +336,12 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
-        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesManagerAccessor.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
             return;
 
-        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+        mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.Blitzard, blitzardData.getLevel());
     }
 
@@ -356,7 +363,7 @@ public class ConstructListener implements Listener {
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         LighthouseData lighthouseData = null;
 
-        for (LighthouseData ld : plugin.getMetaData().getLighthouseDataList()) {
+        for (LighthouseData ld : mixedCatastrophesManagerAccessor.getMetaData().getLighthouseDataList()) {
             if (center.equals(ld.getPosition())) {
                 lighthouseData = ld;
                 break;
@@ -370,14 +377,14 @@ public class ConstructListener implements Listener {
             isNew = true;
         }
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         double multiplier = Math.pow(1 + lighthouseData.getLevel(), 1.5);
         int cost = (int) Math.round(100 * multiplier);
         int costItem = (int) Math.round(multiplier);
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -387,7 +394,7 @@ public class ConstructListener implements Listener {
         }
 
         if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Glowstone to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -400,7 +407,7 @@ public class ConstructListener implements Listener {
             return;
 
         if (isNew)
-            plugin.getMetaData().getLighthouseDataList().add(lighthouseData);
+            mixedCatastrophesManagerAccessor.getMetaData().getLighthouseDataList().add(lighthouseData);
 
         lighthouseData.setLevel(lighthouseData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);
@@ -408,7 +415,7 @@ public class ConstructListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -418,10 +425,12 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
-        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesManagerAccessor.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
             return;
 
-        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+        mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.Lighthouse, lighthouseData.getLevel());
     }
 
@@ -442,19 +451,19 @@ public class ConstructListener implements Listener {
 
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
 
-        for (ScarecrowData sd : plugin.getMetaData().getScarecrowDataList()) {
+        for (ScarecrowData sd : mixedCatastrophesManagerAccessor.getMetaData().getScarecrowDataList()) {
             if (center.equals(sd.getPosition()))
                 return;
         }
 
         ScarecrowData scarecrowData = new ScarecrowData(center, world.getName(), 0);
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int cost = 500;
         int costItem = 1;
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -464,7 +473,7 @@ public class ConstructListener implements Listener {
         }
 
         if (itemStack.getAmount() < costItem) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + costItem + " Pumpkin Pie to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
@@ -476,13 +485,13 @@ public class ConstructListener implements Listener {
         if (!success)
             return;
 
-        plugin.getMetaData().getScarecrowDataList().add(scarecrowData);
+        mixedCatastrophesManagerAccessor.getMetaData().getScarecrowDataList().add(scarecrowData);
         itemStack.setAmount(itemStack.getAmount() - costItem);
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -492,10 +501,12 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
-        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesManagerAccessor.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
             return;
 
-        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateConstructAchievementProgress(
+        mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.Scarecrow, 1);
     }
 }

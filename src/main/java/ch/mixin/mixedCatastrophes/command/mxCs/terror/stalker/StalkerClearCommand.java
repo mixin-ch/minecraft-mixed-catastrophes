@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs.terror.stalker;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StalkerClearCommand extends SubCommand {
-    public StalkerClearCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public StalkerClearCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class StalkerClearCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -56,7 +57,7 @@ public class StalkerClearCommand extends SubCommand {
             }
         }
 
-        plugin.getMetaData().getPlayerDataMap().get((player).getUniqueId()).getTerrorData().getStalkerDatas().clear();
+        mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get((player).getUniqueId()).getTerrorData().getStalkerDatas().clear();
         sender.sendMessage(ChatColor.GREEN + "Stalkers cleared.");
     }
 

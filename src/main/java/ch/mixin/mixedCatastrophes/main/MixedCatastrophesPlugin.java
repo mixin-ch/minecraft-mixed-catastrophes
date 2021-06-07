@@ -80,7 +80,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         mixedCatastrophesManagerAccessor = new MixedCatastrophesManagerAccessor(this);
         initializeMetaData();
         initializeDependentPlugins();
-        mixedCatastrophesManagerAccessor.setEventChangeManager(new EventChangeManager(this));
+        mixedCatastrophesManagerAccessor.setEventChangeManager(new EventChangeManager(mixedCatastrophesManagerAccessor));
         mixedCatastrophesManagerAccessor.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesManagerAccessor));
         mixedCatastrophesManagerAccessor.setHelpInventoryManager(new HelpInventoryManager(this));
         mixedCatastrophesManagerAccessor.setParticler(new Particler(this));
@@ -94,7 +94,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
             }
         }
 
-        CommandInitializer.setupCommands(this);
+        CommandInitializer.setupCommands(mixedCatastrophesManagerAccessor);
         EventListenerInitializer.setupEventListener(mixedCatastrophesManagerAccessor);
     }
 
@@ -146,7 +146,6 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     private void tickMixedAchievementsPlugin() {
         if (MixedAchievementsPlugin.isActive()) {
             mixedCatastrophesManagerAccessor.getMixedAchievementsManager().initializeAchievements();
-            mixedCatastrophesManagerAccessor.getEventChangeManager().configureMixedAchievements(mixedCatastrophesManagerAccessor.getMixedAchievementsManager());
             mixedCatastrophesManagerAccessor.getEventChangeManager().updateAchievementProgress();
         } else {
             getServer().getScheduler().scheduleSyncDelayedTask(this
@@ -189,29 +188,5 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
 
     public boolean isPluginFlawless() {
         return pluginFlawless;
-    }
-
-    public MetaData getMetaData() {
-        return mixedCatastrophesManagerAccessor.getMetaData();
-    }
-
-    public List<World> getAffectedWorlds() {
-        return mixedCatastrophesManagerAccessor.getAffectedWorlds();
-    }
-
-    public EventChangeManager getEventChangeManager() {
-        return mixedCatastrophesManagerAccessor.getEventChangeManager();
-    }
-
-    public RootCatastropheManager getRootCatastropheManager() {
-        return mixedCatastrophesManagerAccessor.getRootCatastropheManager();
-    }
-
-    public HelpInventoryManager getHelpInventoryManager() {
-        return mixedCatastrophesManagerAccessor.getHelpInventoryManager();
-    }
-
-    public Particler getParticler() {
-        return mixedCatastrophesManagerAccessor.getParticler();
     }
 }

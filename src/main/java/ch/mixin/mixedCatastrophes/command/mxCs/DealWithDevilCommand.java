@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs;
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import net.md_5.bungee.api.ChatColor;
@@ -17,8 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DealWithDevilCommand extends SubCommand {
-    public DealWithDevilCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public DealWithDevilCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class DealWithDevilCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -44,11 +45,11 @@ public class DealWithDevilCommand extends SubCommand {
         }
 
         Player player = (Player) sender;
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int limit = 5 + playerData.getAspect(AspectType.Death_Seeker);
         if (playerData.getAspect(AspectType.Greyhat_Debt) >= limit) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You currently must have less than " + limit + " Debt to do this.")
                     .withColor(ChatColor.WHITE)
@@ -67,7 +68,7 @@ public class DealWithDevilCommand extends SubCommand {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Greyhat_Debt, 1);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

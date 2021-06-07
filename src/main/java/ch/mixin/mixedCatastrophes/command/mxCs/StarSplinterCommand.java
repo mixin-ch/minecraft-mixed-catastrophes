@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class StarSplinterCommand extends SubCommand {
-    public StarSplinterCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public StarSplinterCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class StarSplinterCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -46,9 +47,9 @@ public class StarSplinterCommand extends SubCommand {
                 return;
             }
 
-            plugin.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter(player);
+            mixedCatastrophesManagerAccessor.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter(player);
         } else {
-            plugin.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter();
+            mixedCatastrophesManagerAccessor.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter();
         }
 
         sender.sendMessage(ChatColor.GREEN + "Triggered Star-Splinter.");

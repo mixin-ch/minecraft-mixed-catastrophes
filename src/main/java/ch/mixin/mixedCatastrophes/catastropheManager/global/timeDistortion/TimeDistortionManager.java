@@ -56,7 +56,7 @@ public class TimeDistortionManager extends CatastropheManager {
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             player.playSound(player.getLocation(), Sound.AMBIENT_BASALT_DELTAS_ADDITIONS, 10.0f, 1.0f);
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("Time is shifting.")
                     .withColor(ChatColor.BLUE)

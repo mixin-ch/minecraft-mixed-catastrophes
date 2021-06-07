@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -10,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelpCommand extends SubCommand {
-    public HelpCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public HelpCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class HelpCommand extends SubCommand {
         }
 
         Player player = (Player) sender;
-        plugin.getHelpInventoryManager().open(player);
+        mixedCatastrophesManagerAccessor.getHelpInventoryManager().open(player);
         sender.sendMessage(ChatColor.GREEN + "Successfully Opened Help.");
     }
 

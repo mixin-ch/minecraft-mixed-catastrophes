@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.command;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.Command;
@@ -15,8 +16,8 @@ public abstract class RootCommand extends SubCommand implements CommandExecutor 
     protected final String commandName;
     protected final HashMap<String, SubCommand> subCommandMap;
 
-    public RootCommand(MixedCatastrophesPlugin plugin, String commandName, HashMap<String, SubCommand> subCommandMap) {
-        super(plugin);
+    public RootCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor, String commandName, HashMap<String, SubCommand> subCommandMap) {
+        super(mixedCatastrophesManagerAccessor);
         this.commandName = commandName;
         this.subCommandMap = subCommandMap;
     }

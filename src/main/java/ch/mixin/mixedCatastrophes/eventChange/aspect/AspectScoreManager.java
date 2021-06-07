@@ -2,7 +2,7 @@ package ch.mixin.mixedCatastrophes.eventChange.aspect;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -16,15 +16,15 @@ public class AspectScoreManager {
     private final HashMap<UUID, Scoreboard> playerMap = new HashMap<>();
 
     private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-    private final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public AspectScoreManager(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public AspectScoreManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     public void updateScoreboard(Player player) {
         UUID playerId = player.getUniqueId();
-        PlayerData pcd = plugin.getMetaData().getPlayerDataMap().get(playerId);
+        PlayerData pcd = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(playerId);
         HashMap<AspectType, Integer> aspects = pcd.getAspects();
 
         int dreamCooldown = pcd.getDreamCooldown();

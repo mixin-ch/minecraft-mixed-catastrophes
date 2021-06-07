@@ -99,7 +99,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
                 stalkerDatas.remove(stalkerData);
                 i--;
 
-                plugin.getEventChangeManager()
+                mixedCatastrophesManagerAccessor.getEventChangeManager()
                         .eventChange(player)
                         .withEventSound(Sound.AMBIENT_CAVE)
                         .withEventMessage("A Shadow fades away.")
@@ -160,7 +160,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
         World world = player.getWorld();
         Coordinate3D coordinate3D = Coordinate3D.toCoordinate(player.getLocation()).sum(Coordinate3D.random().multiply(50));
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int hauntingDemise = playerData.getAspect(AspectType.Death_Seeker);
         int terror = playerData.getAspect(AspectType.Terror);
         int modifier = hauntingDemise + terror;
@@ -172,7 +172,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
         StalkerData stalkerData = new StalkerData(world.getName(), coordinate3D, speed, remainingTime);
         metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData().getStalkerDatas().add(stalkerData);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.ENTITY_BLAZE_AMBIENT)
                 .withEventMessage("Something is coming for you. RUN!")

@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.catastropheManager.personal.dream;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
@@ -35,9 +36,11 @@ public class DreamManager {
     }
 
     private final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public DreamManager(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public DreamManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        plugin = mixedCatastrophesManagerAccessor.getPlugin();
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     public void performDream(Player player, Block startingBed) {
@@ -46,10 +49,10 @@ public class DreamManager {
         if (dreamType == null)
             return;
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getDreamCooldown() > 0) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("It is too early to enter Dreams. Wait " + playerData.getDreamCooldown() + " seconds.")
                     .withColor(ChatColor.WHITE)
@@ -137,7 +140,7 @@ public class DreamManager {
     }
 
     private boolean greyhat(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int greyhatDebt = playerData.getAspect(AspectType.Greyhat_Debt);
         double probability = greyhatDebt / (100.0 + greyhatDebt);
@@ -146,7 +149,7 @@ public class DreamManager {
             int time = 10 * 60;
             playerData.setDreamCooldown(time);
 
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("Your Dream has bee seized by Greyhat Inc.")
                     .withCause(AspectType.Greyhat_Debt)
@@ -160,7 +163,7 @@ public class DreamManager {
     }
 
     private void sereneDreams(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (greyhat(player))
             return;
@@ -174,7 +177,7 @@ public class DreamManager {
         changeMap.put(AspectType.Terror, -terrorMinus);
         changeMap.put(AspectType.Secrets, 10);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -186,13 +189,13 @@ public class DreamManager {
     }
 
     private void skyDreams(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int terrorMinus = (int) Math.min(Math.round(10 + 0.2 * playerData.getAspect(AspectType.Terror)), playerData.getAspect(AspectType.Terror));
         int cost = 2 * terrorMinus;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to enter Sky Dreams.")
                     .withColor(ChatColor.WHITE)
@@ -214,7 +217,7 @@ public class DreamManager {
         changeMap.put(AspectType.Terror, -terrorMinus);
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -226,12 +229,12 @@ public class DreamManager {
     }
 
     private void bloodstainedDreams(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int limit = 300;
 
         if (playerData.getAspect(AspectType.Terror) > limit) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You can have at most " + limit + " Terror to enter Bloodstained Dreams.")
                     .withColor(ChatColor.WHITE)
@@ -242,7 +245,7 @@ public class DreamManager {
 
         boolean nearLighthouse = false;
 
-        for (LighthouseData lighthouseData : plugin.getMetaData().getLighthouseDataList()) {
+        for (LighthouseData lighthouseData : mixedCatastrophesManagerAccessor.getMetaData().getLighthouseDataList()) {
             World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)
@@ -264,7 +267,7 @@ public class DreamManager {
         }
 
         if (nearLighthouse) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You can't have Bloodstained Dreams in Lighthouse Range.")
                     .withColor(ChatColor.WHITE)
@@ -287,7 +290,7 @@ public class DreamManager {
         changeMap.put(AspectType.Terror, terrorPlus);
         changeMap.put(AspectType.Secrets, secretsPlus);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -299,12 +302,12 @@ public class DreamManager {
     }
 
     private void clockworkDreams(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int cost = 30;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to enter Clockwork Dreams.")
                     .withColor(ChatColor.WHITE)
@@ -327,7 +330,7 @@ public class DreamManager {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -339,12 +342,12 @@ public class DreamManager {
     }
 
     private void gloryDreams(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int cost = 120;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to enter Glory Dreams.")
                     .withColor(ChatColor.WHITE)
@@ -367,7 +370,7 @@ public class DreamManager {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -379,12 +382,12 @@ public class DreamManager {
     }
 
     private void perfectDreams(Player player) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int cost = 480;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You need at least " + cost + " Secrets to enter Perfect Dreams.")
                     .withColor(ChatColor.WHITE)
@@ -407,7 +410,7 @@ public class DreamManager {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

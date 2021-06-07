@@ -8,6 +8,7 @@ import ch.mixin.mixedCatastrophes.eventChange.message.EventMessage;
 import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
 import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.mixedAchievements.MixedAchievementsManager;
@@ -17,19 +18,14 @@ import org.bukkit.entity.Player;
 import java.util.HashMap;
 
 public class EventChangeManager {
-    private final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
     private final AspectScoreManager aspectScoreManager;
-    private MixedAchievementsManager mixedAchievementsManager;
     private final Messager messager;
 
-    public EventChangeManager(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
-        aspectScoreManager = new AspectScoreManager(plugin);
+    public EventChangeManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+        aspectScoreManager = new AspectScoreManager(mixedCatastrophesManagerAccessor);
         messager = new Messager();
-    }
-
-    public void configureMixedAchievements(MixedAchievementsManager mixedAchievementsManager) {
-        this.mixedAchievementsManager = mixedAchievementsManager;
     }
 
     public void execute(EventChange eventChange) {
@@ -59,7 +55,7 @@ public class EventChangeManager {
     }
 
     private void aspectChange(Player player, AspectChange aspectChange) {
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         for (AspectType aspectType : aspectChange.getChangeMap().keySet()) {
             playerData.addAspect(aspectType, aspectChange.getChangeMap().get(aspectType));
@@ -70,25 +66,25 @@ public class EventChangeManager {
     }
 
     private void updateAchievementProgress(Player player, HashMap<AspectType, Integer> changeMap) {
-        if (mixedAchievementsManager == null)
+        if (!mixedCatastrophesManagerAccessor.getMixedAchievementsManager().isActive())
             return;
 
-        HashMap<AspectType, Integer> aspects = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspects();
-        mixedAchievementsManager.updateAspectAchievementProgress(player, aspects, changeMap);
+        HashMap<AspectType, Integer> aspects = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspects();
+        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateAspectAchievementProgress(player, aspects, changeMap);
     }
 
     public void updateAchievementProgress(Player player) {
-        if (mixedAchievementsManager == null)
+        if (!mixedCatastrophesManagerAccessor.getMixedAchievementsManager().isActive())
             return;
 
         updateAchievementProgress(player, new HashMap<>());
     }
 
     public void updateAchievementProgress() {
-        if (mixedAchievementsManager == null)
+        if (!mixedCatastrophesManagerAccessor.getMixedAchievementsManager().isActive())
             return;
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : mixedCatastrophesManagerAccessor.getPlugin().getServer().getOnlinePlayers()) {
             updateAchievementProgress(player);
         }
     }
@@ -122,7 +118,7 @@ public class EventChangeManager {
     }
 
     public void updateScoreBoard() {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : mixedCatastrophesManagerAccessor.getPlugin().getServer().getOnlinePlayers()) {
             aspectScoreManager.updateScoreboard(player);
         }
     }

@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,10 +17,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class ActionListener implements Listener {
-    protected final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public ActionListener(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public ActionListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     @EventHandler
@@ -30,7 +31,7 @@ public class ActionListener implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!plugin.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
             return;
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -42,7 +43,7 @@ public class ActionListener implements Listener {
         if (!itemStack.getItemMeta().equals(mixIslandDictionary.getItemMeta()))
             return;
 
-        plugin.getHelpInventoryManager().open(player);
+        mixedCatastrophesManagerAccessor.getHelpInventoryManager().open(player);
     }
 
     @EventHandler
@@ -56,10 +57,10 @@ public class ActionListener implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!plugin.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
             return;
 
-        plugin.getRootCatastropheManager().getPersonalCatastropheManager().getDreamManager().performDream(player, event.getClickedBlock());
+        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getPersonalCatastropheManager().getDreamManager().performDream(player, event.getClickedBlock());
     }
 
     @EventHandler
@@ -67,7 +68,7 @@ public class ActionListener implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!plugin.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
             return;
 
         if (!Constants.Fires.contains(event.getBlockPlaced().getType()))
@@ -79,6 +80,6 @@ public class ActionListener implements Listener {
         Block blockN1 = LocationN1.getBlock();
         Block blockN2 = LocationN2.getBlock();
 
-        plugin.getRootCatastropheManager().getPersonalCatastropheManager().getRiteManager().performRite(player, blockN1, blockN2);
+        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getPersonalCatastropheManager().getRiteManager().performRite(player, blockN1, blockN2);
     }
 }

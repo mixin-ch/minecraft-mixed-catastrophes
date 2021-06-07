@@ -104,7 +104,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             ArrayList<Player> playerList = new ArrayList<>();
 
             for (Player p : plugin.getServer().getOnlinePlayers()) {
-                if (plugin.getAffectedWorlds().contains(p.getWorld())) {
+                if (mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(p.getWorld())) {
                     playerList.add(p);
                 }
             }
@@ -122,7 +122,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         ArrayList<Player> playerList = new ArrayList<>();
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
-            if (plugin.getAffectedWorlds().contains(p.getWorld())) {
+            if (mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(p.getWorld())) {
                 playerList.add(p);
             }
         }
@@ -170,7 +170,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
         for (Player p : playerList) {
             p.playSound(p.getLocation(), Sound.AMBIENT_CAVE, 10.0f, 1.0f);
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(p)
                     .withEventMessage("A Star-Splinter of " + starSplinterPremise.getName() + ".")
                     .withColor(ChatColor.AQUA)

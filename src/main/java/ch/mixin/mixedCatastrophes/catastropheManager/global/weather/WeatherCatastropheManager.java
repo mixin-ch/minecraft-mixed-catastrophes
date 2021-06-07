@@ -209,7 +209,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
     private void playEffect(Sound sound, String message, ChatColor chatColor) {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            plugin.getEventChangeManager()
+            mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
                     .withEventSound(sound)
                     .withEventMessage(message)
@@ -243,7 +243,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void particleChain(Particle particle, int ticks) {
-        for (World world : plugin.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
             ArrayList<Location> openLocations = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -269,7 +269,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void enforceRadiantSky() {
-        for (World world : plugin.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -325,7 +325,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
             blitzardMap.put(location, blitzardData.getLevel() * 10);
         }
 
-        for (World world : plugin.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -406,7 +406,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void enforceSearingCold() {
-        for (World world : plugin.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -511,7 +511,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void enforceGravityLoss() {
-        for (World world : plugin.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
             for (Player player : world.getPlayers()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 2 * 20, 2));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 12 * 20, 0));
@@ -522,7 +522,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     private void enforceCatsAndDogs() {
         ArrayList<Location> targets = new ArrayList<>();
 
-        for (World world : plugin.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {

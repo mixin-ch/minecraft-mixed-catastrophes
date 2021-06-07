@@ -94,7 +94,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
         playerLoop:
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+            if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
                 continue;
 
             World world = player.getWorld();
@@ -166,7 +166,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
         changeMap.put(AspectType.Terror, terrorPlus);
         changeMap.put(AspectType.Secrets, secretsPlus);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -183,7 +183,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
         ArrayList<String> hintList = new ArrayList<>(plugin.getConfig().getStringList("hintList"));
         String hint = hintList.get(new Random().nextInt(hintList.size()));
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("They Whisper: " + hint)

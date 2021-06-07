@@ -29,8 +29,8 @@ public class PersonalCatastropheManager extends CatastropheManager {
     public PersonalCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
         super(mixedCatastrophesManagerAccessor);
         terrorCatastropheManager = new TerrorCatastropheManager(mixedCatastrophesManagerAccessor);
-        riteManager = new RiteManager(plugin);
-        dreamManager = new DreamManager(plugin);
+        riteManager = new RiteManager(mixedCatastrophesManagerAccessor);
+        dreamManager = new DreamManager(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -93,12 +93,12 @@ public class PersonalCatastropheManager extends CatastropheManager {
         }
 
         for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!plugin.getAffectedWorlds().contains(player.getWorld()))
+            if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
                 continue;
 
             if (!playerDataMap.containsKey(player.getUniqueId())) {
                 initializePlayerData(player);
-                plugin.getEventChangeManager().updateScoreBoard(player);
+                mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard(player);
             }
 
             PlayerData playerData = playerDataMap.get(player.getUniqueId());
@@ -118,7 +118,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 0));
 
-                    plugin.getEventChangeManager()
+                    mixedCatastrophesManagerAccessor.getEventChangeManager()
                             .eventChange(player)
                             .withEventSound(Sound.ENTITY_BLAZE_AMBIENT)
                             .withEventMessage("The Lighthouse burns the Red Eye in your Mind.")

@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
@@ -15,10 +16,10 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 
 public class NeedListener implements Listener {
-    protected final MixedCatastrophesPlugin plugin;
+    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
 
-    public NeedListener(MixedCatastrophesPlugin plugin) {
-        this.plugin = plugin;
+    public NeedListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
     }
 
     @EventHandler
@@ -36,7 +37,7 @@ public class NeedListener implements Listener {
         if (location.getY() >= 0)
             return;
 
-        PlayerData playerData = plugin.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Celestial_Favor) <= 0)
             return;
@@ -50,7 +51,7 @@ public class NeedListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Celestial_Favor, -1);
 
-        plugin.getEventChangeManager()
+        mixedCatastrophesManagerAccessor.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

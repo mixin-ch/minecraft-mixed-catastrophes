@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -9,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CatastrophesCommand extends SubCommand {
-    public CatastrophesCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public CatastrophesCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -34,11 +35,11 @@ public class CatastrophesCommand extends SubCommand {
 
         switch (argument) {
             case "activate":
-                plugin.getRootCatastropheManager().start();
+                mixedCatastrophesManagerAccessor.getRootCatastropheManager().start();
                 sender.sendMessage(ChatColor.GREEN + "Catastrophes activated.");
                 break;
             case "deactivate":
-                plugin.getRootCatastropheManager().stop();
+                mixedCatastrophesManagerAccessor.getRootCatastropheManager().stop();
                 sender.sendMessage(ChatColor.GREEN + "Catastrophes deactivated.");
                 break;
             default:

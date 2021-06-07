@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs.terror;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AssaultCommand extends SubCommand {
-    public AssaultCommand(MixedCatastrophesPlugin plugin) {
-        super(plugin);
+    public AssaultCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
+        super(mixedCatastrophesManagerAccessor);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class AssaultCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.getMetaData().isActive()) {
+        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -56,7 +57,7 @@ public class AssaultCommand extends SubCommand {
             }
         }
 
-        plugin.getRootCatastropheManager().getPersonalCatastropheManager().getTerrorCatastropheManager().getAssaultCatastropheManager().causeAssault(player);
+        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getPersonalCatastropheManager().getTerrorCatastropheManager().getAssaultCatastropheManager().causeAssault(player);
         sender.sendMessage(ChatColor.GREEN + "Triggered Assault.");
     }
 
