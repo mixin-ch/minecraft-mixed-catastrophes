@@ -425,7 +425,7 @@ public class HelpInventoryManager {
                 "Regularly drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
         }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
         createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.BlazeReactor).getMaterial(), 1, slot(2, 4), "Blaze Reactor", new String[]{
-                "Regularly drops Cobblestone."
+                "Regularly drops Cobblestone.", "Drains Water from Cauldrons tofunction."
         }, linkInventoryMap, HelpInventoryType.Constructs_BlazeReactor);
         createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Blitzard).getMaterial(), 1, slot(2, 5), "Blitzard", new String[]{
                 "Attracts Lightning."
@@ -542,7 +542,7 @@ public class HelpInventoryManager {
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
                 , linkInventoryMap, HelpInventoryType.Constructs);
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
-                "Construct in the following Configuration.", "Use Magma Cream to Level up.", "Drops Cobblestone."
+                "Construct in the following Configuration.", "Use Magma Cream to Level up.", "Fill Cauldrons with Water regularly.", "Drops Cobblestone."
         });
         createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Layer 1", new String[]{});
         createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Layer 2", new String[]{});
