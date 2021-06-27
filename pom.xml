@@ -6,7 +6,7 @@
 
     <groupId>ch.mixin</groupId>
     <artifactId>MixedCatastrophes</artifactId>
-    <version>2.2.0-p</version>
+    <version>2.2.2</version>
     <packaging>jar</packaging>
 
     <name>MixedCatastrophes</name>
@@ -71,7 +71,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.17-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

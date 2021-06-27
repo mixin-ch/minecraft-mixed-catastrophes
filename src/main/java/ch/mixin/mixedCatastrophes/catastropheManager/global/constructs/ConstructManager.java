@@ -12,6 +12,7 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -238,15 +239,13 @@ public class ConstructManager extends CatastropheManager {
                 while (cauldronList.size() > 0) {
                     int index = new Random().nextInt(cauldronList.size());
                     Block cauldron = cauldronList.get(index).getBlock();
-                    Levelled cauldronData = (Levelled) cauldron.getBlockData();
                     cauldronList.remove(index);
 
-                    if (cauldronData.getLevel() == 0)
+                    if (cauldron.getType() != Material.WATER_CAULDRON)
                         continue;
 
-                    cauldronData.setLevel(cauldronData.getLevel() - 1);
-                    cauldron.setBlockData(cauldronData);
-                    fuel += 20 * blazeReactorData.getLevel();
+                    cauldron.setType(Material.CAULDRON);
+                    fuel += 60 * blazeReactorData.getLevel();
                     break;
                 }
             }

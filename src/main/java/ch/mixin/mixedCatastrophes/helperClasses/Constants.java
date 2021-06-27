@@ -33,6 +33,7 @@ public class Constants {
     public static final ArrayList<Material> Lanterns;
     public static final ArrayList<Material> Torches;
     public static final ArrayList<Material> Fences;
+    public static final ArrayList<Material> Cauldrons;
 
     public static final ConstructShape GreenWell;
     public static final ConstructShape Blitzard;
@@ -234,6 +235,12 @@ public class Constants {
         Fences.add(Material.SPRUCE_FENCE);
         Fences.add(Material.WARPED_FENCE);
 
+        Cauldrons = new ArrayList<>();
+        Cauldrons.add(Material.CAULDRON);
+        Cauldrons.add(Material.LAVA_CAULDRON);
+        Cauldrons.add(Material.POWDER_SNOW_CAULDRON);
+        Cauldrons.add(Material.WATER_CAULDRON);
+
         GreenWell = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
             put(new Coordinate3D(0, 0, 0), Material.WATER);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
@@ -287,12 +294,7 @@ public class Constants {
             put(new Coordinate3D(-1, 0, -1), Material.BRICKS);
             put(new Coordinate3D(-1, 0, 0), Material.BRICKS);
             put(new Coordinate3D(-1, 0, 1), Material.BRICKS);
-            put(new Coordinate3D(3, -1, -1), Material.CAULDRON);
-            put(new Coordinate3D(3, -1, 0), Material.CAULDRON);
-            put(new Coordinate3D(3, -1, 1), Material.CAULDRON);
-            put(new Coordinate3D(2, -1, -1), Material.CAULDRON);
             put(new Coordinate3D(2, -1, 0), Material.LAVA);
-            put(new Coordinate3D(2, -1, 1), Material.CAULDRON);
             put(new Coordinate3D(1, -1, -1), Material.BRICKS);
             put(new Coordinate3D(1, -1, 0), Material.BRICKS);
             put(new Coordinate3D(1, -1, 1), Material.BRICKS);
@@ -302,6 +304,11 @@ public class Constants {
             put(new Coordinate3D(-1, -1, -1), Material.BRICKS);
             put(new Coordinate3D(-1, -1, 1), Material.BRICKS);
         }}, new HashMap<Coordinate3D, List<Material>>() {{
+            put(new Coordinate3D(3, -1, -1), Cauldrons);
+            put(new Coordinate3D(3, -1, 0), Cauldrons);
+            put(new Coordinate3D(3, -1, 1), Cauldrons);
+            put(new Coordinate3D(2, -1, -1), Cauldrons);
+            put(new Coordinate3D(2, -1, 1), Cauldrons);
             put(new Coordinate3D(-1, -1, 0), Airs);
         }});
 
