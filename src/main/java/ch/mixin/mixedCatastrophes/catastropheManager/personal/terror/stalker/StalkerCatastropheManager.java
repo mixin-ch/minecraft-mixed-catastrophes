@@ -48,12 +48,16 @@ public class StalkerCatastropheManager extends CatastropheManager {
     public void tick() {
     }
 
-    public void tick(Player player) {
+    public void tick(Player player, boolean hasScareCrow) {
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getStalkerTimer();
         timer--;
+
+        if (hasScareCrow) {
+            timer--;
+        }
 
         if (timer <= 0) {
             timer = stalkerTimer();
@@ -62,7 +66,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
             int terror = playerData.getAspect(AspectType.Terror);
             double modifier = Math.pow(Math.max(0, terror + hauntingDemise - 50), 0.5);
 
-            double probability = (modifier) / (modifier + 150.0);
+            double probability = (modifier) / (modifier + 200.0);
 
             if (new Random().nextDouble() < probability) {
                 causeStalker(player);

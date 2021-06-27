@@ -114,18 +114,23 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
             int timer = terrorData.getTerrorTimer();
             timer--;
+            ScarecrowData strongestScarecrow = getStrongestScarecrow(scarecrowMap, player);
+            boolean hasScareCrow = strongestScarecrow != null;
+
+            if (hasScareCrow) {
+                timer--;
+            }
 
             if (timer <= 0) {
                 timer = terrorTimer();
-                ScarecrowData strongestScarecrow = getStrongestScarecrow(scarecrowMap, player);
                 executeHorrificWhispers(player, strongestScarecrow);
             }
 
             terrorData.setTerrorTimer(timer);
 
-            assaultCatastropheManager.tick(player);
-            stalkerCatastropheManager.tick(player);
-            paranoiaCatastropheManager.tick(player);
+            assaultCatastropheManager.tick(player, hasScareCrow);
+            stalkerCatastropheManager.tick(player, hasScareCrow);
+            paranoiaCatastropheManager.tick(player, hasScareCrow);
         }
     }
 

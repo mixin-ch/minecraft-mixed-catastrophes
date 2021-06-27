@@ -69,12 +69,16 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     public void tick() {
     }
 
-    public void tick(Player player) {
+    public void tick(Player player, boolean hasScareCrow) {
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getParanoiaTimer();
         timer--;
+
+        if (hasScareCrow){
+            timer--;
+        }
 
         if (timer <= 0) {
             timer = paranoiaTimer();

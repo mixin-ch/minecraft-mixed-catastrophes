@@ -11,6 +11,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -156,12 +157,16 @@ public class AssaultCatastropheManager extends CatastropheManager {
     public void tick() {
     }
 
-    public void tick(Player player) {
+    public void tick(Player player, boolean hasScareCrow) {
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
         int assaultTimer = terrorData.getAssaultTimer();
         assaultTimer--;
+
+        if (hasScareCrow){
+            assaultTimer--;
+        }
 
         if (assaultTimer <= 0) {
             assaultTimer = assaultTimer();
@@ -179,7 +184,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     private int assaultTimer() {
-        return Functions.random(20, 40);
+        return Functions.random(20, 30);
     }
 
     public void causeAssault(Player player) {
