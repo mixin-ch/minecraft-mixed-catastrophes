@@ -239,7 +239,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
-            lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());
+            lighthouseMap.put(lighthouseLocation, lighthouseData.getLevel() * Constants.LighthouseRangeFactor);
         }
 
         spaceLoop:

@@ -1,5 +1,9 @@
 package ch.mixin.mixedCatastrophes.helperClasses;
 
+import ch.mixin.mixedAchievements.main.MixedAchievementsPlugin;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
+import ch.mixin.mixedCatastrophes.metaData.constructs.ConstructData;
+import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -7,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class Functions {
@@ -85,8 +90,8 @@ public class Functions {
     public static ArrayList<Coordinate2D> getSquareEdge(Coordinate2D center, int radius) {
         ArrayList<Coordinate2D> square = new ArrayList<>();
 
-        if (radius <= 0){
-            square.add(center.sum(0,0));
+        if (radius <= 0) {
+            square.add(center.sum(0, 0));
             return square;
         }
 
@@ -150,16 +155,6 @@ public class Functions {
         } else {
             return block.getLocation();
         }
-
-//        for (int y = world.getMaxHeight(); y >= 0; y--) {
-//            Location location = new Location(world, space.getX(), y, space.getZ());
-//
-//            if (!Constants.Airs.contains(location.getBlock().getType())) {
-//                return location;
-//            }
-//        }
-//
-//        return null;
     }
 
     public static Location relativeGround(World world, Coordinate3D place) {

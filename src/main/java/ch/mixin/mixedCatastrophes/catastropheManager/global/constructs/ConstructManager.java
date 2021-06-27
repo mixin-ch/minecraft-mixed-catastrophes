@@ -1,18 +1,14 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.constructs;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.*;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Levelled;
-import org.bukkit.event.block.CauldronLevelChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -299,5 +295,113 @@ public class ConstructManager extends CatastropheManager {
             int terror = scarecrowData.getCollectedTerror();
             mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.SOUL, particles, world, new Coordinate3D(0, 0.1 + Math.pow(terror, 0.5) * 0.01, 0), 0.1 + terror * 0.01, 4, 5);
         }
+    }
+
+    public List<ScarecrowData> getScarecrowDataListInWorld(List<ScarecrowData> constructDataList, String worldName) {
+        List<ScarecrowData> constructDataListInWorld = new ArrayList<>();
+
+        for (ScarecrowData constructData : constructDataList) {
+            if (constructData.getWorldName().equals(worldName))
+                constructDataListInWorld.add(constructData);
+        }
+
+        return constructDataListInWorld;
+    }
+
+    public List<ScarecrowData> getScarecrowListIsConstructed(List<ScarecrowData> constructDataList, ConstructType constructType) {
+        List<ScarecrowData> constructDataListIsConstructed = new ArrayList<>();
+
+        for (ScarecrowData constructData : constructDataList) {
+            World world = plugin.getServer().getWorld(constructData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location location = constructData.getPosition().toLocation(world);
+            boolean isConstructed = false;
+
+            switch (constructType) {
+                case GreenWell:
+                    isConstructed = Constants.GreenWell.checkConstructed(location).isConstructed();
+                    break;
+                case BlazeReactor:
+                    isConstructed = Constants.BlazeReactor.checkConstructed(location).isConstructed();
+                    break;
+                case Blitzard:
+                    isConstructed = Constants.Blitzard.checkConstructed(location).isConstructed();
+                    break;
+                case Lighthouse:
+                    isConstructed = Constants.Lighthouse.checkConstructed(location).isConstructed();
+                    break;
+                case Scarecrow:
+                    isConstructed = Constants.Scarecrow.checkConstructed(location).isConstructed();
+                    break;
+            }
+
+            if (isConstructed)
+                constructDataListIsConstructed.add(constructData);
+        }
+
+        return constructDataListIsConstructed;
+    }
+
+    public BlitzardData getStrongestBlitzard(List<BlitzardData> blitzardList, Location location) {
+        BlitzardData strongestBlitzard = null;
+        double strongestPull = -1;
+
+        for (BlitzardData blitzardData : blitzardList) {
+            World world = plugin.getServer().getWorld(blitzardData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location constructLocation = blitzardData.getPosition().toLocation(world);
+
+            if (location.getWorld() != constructLocation.getWorld())
+                continue;
+
+            double pull = Constants.BlitzardRangeFactor * blitzardData.getLevel() - constructLocation.distance(location);
+
+            if (pull < 0)
+                continue;
+
+            if (pull <= strongestPull)
+                continue;
+
+            strongestPull = pull;
+            strongestBlitzard = blitzardData;
+        }
+
+        return strongestBlitzard;
+    }
+
+    public ScarecrowData getStrongestScarecrow(List<ScarecrowData> scarecrowList, Location location) {
+        ScarecrowData strongestScarecrow = null;
+        double strongestPull = -1;
+
+        for (ScarecrowData scarecrowData : scarecrowList) {
+            World world = plugin.getServer().getWorld(scarecrowData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location constructLocation = scarecrowData.getPosition().toLocation(world);
+
+            if (location.getWorld() != constructLocation.getWorld())
+                continue;
+
+            double pull = Constants.ScareCrowRange - constructLocation.distance(location);
+
+            if (pull < 0)
+                continue;
+
+            if (pull <= strongestPull)
+                continue;
+
+            strongestPull = pull;
+            strongestScarecrow = scarecrowData;
+        }
+
+        return strongestScarecrow;
     }
 }

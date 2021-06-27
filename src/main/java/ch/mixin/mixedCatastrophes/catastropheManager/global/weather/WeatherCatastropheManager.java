@@ -322,7 +322,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
             if (!Constants.Blitzard.checkConstructed(location).isConstructed())
                 continue;
 
-            blitzardMap.put(location, blitzardData.getLevel() * 10);
+            blitzardMap.put(location, blitzardData.getLevel() * Constants.BlitzardRangeFactor);
         }
 
         for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {

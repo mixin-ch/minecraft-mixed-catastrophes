@@ -1,6 +1,7 @@
-package ch.mixin.mixedCatastrophes.eventChange.aspect;
+package ch.mixin.mixedCatastrophes.eventChange.scoreBoard;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
+import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;

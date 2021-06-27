@@ -119,7 +119,7 @@ public class RootCatastropheManager {
         return starSplinterCatastropheManager;
     }
 
-    public ConstructManager getGreenWellManager() {
+    public ConstructManager getConstructManager() {
         return constructManager;
     }
 

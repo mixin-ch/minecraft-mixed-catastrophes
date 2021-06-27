@@ -1,7 +1,7 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault.AssaultCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheManager;
@@ -10,7 +10,6 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
@@ -23,18 +22,21 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class TerrorCatastropheManager extends CatastropheManager {
     private final AssaultCatastropheManager assaultCatastropheManager;
     private final StalkerCatastropheManager stalkerCatastropheManager;
     private final ParanoiaCatastropheManager paranoiaCatastropheManager;
+    private final ConstructManager constructManager;
 
     public TerrorCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
         super(mixedCatastrophesManagerAccessor);
         assaultCatastropheManager = new AssaultCatastropheManager(mixedCatastrophesManagerAccessor);
         stalkerCatastropheManager = new StalkerCatastropheManager(mixedCatastrophesManagerAccessor);
         paranoiaCatastropheManager = new ParanoiaCatastropheManager(mixedCatastrophesManagerAccessor);
+        constructManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager();
     }
 
     @Override
@@ -76,7 +78,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     @Override
     public void tick() {
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
-        HashMap<ScarecrowData, Location> scarecrowMap = makeActiveScarecrowMap();
+        List<ScarecrowData> scarecrowList = getActiveScarecrowList();
 
         for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
             World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
@@ -89,7 +91,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
             if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
-            lighthouseMap.put(lighthouseLocation, 10 * lighthouseData.getLevel());
+            lighthouseMap.put(lighthouseLocation, lighthouseData.getLevel() * Constants.LighthouseRangeFactor);
         }
 
         playerLoop:
@@ -114,7 +116,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
             int timer = terrorData.getTerrorTimer();
             timer--;
-            ScarecrowData strongestScarecrow = getStrongestScarecrow(scarecrowMap, player);
+            ScarecrowData strongestScarecrow = constructManager.getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
 
             if (hasScareCrow) {
@@ -139,7 +141,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     public void triggerHorrificWhispers(Player player) {
-        executeHorrificWhispers(player, getStrongestScarecrow(makeActiveScarecrowMap(), player));
+        executeHorrificWhispers(player, constructManager.getStrongestScarecrow(getActiveScarecrowList(), player.getLocation()));
     }
 
     private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData) {
@@ -197,49 +199,8 @@ public class TerrorCatastropheManager extends CatastropheManager {
                 .execute();
     }
 
-    private HashMap<ScarecrowData, Location> makeActiveScarecrowMap() {
-        HashMap<ScarecrowData, Location> scarecrowMap = new HashMap<>();
-
-        for (ScarecrowData scarecrowData : metaData.getScarecrowDataList()) {
-            World scarecrowWorld = plugin.getServer().getWorld(scarecrowData.getWorldName());
-
-            if (scarecrowWorld == null)
-                continue;
-
-            Location scarecrowLocation = scarecrowData.getPosition().toLocation(scarecrowWorld);
-
-            if (!Constants.Scarecrow.checkConstructed(scarecrowLocation).isConstructed())
-                continue;
-
-            scarecrowMap.put(scarecrowData, scarecrowLocation);
-        }
-
-        return scarecrowMap;
-    }
-
-    private ScarecrowData getStrongestScarecrow(HashMap<ScarecrowData, Location> scarecrowMap, Player player) {
-        ScarecrowData strongestScarecrow = null;
-        double strongestPull = -1;
-
-        for (ScarecrowData scarecrowData : scarecrowMap.keySet()) {
-            Location scarecrowLocation = scarecrowMap.get(scarecrowData);
-
-            if (player.getWorld() != scarecrowLocation.getWorld())
-                continue;
-
-            double pull = 50 - scarecrowLocation.distance(player.getLocation());
-
-            if (pull < 0)
-                continue;
-
-            if (pull <= strongestPull)
-                continue;
-
-            strongestPull = pull;
-            strongestScarecrow = scarecrowData;
-        }
-
-        return strongestScarecrow;
+    private List<ScarecrowData> getActiveScarecrowList() {
+        return constructManager.getScarecrowListIsConstructed(metaData.getScarecrowDataList(), ConstructType.Scarecrow);
     }
 
     public AssaultCatastropheManager getAssaultCatastropheManager() {

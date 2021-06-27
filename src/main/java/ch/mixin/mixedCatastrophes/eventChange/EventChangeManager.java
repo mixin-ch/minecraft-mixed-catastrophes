@@ -2,16 +2,14 @@ package ch.mixin.mixedCatastrophes.eventChange;
 
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectChange;
-import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectScoreManager;
+import ch.mixin.mixedCatastrophes.eventChange.scoreBoard.AspectScoreManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.eventChange.message.EventMessage;
 import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
 import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import ch.mixin.mixedCatastrophes.mixedAchievements.MixedAchievementsManager;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 

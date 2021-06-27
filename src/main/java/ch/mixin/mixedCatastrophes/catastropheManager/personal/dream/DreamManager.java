@@ -259,7 +259,7 @@ public class DreamManager {
             if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
                 continue;
 
-            if (lighthouseLocation.distance(player.getLocation()) > 10 * lighthouseData.getLevel())
+            if (lighthouseLocation.distance(player.getLocation()) > lighthouseData.getLevel() * Constants.LighthouseRangeFactor)
                 continue;
 
             nearLighthouse = true;
