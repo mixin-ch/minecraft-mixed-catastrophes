@@ -29,14 +29,12 @@ public class TerrorCatastropheManager extends CatastropheManager {
     private final AssaultCatastropheManager assaultCatastropheManager;
     private final StalkerCatastropheManager stalkerCatastropheManager;
     private final ParanoiaCatastropheManager paranoiaCatastropheManager;
-    private final ConstructManager constructManager;
 
     public TerrorCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
         super(mixedCatastrophesManagerAccessor);
         assaultCatastropheManager = new AssaultCatastropheManager(mixedCatastrophesManagerAccessor);
         stalkerCatastropheManager = new StalkerCatastropheManager(mixedCatastrophesManagerAccessor);
         paranoiaCatastropheManager = new ParanoiaCatastropheManager(mixedCatastrophesManagerAccessor);
-        constructManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager();
     }
 
     @Override
@@ -116,7 +114,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
             int timer = terrorData.getTerrorTimer();
             timer--;
-            ScarecrowData strongestScarecrow = constructManager.getStrongestScarecrow(scarecrowList, playerLocation);
+            ScarecrowData strongestScarecrow = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
 
             if (hasScareCrow) {
@@ -141,7 +139,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     public void triggerHorrificWhispers(Player player) {
-        executeHorrificWhispers(player, constructManager.getStrongestScarecrow(getActiveScarecrowList(), player.getLocation()));
+        executeHorrificWhispers(player, mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(getActiveScarecrowList(), player.getLocation()));
     }
 
     private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData) {
@@ -200,7 +198,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     private List<ScarecrowData> getActiveScarecrowList() {
-        return constructManager.getScarecrowListIsConstructed(metaData.getScarecrowDataList(), ConstructType.Scarecrow);
+        return mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getScarecrowListIsConstructed(metaData.getScarecrowDataList(), ConstructType.Scarecrow);
     }
 
     public AssaultCatastropheManager getAssaultCatastropheManager() {
