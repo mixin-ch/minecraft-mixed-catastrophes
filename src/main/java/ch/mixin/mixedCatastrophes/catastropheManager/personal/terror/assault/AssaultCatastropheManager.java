@@ -252,6 +252,9 @@ public class AssaultCatastropheManager extends CatastropheManager {
             if (player.getLocation().distance(groundP1) > 40)
                 continue;
 
+            if (Math.abs(player.getLocation().getY() - groundP1.getY()) > 15)
+                continue;
+
             for (Location lighthouseLocation : lighthouseMap.keySet()) {
                 int range = lighthouseMap.get(lighthouseLocation);
 
