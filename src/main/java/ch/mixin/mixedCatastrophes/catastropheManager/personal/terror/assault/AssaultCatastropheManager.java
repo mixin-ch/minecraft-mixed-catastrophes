@@ -161,17 +161,17 @@ public class AssaultCatastropheManager extends CatastropheManager {
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
-        int assaultTimer = terrorData.getAssaultTimer();
-        assaultTimer--;
+        int timer = terrorData.getAssaultTimer();
+        timer--;
 
-        if (hasScareCrow){
-            assaultTimer--;
+        if (hasScareCrow) {
+            timer -= 2;
         }
 
-        if (assaultTimer <= 0) {
-            assaultTimer = assaultTimer();
+        if (timer <= 0) {
+            timer = assaultTimer();
 
-            int terror = playerData.getAspect(AspectType.Terror);
+            int terror = playerData.getAspect(AspectType.Terror) + (hasScareCrow ? 100 : 0);
             double modifier = Math.pow(terror, 0.5);
             double probability = (modifier + 1) / (modifier + 100.0);
 
@@ -180,7 +180,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             }
         }
 
-        terrorData.setAssaultTimer(assaultTimer);
+        terrorData.setAssaultTimer(timer);
     }
 
     private int assaultTimer() {
@@ -249,7 +249,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             if (groundP1 == null)
                 continue;
 
-            if (player.getLocation().distance(groundP1) > 50)
+            if (player.getLocation().distance(groundP1) > 40)
                 continue;
 
             for (Location lighthouseLocation : lighthouseMap.keySet()) {

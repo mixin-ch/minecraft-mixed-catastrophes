@@ -308,7 +308,43 @@ public class ConstructManager extends CatastropheManager {
         return constructDataListInWorld;
     }
 
-    public List<ScarecrowData> getScarecrowListIsConstructed(List<ScarecrowData> constructDataList, ConstructType constructType) {
+    public List<BlitzardData> getBlitzardListIsConstructed(List<BlitzardData> constructDataList) {
+        List<BlitzardData> constructDataListIsConstructed = new ArrayList<>();
+
+        for (BlitzardData constructData : constructDataList) {
+            World world = plugin.getServer().getWorld(constructData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location location = constructData.getPosition().toLocation(world);
+
+            if (Constants.Blitzard.checkConstructed(location).isConstructed())
+                constructDataListIsConstructed.add(constructData);
+        }
+
+        return constructDataListIsConstructed;
+    }
+
+    public List<LighthouseData> getLighthouseListIsConstructed(List<LighthouseData> constructDataList) {
+        List<LighthouseData> constructDataListIsConstructed = new ArrayList<>();
+
+        for (LighthouseData constructData : constructDataList) {
+            World world = plugin.getServer().getWorld(constructData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location location = constructData.getPosition().toLocation(world);
+
+            if (Constants.Lighthouse.checkConstructed(location).isConstructed())
+                constructDataListIsConstructed.add(constructData);
+        }
+
+        return constructDataListIsConstructed;
+    }
+
+    public List<ScarecrowData> getScarecrowListIsConstructed(List<ScarecrowData> constructDataList) {
         List<ScarecrowData> constructDataListIsConstructed = new ArrayList<>();
 
         for (ScarecrowData constructData : constructDataList) {
@@ -318,49 +354,30 @@ public class ConstructManager extends CatastropheManager {
                 continue;
 
             Location location = constructData.getPosition().toLocation(world);
-            boolean isConstructed = false;
 
-            switch (constructType) {
-                case GreenWell:
-                    isConstructed = Constants.GreenWell.checkConstructed(location).isConstructed();
-                    break;
-                case BlazeReactor:
-                    isConstructed = Constants.BlazeReactor.checkConstructed(location).isConstructed();
-                    break;
-                case Blitzard:
-                    isConstructed = Constants.Blitzard.checkConstructed(location).isConstructed();
-                    break;
-                case Lighthouse:
-                    isConstructed = Constants.Lighthouse.checkConstructed(location).isConstructed();
-                    break;
-                case Scarecrow:
-                    isConstructed = Constants.Scarecrow.checkConstructed(location).isConstructed();
-                    break;
-            }
-
-            if (isConstructed)
+            if (Constants.Scarecrow.checkConstructed(location).isConstructed())
                 constructDataListIsConstructed.add(constructData);
         }
 
         return constructDataListIsConstructed;
     }
 
-    public BlitzardData getStrongestBlitzard(List<BlitzardData> blitzardList, Location location) {
-        BlitzardData strongestBlitzard = null;
+    public BlitzardData getStrongestBlitzard(List<BlitzardData> constructList, Location location) {
+        BlitzardData strongestConstruct = null;
         double strongestPull = -1;
 
-        for (BlitzardData blitzardData : blitzardList) {
-            World world = plugin.getServer().getWorld(blitzardData.getWorldName());
+        for (BlitzardData constructData : constructList) {
+            World world = plugin.getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
 
-            Location constructLocation = blitzardData.getPosition().toLocation(world);
+            Location constructLocation = constructData.getPosition().toLocation(world);
 
             if (location.getWorld() != constructLocation.getWorld())
                 continue;
 
-            double pull = Constants.BlitzardRangeFactor * blitzardData.getLevel() - constructLocation.distance(location);
+            double pull = Constants.BlitzardRangeFactor * constructData.getLevel() - constructLocation.distance(location);
 
             if (pull < 0)
                 continue;
@@ -369,23 +386,53 @@ public class ConstructManager extends CatastropheManager {
                 continue;
 
             strongestPull = pull;
-            strongestBlitzard = blitzardData;
+            strongestConstruct = constructData;
         }
 
-        return strongestBlitzard;
+        return strongestConstruct;
     }
 
-    public ScarecrowData getStrongestScarecrow(List<ScarecrowData> scarecrowList, Location location) {
-        ScarecrowData strongestScarecrow = null;
+    public LighthouseData getStrongestLighthouse(List<LighthouseData> constructList, Location location) {
+        LighthouseData strongestConstruct = null;
         double strongestPull = -1;
 
-        for (ScarecrowData scarecrowData : scarecrowList) {
-            World world = plugin.getServer().getWorld(scarecrowData.getWorldName());
+        for (LighthouseData constructData : constructList) {
+            World world = plugin.getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
 
-            Location constructLocation = scarecrowData.getPosition().toLocation(world);
+            Location constructLocation = constructData.getPosition().toLocation(world);
+
+            if (location.getWorld() != constructLocation.getWorld())
+                continue;
+
+            double pull = Constants.LighthouseRangeFactor * constructData.getLevel() - constructLocation.distance(location);
+
+            if (pull < 0)
+                continue;
+
+            if (pull <= strongestPull)
+                continue;
+
+            strongestPull = pull;
+            strongestConstruct = constructData;
+        }
+
+        return strongestConstruct;
+    }
+
+    public ScarecrowData getStrongestScarecrow(List<ScarecrowData> constructList, Location location) {
+        ScarecrowData strongestConstruct = null;
+        double strongestPull = -1;
+
+        for (ScarecrowData constructData : constructList) {
+            World world = plugin.getServer().getWorld(constructData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location constructLocation = constructData.getPosition().toLocation(world);
 
             if (location.getWorld() != constructLocation.getWorld())
                 continue;
@@ -399,9 +446,9 @@ public class ConstructManager extends CatastropheManager {
                 continue;
 
             strongestPull = pull;
-            strongestScarecrow = scarecrowData;
+            strongestConstruct = constructData;
         }
 
-        return strongestScarecrow;
+        return strongestConstruct;
     }
 }

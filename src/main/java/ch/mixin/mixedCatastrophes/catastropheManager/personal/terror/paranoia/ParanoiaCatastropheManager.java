@@ -77,13 +77,13 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         timer--;
 
         if (hasScareCrow){
-            timer--;
+            timer -= 2;
         }
 
         if (timer <= 0) {
             timer = paranoiaTimer();
 
-            ParanoiaType paranoiaType = getParanoia(playerData.getAspect(AspectType.Terror));
+            ParanoiaType paranoiaType = getParanoia(playerData.getAspect(AspectType.Terror) + (hasScareCrow ? 100 : 0));
 
             if (paranoiaType != null) {
                 causeParanoia(player, paranoiaType);

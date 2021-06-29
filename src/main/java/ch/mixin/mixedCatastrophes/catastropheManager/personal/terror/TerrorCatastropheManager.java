@@ -118,7 +118,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
             boolean hasScareCrow = strongestScarecrow != null;
 
             if (hasScareCrow) {
-                timer--;
+                timer -= 2;
             }
 
             if (timer <= 0) {
@@ -198,7 +198,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     private List<ScarecrowData> getActiveScarecrowList() {
-        return mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getScarecrowListIsConstructed(metaData.getScarecrowDataList(), ConstructType.Scarecrow);
+        return mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getScarecrowListIsConstructed(metaData.getScarecrowDataList());
     }
 
     public AssaultCatastropheManager getAssaultCatastropheManager() {
