@@ -36,7 +36,6 @@ public class RootCatastropheManager {
         personalCatastropheManager = new PersonalCatastropheManager(mixedCatastrophesManagerAccessor);
         metaDataSaveTimer = 0;
         initializeMetaData();
-        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard();
         initializeCauser();
     }
 

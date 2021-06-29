@@ -56,7 +56,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         PLUGIN_NAME = getDescription().getName();
         System.out.println(PLUGIN_NAME + " enabled");
         loadConfig();
-        initialize();
+        reload();
         start();
     }
 
@@ -69,6 +69,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     public void reload() {
         super.reloadConfig();
         initialize();
+        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard();
     }
 
     private void loadConfig() {
