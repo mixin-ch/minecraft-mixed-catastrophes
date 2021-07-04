@@ -16,6 +16,7 @@ public class MetaData {
     private int weatherTimer;
     private WeatherCatastropheType weatherCatastropheType;
     private int starSplinterTimer;
+    private List<StarSplinterRemainsData> starSplinterRemainsDataList;
     private HashMap<UUID, PlayerData> playerDataMap;
     private List<GreenWellData> greenWellDataList;
     private List<BlitzardData> blitzardDataList;
@@ -69,6 +70,14 @@ public class MetaData {
 
     public void setStarSplinterTimer(int starSplinterTimer) {
         this.starSplinterTimer = starSplinterTimer;
+    }
+
+    public List<StarSplinterRemainsData> getStarSplinterRemainsDataList() {
+        return starSplinterRemainsDataList;
+    }
+
+    public void setStarSplinterRemainsDataList(List<StarSplinterRemainsData> starSplinterRemainsDataList) {
+        this.starSplinterRemainsDataList = starSplinterRemainsDataList;
     }
 
     public HashMap<UUID, PlayerData> getPlayerDataMap() {

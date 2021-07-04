@@ -2,8 +2,10 @@ package ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
+import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.metaData.StarSplinterRemainsData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -18,8 +20,8 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class StarSplinterCatastropheManager extends CatastropheManager {
-    private static final HashMap<StarSplinterType, Double> starSplinterWeightMap;
-    private static final HashMap<StarSplinterType, StarSplinterPremise> starSplinterPremiseMap;
+    public static final HashMap<StarSplinterType, Double> starSplinterWeightMap;
+    public static final HashMap<StarSplinterType, StarSplinterPremise> starSplinterPremiseMap;
 
     static {
         starSplinterWeightMap = new HashMap<>();
@@ -97,6 +99,9 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
     public void initializeMetaData() {
         if (metaData.getStarSplinterTimer() <= 0) {
             metaData.setStarSplinterTimer(starSplinterTimer());
+        }
+        if (metaData.getStarSplinterRemainsDataList() == null) {
+            metaData.setStarSplinterRemainsDataList(new ArrayList<>());
         }
     }
 
@@ -179,6 +184,8 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         }
 
         Location location = locations.get(new Random().nextInt(locations.size()));
+
+        metaData.getStarSplinterRemainsDataList().add(new StarSplinterRemainsData(starSplinterType, location.getWorld().getName(), Coordinate3D.toCoordinate(location)));
 
         world.strikeLightning(location);
         world.createExplosion(location, 4, true, true);
