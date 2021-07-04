@@ -18,7 +18,7 @@ public class Messager {
     }
 
     public void sendCatastropheTitle(Player player, String text, ChatColor chatColor, AspectType cause, HashMap<AspectType, Integer> changeMap) {
-        player.sendTitle("", formatCatastropheMessage(text, chatColor), 10, 5 * 20, 10);
+        player.sendTitle(" ", formatCatastropheMessage(text, chatColor), 10, 5 * 20, 10);
         sendCatastropheMessage(player, text, chatColor, cause, changeMap);
     }
 
