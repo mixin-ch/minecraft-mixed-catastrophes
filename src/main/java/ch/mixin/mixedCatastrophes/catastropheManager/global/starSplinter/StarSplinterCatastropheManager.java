@@ -1,11 +1,9 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
@@ -20,52 +18,73 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class StarSplinterCatastropheManager extends CatastropheManager {
-    private static final HashMap<StarSplinterPremise, Double> starSplinterWeights;
+    private static final HashMap<StarSplinterType, Double> starSplinterWeightMap;
+    private static final HashMap<StarSplinterType, StarSplinterPremise> starSplinterPremiseMap;
 
     static {
-        starSplinterWeights = new HashMap<>();
-        starSplinterWeights.put(new StarSplinterPremise(
+        starSplinterWeightMap = new HashMap<>();
+        starSplinterWeightMap.put(StarSplinterType.Iron, 4.0);
+        starSplinterWeightMap.put(StarSplinterType.Gold, 4.0);
+        starSplinterWeightMap.put(StarSplinterType.Diamond, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Emerald, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Redstone, 2.0);
+        starSplinterWeightMap.put(StarSplinterType.Lapis_Lazuli, 2.0);
+        starSplinterWeightMap.put(StarSplinterType.Quartz, 4.0);
+        starSplinterWeightMap.put(StarSplinterType.Glowstone, 2.0);
+        starSplinterWeightMap.put(StarSplinterType.Flint, 2.0);
+        starSplinterWeightMap.put(StarSplinterType.Blaze, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Ender_Pearl, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Obsidian, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Clay, 2.0);
+        starSplinterWeightMap.put(StarSplinterType.Feather, 1.0);
+
+        starSplinterPremiseMap = new HashMap<>();
+        starSplinterPremiseMap.put(StarSplinterType.Iron, new StarSplinterPremise(
                 "Iron", Material.IRON_NUGGET, 9.0
-        ), 4.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Gold, new StarSplinterPremise(
                 "Gold", Material.GOLD_NUGGET, 9.0
-        ), 4.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Diamond, new StarSplinterPremise(
                 "Diamond", Material.DIAMOND, 1.0
-        ), 1.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Netherite, new StarSplinterPremise(
                 "Netherite", Material.NETHERITE_SCRAP, 4.0
-        ), 1.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Emerald, new StarSplinterPremise(
                 "Emerald", Material.EMERALD, 1.0
-        ), 1.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Redstone, new StarSplinterPremise(
                 "Redstone", Material.REDSTONE, 1.0
-        ), 2.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Lapis_Lazuli, new StarSplinterPremise(
                 "Lapis Lazuli", Material.LAPIS_LAZULI, 1.0
-        ), 2.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Quartz, new StarSplinterPremise(
                 "Quartz", Material.QUARTZ, 4.0
-        ), 4.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Glowstone, new StarSplinterPremise(
                 "Glowstone", Material.GLOWSTONE_DUST, 4.0
-        ), 2.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Flint, new StarSplinterPremise(
                 "Flint", Material.FLINT, 1.0
-        ), 2.0);
-        starSplinterWeights.put(new StarSplinterPremise(
-                "Blaze", Material.BLAZE_POWDER, 1.0
-        ), 1.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Blaze, new StarSplinterPremise(
+                "Blaze", Material.BLAZE_ROD, 1.0
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Ender_Pearl, new StarSplinterPremise(
                 "Ender Pearl", Material.ENDER_PEARL, 1.0
-        ), 1.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Obsidian, new StarSplinterPremise(
                 "Obsidian", Material.OBSIDIAN, 1.0
-        ), 1.0);
-        starSplinterWeights.put(new StarSplinterPremise(
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Clay, new StarSplinterPremise(
                 "Clay", Material.CLAY_BALL, 4.0
-        ), 2.0);
+        ));
+        starSplinterPremiseMap.put(StarSplinterType.Feather, new StarSplinterPremise(
+                "Feather", Material.FEATHER, 1.0
+        ));
+
     }
 
     private int starSplinterTimer;
@@ -135,7 +154,8 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
     }
 
     public void causeStarSplinter(Player player) {
-        StarSplinterPremise starSplinterPremise = Functions.getRandomWithWeights(starSplinterWeights);
+        StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
+        StarSplinterPremise starSplinterPremise = starSplinterPremiseMap.get(starSplinterType);
         World world = player.getWorld();
         List<Location> locations = new ArrayList<>();
         ArrayList<Player> playerList = new ArrayList<>();
