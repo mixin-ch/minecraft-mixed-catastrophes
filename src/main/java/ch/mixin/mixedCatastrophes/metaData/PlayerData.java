@@ -7,13 +7,15 @@ import java.util.UUID;
 
 public class PlayerData {
     private UUID playerId;
+    private String playerName;
     private int dreamCooldown;
     private int antiLighthouseTimer;
     private HashMap<AspectType, Integer> aspects;
     private TerrorData terrorData;
 
-    public PlayerData(UUID playerId) {
+    public PlayerData(UUID playerId, String playerName) {
         this.playerId = playerId;
+        this.playerName = playerName;
         dreamCooldown = 0;
         antiLighthouseTimer = 0;
         aspects = new HashMap<>();
@@ -47,6 +49,14 @@ public class PlayerData {
 
     public void setPlayerId(UUID playerId) {
         this.playerId = playerId;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public int getDreamCooldown() {

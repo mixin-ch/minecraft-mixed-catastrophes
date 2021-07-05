@@ -1,15 +1,13 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.rite.RiteManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.TerrorCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -45,6 +43,9 @@ public class PersonalCatastropheManager extends CatastropheManager {
         for (Player player : plugin.getServer().getOnlinePlayers()) {
             if (!playerDataMap.containsKey(player.getUniqueId())) {
                 initializePlayerData(player);
+            } else {
+                PlayerData playerData = playerDataMap.get(player.getUniqueId());
+                playerData.setPlayerName(player.getName());
             }
         }
     }
@@ -55,7 +56,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
         PlayerData playerData = playerDataMap.get(playerId);
 
         if (playerData == null) {
-            playerData = new PlayerData(playerId);
+            playerData = new PlayerData(playerId, player.getName());
             playerDataMap.put(playerId, playerData);
         }
 
