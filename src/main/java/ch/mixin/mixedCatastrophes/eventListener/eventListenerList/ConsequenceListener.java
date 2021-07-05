@@ -78,66 +78,6 @@ public class ConsequenceListener implements Listener {
     }
 
     @EventHandler
-    public void entityShootBow(EntityShootBowEvent event) {
-        Entity entity = event.getEntity();
-
-        if (!(entity instanceof Player))
-            return;
-
-        Player player = (Player) entity;
-
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
-            return;
-
-        int misfortune = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
-        double probability = (misfortune) / (misfortune + 30.0);
-        probability /= 2.0;
-
-        if (new Random().nextDouble() >= probability)
-            return;
-
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
-                .eventChange(player)
-                .withEventSound(Sound.ENTITY_ITEM_BREAK)
-                .withEventMessage("An unlucky Misfire.")
-                .withCause(AspectType.Misfortune)
-                .finish()
-                .execute();
-
-        event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void entityDamageByEntity(EntityDamageByEntityEvent event) {
-        Entity entity = event.getDamager();
-
-        if (!(entity instanceof Player))
-            return;
-
-        Player player = (Player) entity;
-
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
-            return;
-
-        int misfortune = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Misfortune);
-        double probability = (misfortune) / (misfortune + 30.0);
-        probability /= 2.0;
-
-        if (new Random().nextDouble() >= probability)
-            return;
-
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
-                .eventChange(player)
-                .withEventSound(Sound.ENTITY_ITEM_BREAK)
-                .withEventMessage("An unlucky Miss.")
-                .withCause(AspectType.Misfortune)
-                .finish()
-                .execute();
-
-        event.setCancelled(true);
-    }
-
-    @EventHandler
     public void harvestBlock(BlockBreakEvent event) {
         Player player = event.getPlayer();
 

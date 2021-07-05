@@ -15,5 +15,6 @@ public class EventListenerInitializer {
         plugin.getServer().getPluginManager().registerEvents(new InventoryListener(mixedCatastrophesManagerAccessor), plugin);
         plugin.getServer().getPluginManager().registerEvents(new ConstructListener(mixedCatastrophesManagerAccessor), plugin);
         plugin.getServer().getPluginManager().registerEvents(new MixedAchievementListener(mixedCatastrophesManagerAccessor), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new AttackListener(mixedCatastrophesManagerAccessor), plugin);
     }
 }
