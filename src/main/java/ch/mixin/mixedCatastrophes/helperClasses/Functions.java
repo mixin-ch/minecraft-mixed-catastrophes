@@ -4,6 +4,7 @@ import ch.mixin.mixedAchievements.main.MixedAchievementsPlugin;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.metaData.constructs.ConstructData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
+import com.google.common.base.CaseFormat;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -201,5 +202,17 @@ public class Functions {
             return null;
 
         return new Location(world, x, y, z);
+    }
+
+    public static String splitCamelCase(String s) {
+        return s.replaceAll(
+                String.format("%s|%s|%s|%s",
+                        "(?<=[A-Z])(?=[A-Z][a-z])",
+                        "(?<=[^A-Z])(?=[A-Z])",
+                        "(?<=[A-Za-z])(?=[^A-Za-z])",
+                        "_"
+                ),
+                " "
+        );
     }
 }

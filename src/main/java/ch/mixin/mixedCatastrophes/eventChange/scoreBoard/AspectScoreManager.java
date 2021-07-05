@@ -2,9 +2,12 @@ package ch.mixin.mixedCatastrophes.eventChange.scoreBoard;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
+import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
 import ch.mixin.mixedCatastrophes.metaData.MetaData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
@@ -66,7 +69,7 @@ public class AspectScoreManager {
         }
 
         int index = 0;
-        int maxBoardSize = Constants.AspectOrder.size() + 2 + 3;
+        int maxBoardSize = Constants.AspectOrder.size() + 2 + 3 + 1;
 
         for (AspectType aspectType : Constants.AspectOrder) {
             int value = aspects.get(aspectType);
@@ -109,6 +112,14 @@ public class AspectScoreManager {
         if (scarecrowData != null) {
             int distance = (int) scarecrowData.getPosition().toLocation(world).distance(player.getLocation());
             makeScore(scoreboard, objective, index, Constants.ConstructThemes.get(ConstructType.Scarecrow).getColor(), "Scarecrow", distance, "m");
+            index++;
+        }
+
+        WeatherCatastropheManager weatherCatastropheManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getWeatherCatastropheManager();
+        WeatherCatastropheType activeWeather = weatherCatastropheManager.getActiveWeather();
+
+        if (activeWeather != WeatherCatastropheType.Nothing) {
+            makeScore(scoreboard, objective, index, Constants.WeatherThemes.get(activeWeather).getColor(), Functions.splitCamelCase(activeWeather.toString()), weatherCatastropheManager.getWeatherTimer(), "s");
             index++;
         }
 

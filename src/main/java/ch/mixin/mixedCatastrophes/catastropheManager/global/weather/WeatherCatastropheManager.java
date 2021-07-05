@@ -568,4 +568,12 @@ public class WeatherCatastropheManager extends CatastropheManager {
                     , 5);
         }
     }
+
+    public int getWeatherTimer() {
+        return weatherTimer;
+    }
+
+    public WeatherCatastropheType getActiveWeather() {
+        return activeWeather;
+    }
 }
