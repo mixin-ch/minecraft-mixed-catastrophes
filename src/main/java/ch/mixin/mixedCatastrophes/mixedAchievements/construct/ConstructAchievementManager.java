@@ -29,8 +29,8 @@ public class ConstructAchievementManager {
         contributePresetMap.put(ConstructType.GreenWell, new ConstructAchievementPreset(
                 new ArrayList<>(Arrays.asList(
                         new AchievementStagePreset("sprouting", 2)
-                        , new AchievementStagePreset("blooming", 10)
-                        , new AchievementStagePreset("overgrowing", 30)
+                        , new AchievementStagePreset("blooming", 7)
+                        , new AchievementStagePreset("overgrowing", 12)
                 ))));
         contributePresetMap.put(ConstructType.BlazeReactor, new ConstructAchievementPreset(
                 new ArrayList<>(Arrays.asList(

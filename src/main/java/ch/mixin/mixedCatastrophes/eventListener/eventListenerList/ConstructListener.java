@@ -50,7 +50,7 @@ public class ConstructListener implements Listener {
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         switch (itemStack.getType()) {
-            case ENDER_EYE:
+            case BONE_MEAL:
                 makeGreenWell(event);
                 break;
             case MAGMA_CREAM:
@@ -106,8 +106,8 @@ public class ConstructListener implements Listener {
         }
 
         PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-        int cost = 160 + 80 * greenWellData.getLevel();
-        int costItem = 2 + greenWellData.getLevel();
+        int cost = 100 * (2 + greenWellData.getLevel());
+        int costItem = 4 * (2 + greenWellData.getLevel());
         boolean success = true;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
@@ -123,7 +123,7 @@ public class ConstructListener implements Listener {
         if (itemStack.getAmount() < costItem) {
             mixedCatastrophesManagerAccessor.getEventChangeManager()
                     .eventChange(player)
-                    .withEventMessage("You need at least " + costItem + " Ender Eyes to do this.")
+                    .withEventMessage("You need at least " + costItem + " Bone Meal to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();

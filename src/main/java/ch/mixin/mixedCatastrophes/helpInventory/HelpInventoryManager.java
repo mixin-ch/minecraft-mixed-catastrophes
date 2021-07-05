@@ -447,10 +447,10 @@ public class HelpInventoryManager {
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
                 , linkInventoryMap, HelpInventoryType.Constructs);
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
-                "Construct in the following Configuration.", "Use Ender Eyes to Level up.", "Spawns Flowers when possible.", "Spawns Logs on Flowers spawn."
+                "Construct in the following Configuration.", "Use Bone Meal to Level up.", "Spawns Flowers when possible.", "Spawns Logs on Flowers spawn."
         });
-        createSlot(inventory, Material.ENDER_EYE, 1, true, slot(2, 2), "Ender Eye", new String[]{
-                "Click on the Water with Ender Eye.", "Costs Ender Eyes and Secrets."
+        createSlot(inventory, Material.BONE_MEAL, 1, true, slot(2, 2), "Bone Meal", new String[]{
+                "Click on the Water with Bone Meal.", "Costs Bone Meal and Secrets."
         });
         for (int row = 1; row <= 3; row++) {
             for (int col = 4; col <= 6; col++) {
