@@ -4,7 +4,6 @@ public enum ParanoiaType {
     Sounds,
     Insomnia,
     Weakness,
-    Vulnerability,
     Paralysis,
     ;
 }

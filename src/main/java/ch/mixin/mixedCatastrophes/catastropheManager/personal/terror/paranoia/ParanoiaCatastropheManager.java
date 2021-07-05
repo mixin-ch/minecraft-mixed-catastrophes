@@ -24,7 +24,6 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         paranoiaOrder = new ArrayList<>();
         paranoiaOrder.add(ParanoiaType.Paralysis);
         paranoiaOrder.add(ParanoiaType.Weakness);
-        paranoiaOrder.add(ParanoiaType.Vulnerability);
         paranoiaOrder.add(ParanoiaType.Insomnia);
         paranoiaOrder.add(ParanoiaType.Sounds);
 
@@ -109,9 +108,6 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         if (check(terror, 135, 1, 1200))
             paranoiaTypeList.add(ParanoiaType.Weakness);
 
-        if (check(terror, 100, 1, 1200))
-            paranoiaTypeList.add(ParanoiaType.Vulnerability);
-
         if (check(terror, 35, 1, 1200))
             paranoiaTypeList.add(ParanoiaType.Paralysis);
 
@@ -143,9 +139,6 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
                 break;
             case Weakness:
                 weakness(player);
-                break;
-            case Vulnerability:
-                vulnerability(player);
                 break;
             case Paralysis:
                 paralysis(player);
