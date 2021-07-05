@@ -27,7 +27,8 @@ public class Constants {
 
     public static final ArrayList<Material> Airs;
     public static final ArrayList<Material> Logs;
-    public static final ArrayList<Material> Flowers;
+    public static final ArrayList<Material> Flowers_Small;
+    public static final ArrayList<Material> Flowers_Tall;
     public static final ArrayList<Material> PottedFlowers;
     public static final ArrayList<Material> Mirrors;
     public static final ArrayList<Material> Stones;
@@ -113,24 +114,26 @@ public class Constants {
         Logs.add(Material.CRIMSON_STEM);
         Logs.add(Material.WARPED_STEM);
 
-        Flowers = new ArrayList<>();
-        Flowers.add(Material.DANDELION);
-        Flowers.add(Material.POPPY);
-        Flowers.add(Material.BLUE_ORCHID);
-        Flowers.add(Material.ALLIUM);
-        Flowers.add(Material.AZURE_BLUET);
-        Flowers.add(Material.RED_TULIP);
-        Flowers.add(Material.PINK_TULIP);
-        Flowers.add(Material.WHITE_TULIP);
-        Flowers.add(Material.ORANGE_TULIP);
-        Flowers.add(Material.OXEYE_DAISY);
-        Flowers.add(Material.CORNFLOWER);
-        Flowers.add(Material.LILY_OF_THE_VALLEY);
-        Flowers.add(Material.WITHER_ROSE);
-        Flowers.add(Material.SUNFLOWER);
-        Flowers.add(Material.LILAC);
-        Flowers.add(Material.ROSE_BUSH);
-        Flowers.add(Material.PEONY);
+        Flowers_Small = new ArrayList<>();
+        Flowers_Small.add(Material.DANDELION);
+        Flowers_Small.add(Material.POPPY);
+        Flowers_Small.add(Material.BLUE_ORCHID);
+        Flowers_Small.add(Material.ALLIUM);
+        Flowers_Small.add(Material.AZURE_BLUET);
+        Flowers_Small.add(Material.RED_TULIP);
+        Flowers_Small.add(Material.PINK_TULIP);
+        Flowers_Small.add(Material.WHITE_TULIP);
+        Flowers_Small.add(Material.ORANGE_TULIP);
+        Flowers_Small.add(Material.OXEYE_DAISY);
+        Flowers_Small.add(Material.CORNFLOWER);
+        Flowers_Small.add(Material.LILY_OF_THE_VALLEY);
+        Flowers_Small.add(Material.WITHER_ROSE);
+
+        Flowers_Tall = new ArrayList<>();
+        Flowers_Tall.add(Material.SUNFLOWER);
+        Flowers_Tall.add(Material.LILAC);
+        Flowers_Tall.add(Material.ROSE_BUSH);
+        Flowers_Tall.add(Material.PEONY);
 
         PottedFlowers = new ArrayList<>();
         PottedFlowers.add(Material.POTTED_DANDELION);

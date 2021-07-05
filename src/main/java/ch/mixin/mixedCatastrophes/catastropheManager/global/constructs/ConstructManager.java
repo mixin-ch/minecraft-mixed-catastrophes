@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -94,6 +96,7 @@ public class ConstructManager extends CatastropheManager {
                 logs.add(field.to3D(center.getY()).toLocation(world).getBlock().getType());
             }
 
+            Random random = new Random();
             double amount = Math.pow(3 + 2 * level, 2) * 0.002;
             int successfulAmount = 0;
 
@@ -101,25 +104,36 @@ public class ConstructManager extends CatastropheManager {
                 double probability = Math.min(1, amount);
                 amount--;
 
-                if (new Random().nextDouble() < probability) {
-                    int range = new Random().nextInt(level + 2);
-                    int x = new Random().nextInt(2 * range + 1) - range;
-                    int z = new Random().nextInt(2 * range + 1) - range;
+                if (random.nextDouble() < probability) {
+                    int range = random.nextInt(level + 2);
+                    int x = random.nextInt(2 * range + 1) - range;
+                    int z = random.nextInt(2 * range + 1) - range;
 
                     Coordinate3D spot = center.sum(x, 0, z);
                     Location location = spot.toLocation(world);
+                    Location locationP1 = location.clone().add(0, 1, 0);
 
                     boolean success = false;
 
                     if (location.getBlock().getType() == Material.FLOWER_POT) {
                         success = true;
-                        location.getBlock().setType(Constants.PottedFlowers.get(new Random().nextInt(Constants.PottedFlowers.size())));
+                        location.getBlock().setType(Constants.PottedFlowers.get(random.nextInt(Constants.PottedFlowers.size())));
                     } else if (Constants.Airs.contains(location.getBlock().getType())) {
                         Location below = spot.sum(0, -1, 0).toLocation(world);
 
                         if (below.getBlock().getType() == Material.GRASS_BLOCK) {
                             success = true;
-                            location.getBlock().setType(Constants.Flowers.get(new Random().nextInt(Constants.Flowers.size())));
+                            boolean tall = random.nextDouble() < (Constants.Flowers_Tall.size() / (double) (Constants.Flowers_Small.size() + Constants.Flowers_Tall.size()));
+                            tall = tall && Constants.Airs.contains(locationP1.getBlock().getType());
+
+                            if (tall) {
+                                Material material = Constants.Flowers_Tall.get(random.nextInt(Constants.Flowers_Tall.size()));
+                                setFlower(location.getBlock(), material, Bisected.Half.BOTTOM);
+                                setFlower(locationP1.getBlock(), material, Bisected.Half.TOP);
+                            } else {
+                                Material material = Constants.Flowers_Small.get(random.nextInt(Constants.Flowers_Small.size()));
+                                location.getBlock().setType(material);
+                            }
                         } else if (below.getBlock().getType() == Material.DIRT) {
                             below.getBlock().setType(Material.GRASS_BLOCK);
                         }
@@ -135,6 +149,13 @@ public class ConstructManager extends CatastropheManager {
                 world.dropItem(locationCenterMiddle, new ItemStack(logs.get(new Random().nextInt(logs.size())), successfulAmount));
             }
         }
+    }
+
+    private void setFlower(Block block, Material type, Bisected.Half half) {
+        block.setType(type, false);
+        Bisected data = (Bisected) block.getBlockData();
+        data.setHalf(half);
+        block.setBlockData(data);
     }
 
     private void tickBlitzard() {
