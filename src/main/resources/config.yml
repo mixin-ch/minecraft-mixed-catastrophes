@@ -1,7 +1,36 @@
-commands:
-  dealWithDevil: true
 worlds:
   - world
+commands:
+  dealWithDevil: true
+interaction:
+  timeDistortion: true
+  weather:
+    radiantSky: true
+    searingCold: true
+    thunderStorm: true
+    gravityLoss: true
+    catsAndDogs: true
+  starSplinter: true
+  aspects:
+    terror:
+      whispers: true
+      assault: true
+      paranoia: true
+      stalker: true
+    misfortune:
+      collectable: true
+      missAttack: true
+    natureConspiracy:
+      collectable: true
+      ravenousFood: true
+      theHorde: true
+    celestialFavor:
+      saveEssence: true
+      starMercy: true
+    greyhatDebt:
+      seizeDream: true
+    nobility:
+      critAttack: true
 hintList:
   - Type "/mx dealWithDevil" if you are stranded on an Island.
   - Radiant Sky blinds you, if you have no shelter.

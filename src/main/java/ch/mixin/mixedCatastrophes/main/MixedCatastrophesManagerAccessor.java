@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.main;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheSettings.CatastropheSettings;
 import ch.mixin.mixedCatastrophes.eventChange.EventChangeManager;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Particler;
@@ -14,6 +15,7 @@ public class MixedCatastrophesManagerAccessor {
     private final MixedCatastrophesPlugin plugin;
     private MetaData metaData;
     private List<World> affectedWorlds;
+    private CatastropheSettings catastropheSettings;
     private EventChangeManager eventChangeManager;
     private RootCatastropheManager rootCatastropheManager;
     private HelpInventoryManager helpInventoryManager;
@@ -42,6 +44,14 @@ public class MixedCatastrophesManagerAccessor {
 
     public void setAffectedWorlds(List<World> affectedWorlds) {
         this.affectedWorlds = affectedWorlds;
+    }
+
+    public CatastropheSettings getCatastropheSettings() {
+        return catastropheSettings;
+    }
+
+    public void setCatastropheSettings(CatastropheSettings catastropheSettings) {
+        this.catastropheSettings = catastropheSettings;
     }
 
     public EventChangeManager getEventChangeManager() {

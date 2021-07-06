@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.main;
 import ch.mixin.islandgenerator.main.IslandGeneratorPlugin;
 import ch.mixin.mixedAchievements.main.MixedAchievementsPlugin;
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheSettings.CatastropheSettings;
 import ch.mixin.mixedCatastrophes.command.CommandInitializer;
 import ch.mixin.mixedCatastrophes.eventChange.EventChangeManager;
 import ch.mixin.mixedCatastrophes.eventListener.EventListenerInitializer;
@@ -81,12 +82,8 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         mixedCatastrophesManagerAccessor = new MixedCatastrophesManagerAccessor(this);
         initializeMetaData();
         initializeDependentPlugins();
-        mixedCatastrophesManagerAccessor.setEventChangeManager(new EventChangeManager(mixedCatastrophesManagerAccessor));
-        mixedCatastrophesManagerAccessor.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesManagerAccessor));
-        mixedCatastrophesManagerAccessor.setHelpInventoryManager(new HelpInventoryManager(this));
-        mixedCatastrophesManagerAccessor.setParticler(new Particler(this));
+
         List<World> affectedWorlds = new ArrayList<>();
-        mixedCatastrophesManagerAccessor.setAffectedWorlds(affectedWorlds);
 
         for (String worldName : getConfig().getStringList("worlds")) {
             World world = getServer().getWorld(worldName);
@@ -94,6 +91,14 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
                 affectedWorlds.add(world);
             }
         }
+
+        mixedCatastrophesManagerAccessor.setAffectedWorlds(affectedWorlds);
+        mixedCatastrophesManagerAccessor.setCatastropheSettings(new CatastropheSettings(getConfig()));
+
+        mixedCatastrophesManagerAccessor.setEventChangeManager(new EventChangeManager(mixedCatastrophesManagerAccessor));
+        mixedCatastrophesManagerAccessor.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesManagerAccessor));
+        mixedCatastrophesManagerAccessor.setHelpInventoryManager(new HelpInventoryManager(this));
+        mixedCatastrophesManagerAccessor.setParticler(new Particler(this));
 
         CommandInitializer.setupCommands(mixedCatastrophesManagerAccessor);
         EventListenerInitializer.setupEventListener(mixedCatastrophesManagerAccessor);
