@@ -1,15 +1,13 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.weather;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Furnace;
@@ -19,7 +17,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.UUID;
 
 public class WeatherCatastropheManager extends CatastropheManager {
     private static final HashMap<WeatherCatastropheType, Double> catastropheWeights;
@@ -88,7 +89,12 @@ public class WeatherCatastropheManager extends CatastropheManager {
             WeatherCatastropheType newWeather;
 
             if (activeWeather == WeatherCatastropheType.Nothing) {
+                HashMap<WeatherCatastropheType, Boolean> weatherSettings = mixedCatastrophesManagerAccessor.getCatastropheSettings().getWeather();
                 newWeather = Functions.getRandomWithWeights(catastropheWeights);
+
+                while (newWeather != WeatherCatastropheType.Nothing && !weatherSettings.get(newWeather)) {
+                    newWeather = Functions.getRandomWithWeights(catastropheWeights);
+                }
             } else {
                 newWeather = WeatherCatastropheType.Nothing;
             }

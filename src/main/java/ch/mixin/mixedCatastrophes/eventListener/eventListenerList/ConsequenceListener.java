@@ -32,6 +32,9 @@ public class ConsequenceListener implements Listener {
 
     @EventHandler
     public void eat(PlayerItemConsumeEvent event) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isRavenousFood())
+            return;
+
         Player player = event.getPlayer();
 
         if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
@@ -63,6 +66,9 @@ public class ConsequenceListener implements Listener {
     }
 
     private void drinkMilk(Player player) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
+            return;
+
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Nature_Conspiracy, 1);
 
@@ -92,6 +98,9 @@ public class ConsequenceListener implements Listener {
     }
 
     private void breakWood(Player player, Location targetLocation) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isTheHorde())
+            return;
+
         int natureConspiracy = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspect(AspectType.Nature_Conspiracy);
         double probability = natureConspiracy / (natureConspiracy + 5.0);
         probability /= 25.0;
@@ -104,6 +113,9 @@ public class ConsequenceListener implements Listener {
 
     @EventHandler
     public void killAnimal(EntityDeathEvent event) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isTheHorde())
+            return;
+
         LivingEntity livingEntity = event.getEntity();
 
         if (!(livingEntity instanceof Animals))

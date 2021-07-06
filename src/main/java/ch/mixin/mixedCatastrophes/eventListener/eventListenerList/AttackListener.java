@@ -21,12 +21,18 @@ public class AttackListener implements Listener {
     }
 
     private boolean tryPlayerCrit(PlayerData playerData) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNobility().isCritAttack())
+            return false;
+
         int nobility = playerData.getAspect(AspectType.Nobility);
         double probability = (nobility) / (nobility + 100.0);
         return new Random().nextDouble() < probability;
     }
 
     private boolean tryPlayerMiss(PlayerData playerData) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getMisfortune().isMissAttack())
+            return false;
+
         int misfortune = playerData.getAspect(AspectType.Misfortune);
         double probability = (misfortune) / (misfortune + 30.0);
         probability /= 2.0;

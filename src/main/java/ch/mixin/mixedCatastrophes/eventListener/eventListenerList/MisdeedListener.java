@@ -44,6 +44,9 @@ public class MisdeedListener implements Listener {
     }
 
     private void breakWood(Player player) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
+            return;
+
         if (new Random().nextDouble() >= 0.02)
             return;
 
@@ -62,6 +65,9 @@ public class MisdeedListener implements Listener {
     }
 
     private void breakMirror(Player player) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
+            return;
+
         if (new Random().nextDouble() >= 0.05)
             return;
 
@@ -80,6 +86,9 @@ public class MisdeedListener implements Listener {
     }
 
     private void breakStone(Player player) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
+            return;
+
         if (new Random().nextDouble() >= 0.005)
             return;
 
@@ -99,6 +108,9 @@ public class MisdeedListener implements Listener {
 
     @EventHandler
     public void killAnimal(EntityDeathEvent event) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
+            return;
+
         LivingEntity livingEntity = event.getEntity();
 
         if (!(livingEntity instanceof Animals))

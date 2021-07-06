@@ -49,6 +49,9 @@ public class StalkerCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, boolean hasScareCrow) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isStalker())
+            return;
+
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 

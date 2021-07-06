@@ -24,6 +24,9 @@ public class NeedListener implements Listener {
 
     @EventHandler
     public void entityDamageEvent(EntityDamageEvent event) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getCelestialFavor().isStarMercy())
+            return;
+
         if (!(event.getEntity() instanceof Player))
             return;
 

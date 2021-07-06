@@ -121,6 +121,9 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().isStarSplinter())
+            return;
+
         starSplinterTimer--;
 
         if (starSplinterTimer <= 0) {

@@ -41,6 +41,9 @@ public class TimeDistortionManager extends CatastropheManager {
 
     @Override
     public void tick() {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().isTimeDistortion())
+            return;
+        
         timeDistortionTimer--;
 
         if (timeDistortionTimer <= 0) {

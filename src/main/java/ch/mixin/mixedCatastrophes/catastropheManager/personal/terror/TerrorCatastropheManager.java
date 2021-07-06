@@ -1,7 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault.AssaultCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheManager;
@@ -111,22 +110,25 @@ public class TerrorCatastropheManager extends CatastropheManager {
             }
 
             TerrorData terrorData = metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData();
-
-            int timer = terrorData.getTerrorTimer();
-            timer--;
             ScarecrowData strongestScarecrow = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
 
-            if (hasScareCrow) {
-                timer -= 2;
-            }
 
-            if (timer <= 0) {
-                timer = terrorTimer();
-                executeHorrificWhispers(player, strongestScarecrow);
-            }
+            if (mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isWhispers()) {
+                int timer = terrorData.getTerrorTimer();
+                timer--;
 
-            terrorData.setTerrorTimer(timer);
+                if (hasScareCrow) {
+                    timer -= 2;
+                }
+
+                if (timer <= 0) {
+                    timer = terrorTimer();
+                    executeHorrificWhispers(player, strongestScarecrow);
+                }
+
+                terrorData.setTerrorTimer(timer);
+            }
 
             assaultCatastropheManager.tick(player, hasScareCrow);
             stalkerCatastropheManager.tick(player, hasScareCrow);

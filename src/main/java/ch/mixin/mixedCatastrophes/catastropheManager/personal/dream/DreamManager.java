@@ -140,6 +140,9 @@ public class DreamManager {
     }
 
     private boolean greyhat(Player player) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getGreyhatDebt().isSeizeDream())
+            return false;
+
         PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int greyhatDebt = playerData.getAspect(AspectType.Greyhat_Debt);

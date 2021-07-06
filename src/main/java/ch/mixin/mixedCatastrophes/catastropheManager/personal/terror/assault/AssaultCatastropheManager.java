@@ -158,6 +158,9 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, boolean hasScareCrow) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isAssault())
+            return;
+
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 

@@ -51,7 +51,8 @@ public class StatusListener implements Listener {
 
         PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
-        if (playerData.getAspect(AspectType.Celestial_Favor) > 0) {
+        if (playerData.getAspect(AspectType.Celestial_Favor) > 0
+                && mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getCelestialFavor().isSaveEssence()) {
             saveEssence(event);
         } else {
             loseEssence(event);

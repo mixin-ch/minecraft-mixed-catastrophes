@@ -69,6 +69,9 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, boolean hasScareCrow) {
+        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isParanoia())
+            return;
+
         PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
