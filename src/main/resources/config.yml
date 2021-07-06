@@ -11,7 +11,7 @@ interaction:
     gravityLoss: true
     catsAndDogs: true
   starSplinter: true
-  aspects:
+  aspect:
     terror:
       whispers: true
       assault: true

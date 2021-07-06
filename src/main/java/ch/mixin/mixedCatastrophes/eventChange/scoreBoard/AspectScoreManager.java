@@ -8,7 +8,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.MetaData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
@@ -29,15 +29,15 @@ public class AspectScoreManager {
     private final HashMap<UUID, Scoreboard> playerMap = new HashMap<>();
 
     private final ScoreboardManager scoreboardManager = Bukkit.getScoreboardManager();
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
 
-    public AspectScoreManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+    public AspectScoreManager(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
     public void updateScoreboard(Player player) {
-        MetaData metaData = mixedCatastrophesManagerAccessor.getMetaData();
-        ConstructManager constructManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager();
+        MetaData metaData = mixedCatastrophesData.getMetaData();
+        ConstructManager constructManager = mixedCatastrophesData.getRootCatastropheManager().getConstructManager();
 
         List<BlitzardData> blitzardDataList = constructManager.getBlitzardListIsConstructed(metaData.getBlitzardDataList());
         List<LighthouseData> lighthouseDataList = constructManager.getLighthouseListIsConstructed(metaData.getLighthouseDataList());
@@ -48,7 +48,7 @@ public class AspectScoreManager {
 
     public void updateScoreboard(Player player, List<BlitzardData> blitzardDataList, List<LighthouseData> lighthouseDataList, List<ScarecrowData> scarecrowDataList) {
         UUID playerId = player.getUniqueId();
-        PlayerData pcd = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(playerId);
+        PlayerData pcd = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(playerId);
         HashMap<AspectType, Integer> aspects = pcd.getAspects();
 
         int dreamCooldown = pcd.getDreamCooldown();
@@ -90,7 +90,7 @@ public class AspectScoreManager {
             index++;
         }
 
-        ConstructManager constructManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager();
+        ConstructManager constructManager = mixedCatastrophesData.getRootCatastropheManager().getConstructManager();
         BlitzardData blitzardData = constructManager.getStrongestBlitzard(blitzardDataList, player.getLocation());
         LighthouseData lighthouseData = constructManager.getStrongestLighthouse(lighthouseDataList, player.getLocation());
         ScarecrowData scarecrowData = constructManager.getStrongestScarecrow(scarecrowDataList, player.getLocation());
@@ -115,7 +115,7 @@ public class AspectScoreManager {
             index++;
         }
 
-        WeatherCatastropheManager weatherCatastropheManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getWeatherCatastropheManager();
+        WeatherCatastropheManager weatherCatastropheManager = mixedCatastrophesData.getRootCatastropheManager().getWeatherCatastropheManager();
         WeatherCatastropheType activeWeather = weatherCatastropheManager.getActiveWeather();
 
         if (activeWeather != WeatherCatastropheType.Nothing) {

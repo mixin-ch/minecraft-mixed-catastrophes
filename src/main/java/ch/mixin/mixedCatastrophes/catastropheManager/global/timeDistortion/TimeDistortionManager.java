@@ -2,7 +2,7 @@ package ch.mixin.mixedCatastrophes.catastropheManager.global.timeDistortion;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -14,25 +14,25 @@ import java.util.Random;
 public class TimeDistortionManager extends CatastropheManager {
     private int timeDistortionTimer;
 
-    public TimeDistortionManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public TimeDistortionManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
     public void initializeMetaData() {
-        if (metaData.getTimeDistortionTimer() <= 0) {
-            metaData.setTimeDistortionTimer(timeDistortionTimer());
+        if (mixedCatastrophesData.getMetaData().getTimeDistortionTimer() <= 0) {
+            mixedCatastrophesData.getMetaData().setTimeDistortionTimer(timeDistortionTimer());
         }
     }
 
     @Override
     public void updateMetaData() {
-        metaData.setTimeDistortionTimer(timeDistortionTimer);
+        mixedCatastrophesData.getMetaData().setTimeDistortionTimer(timeDistortionTimer);
     }
 
     @Override
     public void initializeCauser() {
-        timeDistortionTimer = metaData.getTimeDistortionTimer();
+        timeDistortionTimer = mixedCatastrophesData.getMetaData().getTimeDistortionTimer();
     }
 
     private int timeDistortionTimer() {
@@ -41,7 +41,7 @@ public class TimeDistortionManager extends CatastropheManager {
 
     @Override
     public void tick() {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().isTimeDistortion())
+        if (!mixedCatastrophesData.getCatastropheSettings().isTimeDistortion())
             return;
         
         timeDistortionTimer--;
@@ -55,11 +55,11 @@ public class TimeDistortionManager extends CatastropheManager {
         timeDistortionTimer = timeDistortionTimer();
         int momentum = (int) Math.round((new Random().nextDouble() * 0.5 + 0.25) * 24000);
         boolean forward = new Random().nextBoolean();
-        List<World> worlds = mixedCatastrophesManagerAccessor.getAffectedWorlds();
+        List<World> worlds = mixedCatastrophesData.getAffectedWorlds();
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             player.playSound(player.getLocation(), Sound.AMBIENT_BASALT_DELTAS_ADDITIONS, 10.0f, 1.0f);
-            mixedCatastrophesManagerAccessor.getEventChangeManager()
+            mixedCatastrophesData.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("Time is shifting.")
                     .withColor(ChatColor.BLUE)
@@ -81,7 +81,7 @@ public class TimeDistortionManager extends CatastropheManager {
         int momentumRemaining = momentum - jumpAmount;
 
         if (momentumRemaining > 0) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
+            mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () ->
                             partialTimeDistortion(worlds, momentumRemaining, forward)
                     , 1);
         }

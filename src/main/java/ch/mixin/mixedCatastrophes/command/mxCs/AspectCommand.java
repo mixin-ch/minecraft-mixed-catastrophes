@@ -2,8 +2,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -16,8 +15,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AspectCommand extends SubCommand {
-    public AspectCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public AspectCommand(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -27,6 +26,11 @@ public class AspectCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
+        if (!plugin.isPluginFlawless()) {
+            sender.sendMessage(ChatColor.RED + "Catastrophes has Problems.");
+            return;
+        }
+
         if (!sender.hasPermission("mixedCatastrophes.aspect")) {
             sender.sendMessage(ChatColor.RED + "You lack Permission.");
             return;
@@ -77,12 +81,12 @@ public class AspectCommand extends SubCommand {
             return;
         }
 
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(aspectType, value - playerData.getAspect(aspectType));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .execute();

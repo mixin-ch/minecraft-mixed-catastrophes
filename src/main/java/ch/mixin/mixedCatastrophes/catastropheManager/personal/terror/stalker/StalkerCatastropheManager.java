@@ -1,11 +1,10 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.StalkerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
@@ -19,8 +18,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class StalkerCatastropheManager extends CatastropheManager {
-    public StalkerCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public StalkerCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -49,10 +48,10 @@ public class StalkerCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, boolean hasScareCrow) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isStalker())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isStalker())
             return;
 
-        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getStalkerTimer();
@@ -86,7 +85,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
 
 
     private void stalkerActions(Player player) {
-        ArrayList<StalkerData> stalkerDatas = metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData().getStalkerDatas();
+        ArrayList<StalkerData> stalkerDatas = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getTerrorData().getStalkerDatas();
         Coordinate3D playerPosition = Coordinate3D.toCoordinate(player.getLocation()).sum(0, 2, 0);
         World world = player.getWorld();
 
@@ -106,7 +105,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
                 stalkerDatas.remove(stalkerData);
                 i--;
 
-                mixedCatastrophesManagerAccessor.getEventChangeManager()
+                mixedCatastrophesData.getEventChangeManager()
                         .eventChange(player)
                         .withEventSound(Sound.AMBIENT_CAVE)
                         .withEventMessage("A Shadow fades away.")
@@ -158,7 +157,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
         int remainingTicks = ticks - 1;
 
         if (remainingTicks > 0) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> moveStalker(fromPositions, toPositions, world, remainingTicks)
+            mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> moveStalker(fromPositions, toPositions, world, remainingTicks)
                     , 1);
         }
     }
@@ -167,7 +166,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
         World world = player.getWorld();
         Coordinate3D coordinate3D = Coordinate3D.toCoordinate(player.getLocation()).sum(Coordinate3D.random().multiply(50));
 
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int hauntingDemise = playerData.getAspect(AspectType.Death_Seeker);
         int terror = playerData.getAspect(AspectType.Terror);
         int modifier = hauntingDemise + terror;
@@ -177,9 +176,9 @@ public class StalkerCatastropheManager extends CatastropheManager {
         int remainingTime = (int) Math.round((60.0 + 0.5 * modifier) / speed);
 
         StalkerData stalkerData = new StalkerData(world.getName(), coordinate3D, speed, remainingTime);
-        metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData().getStalkerDatas().add(stalkerData);
+        mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getTerrorData().getStalkerDatas().add(stalkerData);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.ENTITY_BLAZE_AMBIENT)
                 .withEventMessage("Something is coming for you. RUN!")

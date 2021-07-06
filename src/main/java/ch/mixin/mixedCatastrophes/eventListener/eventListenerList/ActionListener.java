@@ -7,7 +7,7 @@ import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.StarSplinterRemainsData;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,7 +20,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,21 +27,24 @@ import java.util.List;
 import java.util.Random;
 
 public class ActionListener implements Listener {
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
 
-    public ActionListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+    public ActionListener(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
     @EventHandler
     public void openMixIslandDictionary(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
 
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(world))
             return;
 
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -54,11 +56,14 @@ public class ActionListener implements Listener {
         if (!itemStack.getItemMeta().equals(mixIslandDictionary.getItemMeta()))
             return;
 
-        mixedCatastrophesManagerAccessor.getHelpInventoryManager().open(player);
+        mixedCatastrophesData.getHelpInventoryManager().open(player);
     }
 
     @EventHandler
     public void dream(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
 
@@ -68,18 +73,21 @@ public class ActionListener implements Listener {
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(world))
             return;
 
-        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getPersonalCatastropheManager().getDreamManager().performDream(player, event.getClickedBlock());
+        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getDreamManager().performDream(player, event.getClickedBlock());
     }
 
     @EventHandler
     public void rite(BlockPlaceEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
 
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(world))
             return;
 
         if (!Constants.Fires.contains(event.getBlockPlaced().getType()))
@@ -91,11 +99,14 @@ public class ActionListener implements Listener {
         Block blockN1 = LocationN1.getBlock();
         Block blockN2 = LocationN2.getBlock();
 
-        mixedCatastrophesManagerAccessor.getRootCatastropheManager().getPersonalCatastropheManager().getRiteManager().performRite(player, blockN1, blockN2);
+        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getRiteManager().performRite(player, blockN1, blockN2);
     }
 
     @EventHandler
     public void crystalDamage(EntityDamageEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
         Entity entity = event.getEntity();
 
         if (entity.getType() != EntityType.ENDER_CRYSTAL)
@@ -103,16 +114,16 @@ public class ActionListener implements Listener {
 
         World world = entity.getWorld();
 
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(world))
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(world))
             return;
 
         Location location = entity.getLocation();
         StarSplinterType starSplinterType = null;
-        List<StarSplinterRemainsData> starSplinterRemainsDataList = mixedCatastrophesManagerAccessor.getMetaData().getStarSplinterRemainsDataList();
+        List<StarSplinterRemainsData> starSplinterRemainsDataList = mixedCatastrophesData.getMetaData().getStarSplinterRemainsDataList();
 
         for (int i = 0; i < starSplinterRemainsDataList.size(); i++) {
             StarSplinterRemainsData starSplinterRemainsData = starSplinterRemainsDataList.get(i);
-            World remainsWorld = mixedCatastrophesManagerAccessor.getPlugin().getServer().getWorld(starSplinterRemainsData.getWorldName());
+            World remainsWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(starSplinterRemainsData.getWorldName());
 
             if (remainsWorld == null || !remainsWorld.equals(world))
                 continue;

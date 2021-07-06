@@ -7,7 +7,17 @@ public class NatureConspiracyCatastropheSettings {
     private boolean ravenousFood;
     private boolean theHorde;
 
+    public NatureConspiracyCatastropheSettings() {
+    }
+
+    public NatureConspiracyCatastropheSettings(ConfigurationSection configuration) {
+        initialize(configuration);
+    }
+
     public void initialize(ConfigurationSection configuration) {
+        if (configuration == null)
+            return;
+
         collectable = configuration.getBoolean("collectable");
         ravenousFood = configuration.getBoolean("ravenousFood");
         theHorde = configuration.getBoolean("theHorde");

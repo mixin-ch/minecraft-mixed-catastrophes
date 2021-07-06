@@ -4,7 +4,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -17,19 +17,25 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import java.util.HashMap;
 
 public class StatusListener implements Listener {
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
 
-    public StatusListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+    public StatusListener(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
     @EventHandler
     public void join(PlayerJoinEvent event) {
+        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+            return;
+
         Player player = event.getPlayer();
-        RootCatastropheManager rootCatastropheManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager();
+        RootCatastropheManager rootCatastropheManager = mixedCatastrophesData.getRootCatastropheManager();
         rootCatastropheManager.getPersonalCatastropheManager().initializePlayerData(player);
-        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard(player);
-        mixedCatastrophesManagerAccessor.getEventChangeManager().updateAchievementProgress(player);
+        mixedCatastrophesData.getEventChangeManager().updateScoreBoard(player);
+        mixedCatastrophesData.getEventChangeManager().updateAchievementProgress(player);
+
+        if (!mixedCatastrophesData.getMetaData().isActive())
+            return;
 
         if (!event.getPlayer().hasPlayedBefore()) {
             player.getInventory().addItem(HelpInventoryManager.HelpBookItem);
@@ -38,21 +44,33 @@ public class StatusListener implements Listener {
 
     @EventHandler
     public void respawn(PlayerRespawnEvent event) {
+        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+            return;
+
+        if (!mixedCatastrophesData.getMetaData().isActive())
+            return;
+
         Player player = event.getPlayer();
         player.getInventory().addItem(HelpInventoryManager.HelpBookItem);
     }
 
     @EventHandler
     public void death(PlayerDeathEvent event) {
-        Player player = event.getEntity();
-
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
             return;
 
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        if (!mixedCatastrophesData.getMetaData().isActive())
+            return;
+
+        Player player = event.getEntity();
+
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
+            return;
+
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Celestial_Favor) > 0
-                && mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getCelestialFavor().isSaveEssence()) {
+                && mixedCatastrophesData.getCatastropheSettings().getAspect().getCelestialFavor().isSaveEssence()) {
             saveEssence(event);
         } else {
             loseEssence(event);
@@ -61,7 +79,7 @@ public class StatusListener implements Listener {
 
     private void loseEssence(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         playerData.getTerrorData().getStalkerDatas().clear();
         playerData.setDreamCooldown(0);
@@ -72,7 +90,7 @@ public class StatusListener implements Listener {
         changeMap.put(AspectType.Secrets, 100);
         changeMap.put(AspectType.Terror, -(int) Math.floor(0.5 * playerData.getAspect(AspectType.Terror)));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -85,7 +103,7 @@ public class StatusListener implements Listener {
 
     private void saveEssence(PlayerDeathEvent event) {
         Player player = event.getEntity();
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         playerData.getTerrorData().getStalkerDatas().clear();
         playerData.setDreamCooldown(0);
@@ -99,7 +117,7 @@ public class StatusListener implements Listener {
         changeMap.put(AspectType.Celestial_Favor, -1);
         changeMap.put(AspectType.Terror, -(int) Math.floor(0.2 * playerData.getAspect(AspectType.Terror)));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

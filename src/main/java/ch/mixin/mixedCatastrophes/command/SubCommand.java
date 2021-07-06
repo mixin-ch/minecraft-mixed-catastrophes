@@ -1,6 +1,6 @@
 package ch.mixin.mixedCatastrophes.command;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import org.bukkit.command.CommandSender;
 
@@ -8,11 +8,11 @@ import java.util.List;
 
 public abstract class SubCommand {
     protected final MixedCatastrophesPlugin plugin;
-    protected final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    protected final MixedCatastrophesData mixedCatastrophesData;
 
-    public SubCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        plugin = mixedCatastrophesManagerAccessor.getPlugin();
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+    public SubCommand(MixedCatastrophesData mixedCatastrophesData) {
+        plugin = mixedCatastrophesData.getPlugin();
+        this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
     public abstract SubCommand fetchCommand(List<String> arguments);

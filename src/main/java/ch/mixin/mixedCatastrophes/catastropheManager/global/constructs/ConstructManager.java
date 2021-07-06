@@ -2,14 +2,13 @@ package ch.mixin.mixedCatastrophes.catastropheManager.global.constructs;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.*;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,26 +17,26 @@ import java.util.List;
 import java.util.Random;
 
 public class ConstructManager extends CatastropheManager {
-    public ConstructManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
     public void initializeMetaData() {
-        if (metaData.getGreenWellDataList() == null)
-            metaData.setGreenWellDataList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getGreenWellDataList() == null)
+            mixedCatastrophesData.getMetaData().setGreenWellDataList(new ArrayList<>());
 
-        if (metaData.getBlitzardDataList() == null)
-            metaData.setBlitzardDataList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getBlitzardDataList() == null)
+            mixedCatastrophesData.getMetaData().setBlitzardDataList(new ArrayList<>());
 
-        if (metaData.getLighthouseDataList() == null)
-            metaData.setLighthouseDataList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getLighthouseDataList() == null)
+            mixedCatastrophesData.getMetaData().setLighthouseDataList(new ArrayList<>());
 
-        if (metaData.getBlazeReactorList() == null)
-            metaData.setBlazeReactorList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getBlazeReactorList() == null)
+            mixedCatastrophesData.getMetaData().setBlazeReactorList(new ArrayList<>());
 
-        if (metaData.getScarecrowDataList() == null)
-            metaData.setScarecrowDataList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getScarecrowDataList() == null)
+            mixedCatastrophesData.getMetaData().setScarecrowDataList(new ArrayList<>());
     }
 
     @Override
@@ -50,7 +49,7 @@ public class ConstructManager extends CatastropheManager {
 
     @Override
     public void tick() {
-        if (plugin.getServer().getOnlinePlayers().size() == 0)
+        if (mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers().size() == 0)
             return;
 
         tickGreenWell();
@@ -62,10 +61,10 @@ public class ConstructManager extends CatastropheManager {
 
 
     private void tickGreenWell() {
-        List<GreenWellData> greenWellDataList = metaData.getGreenWellDataList();
+        List<GreenWellData> greenWellDataList = mixedCatastrophesData.getMetaData().getGreenWellDataList();
 
         for (GreenWellData greenWellData : greenWellDataList) {
-            World world = plugin.getServer().getWorld(greenWellData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(greenWellData.getWorldName());
 
             if (world == null)
                 return;
@@ -84,7 +83,7 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
 
             if (!Constants.GreenWell.checkConstructed(locationCenter).isConstructed())
                 return;
@@ -159,10 +158,10 @@ public class ConstructManager extends CatastropheManager {
     }
 
     private void tickBlitzard() {
-        List<BlitzardData> blitzardDataList = metaData.getBlitzardDataList();
+        List<BlitzardData> blitzardDataList = mixedCatastrophesData.getMetaData().getBlitzardDataList();
 
         for (BlitzardData blitzardData : blitzardDataList) {
-            World world = plugin.getServer().getWorld(blitzardData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blitzardData.getWorldName());
 
             if (world == null)
                 return;
@@ -179,15 +178,15 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, Math.pow(level, 1.25) * 0.2, 4, 5);
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.SPELL_MOB, particles, world, Math.pow(level, 1.25) * 0.2, 4, 5);
         }
     }
 
     private void tickLighthouse() {
-        List<LighthouseData> lighthouseDataList = metaData.getLighthouseDataList();
+        List<LighthouseData> lighthouseDataList = mixedCatastrophesData.getMetaData().getLighthouseDataList();
 
         for (LighthouseData lighthouseData : lighthouseDataList) {
-            World world = plugin.getServer().getWorld(lighthouseData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
 
             if (world == null)
                 return;
@@ -204,15 +203,15 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center);
             particles.add(center.sum(0, 1, 0));
 
-            mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.LAVA, particles, world, Math.pow(level, 1.1) * 0.25, 4, 5);
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.LAVA, particles, world, Math.pow(level, 1.1) * 0.25, 4, 5);
         }
     }
 
     private void tickBlazeReactor() {
-        List<BlazeReactorData> blazeReactorDataList = metaData.getBlazeReactorList();
+        List<BlazeReactorData> blazeReactorDataList = mixedCatastrophesData.getMetaData().getBlazeReactorList();
 
         for (BlazeReactorData blazeReactorData : blazeReactorDataList) {
-            World world = plugin.getServer().getWorld(blazeReactorData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blazeReactorData.getWorldName());
 
             if (world == null)
                 return;
@@ -237,7 +236,7 @@ public class ConstructManager extends CatastropheManager {
                 particles.add(i, particle.sum(center));
             }
 
-            mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, new Coordinate3D(0, 0.2 + level * 0.02, 0), Math.pow(level, 1.5) * 0.15, 4, 5);
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.SMOKE_LARGE, particles, world, new Coordinate3D(0, 0.2 + level * 0.02, 0), Math.pow(level, 1.5) * 0.15, 4, 5);
 
             if (fuel == 0) {
                 List<Coordinate3D> relativeCauldronList = new ArrayList<>();
@@ -289,10 +288,10 @@ public class ConstructManager extends CatastropheManager {
     }
 
     private void tickScarecrow() {
-        List<ScarecrowData> scarecrowDataList = metaData.getScarecrowDataList();
+        List<ScarecrowData> scarecrowDataList = mixedCatastrophesData.getMetaData().getScarecrowDataList();
 
         for (ScarecrowData scarecrowData : scarecrowDataList) {
-            World world = plugin.getServer().getWorld(scarecrowData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(scarecrowData.getWorldName());
 
             if (world == null)
                 return;
@@ -314,7 +313,7 @@ public class ConstructManager extends CatastropheManager {
             }
 
             int terror = scarecrowData.getCollectedTerror();
-            mixedCatastrophesManagerAccessor.getParticler().spawnParticles(Particle.SOUL, particles, world, new Coordinate3D(0, 0.1 + Math.pow(terror, 0.5) * 0.01, 0), 0.1 + terror * 0.01, 4, 5);
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.SOUL, particles, world, new Coordinate3D(0, 0.1 + Math.pow(terror, 0.5) * 0.01, 0), 0.1 + terror * 0.01, 4, 5);
         }
     }
 
@@ -333,7 +332,7 @@ public class ConstructManager extends CatastropheManager {
         List<BlitzardData> constructDataListIsConstructed = new ArrayList<>();
 
         for (BlitzardData constructData : constructDataList) {
-            World world = plugin.getServer().getWorld(constructData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
@@ -351,7 +350,7 @@ public class ConstructManager extends CatastropheManager {
         List<LighthouseData> constructDataListIsConstructed = new ArrayList<>();
 
         for (LighthouseData constructData : constructDataList) {
-            World world = plugin.getServer().getWorld(constructData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
@@ -369,7 +368,7 @@ public class ConstructManager extends CatastropheManager {
         List<ScarecrowData> constructDataListIsConstructed = new ArrayList<>();
 
         for (ScarecrowData constructData : constructDataList) {
-            World world = plugin.getServer().getWorld(constructData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
@@ -388,7 +387,7 @@ public class ConstructManager extends CatastropheManager {
         double strongestPull = -1;
 
         for (BlitzardData constructData : constructList) {
-            World world = plugin.getServer().getWorld(constructData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
@@ -418,7 +417,7 @@ public class ConstructManager extends CatastropheManager {
         double strongestPull = -1;
 
         for (LighthouseData constructData : constructList) {
-            World world = plugin.getServer().getWorld(constructData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;
@@ -448,7 +447,7 @@ public class ConstructManager extends CatastropheManager {
         double strongestPull = -1;
 
         for (ScarecrowData constructData : constructList) {
-            World world = plugin.getServer().getWorld(constructData.getWorldName());
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
             if (world == null)
                 continue;

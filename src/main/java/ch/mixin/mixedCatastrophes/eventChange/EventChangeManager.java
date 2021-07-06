@@ -9,7 +9,7 @@ import ch.mixin.mixedCatastrophes.eventChange.message.EventMessage;
 import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
 import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.MetaData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
@@ -18,18 +18,17 @@ import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class EventChangeManager {
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
     private final AspectScoreManager aspectScoreManager;
     private final Messager messager;
 
-    public EventChangeManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
-        aspectScoreManager = new AspectScoreManager(mixedCatastrophesManagerAccessor);
+    public EventChangeManager(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
+        aspectScoreManager = new AspectScoreManager(mixedCatastrophesData);
         messager = new Messager();
     }
 
@@ -60,7 +59,7 @@ public class EventChangeManager {
     }
 
     private void aspectChange(Player player, AspectChange aspectChange) {
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         for (AspectType aspectType : aspectChange.getChangeMap().keySet()) {
             playerData.addAspect(aspectType, aspectChange.getChangeMap().get(aspectType));
@@ -71,25 +70,25 @@ public class EventChangeManager {
     }
 
     private void updateAchievementProgress(Player player, HashMap<AspectType, Integer> changeMap) {
-        if (!mixedCatastrophesManagerAccessor.getMixedAchievementsManager().isActive())
+        if (!mixedCatastrophesData.getMixedAchievementsManager().isActive())
             return;
 
-        HashMap<AspectType, Integer> aspects = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspects();
-        mixedCatastrophesManagerAccessor.getMixedAchievementsManager().updateAspectAchievementProgress(player, aspects, changeMap);
+        HashMap<AspectType, Integer> aspects = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getAspects();
+        mixedCatastrophesData.getMixedAchievementsManager().updateAspectAchievementProgress(player, aspects, changeMap);
     }
 
     public void updateAchievementProgress(Player player) {
-        if (!mixedCatastrophesManagerAccessor.getMixedAchievementsManager().isActive())
+        if (!mixedCatastrophesData.getMixedAchievementsManager().isActive())
             return;
 
         updateAchievementProgress(player, new HashMap<>());
     }
 
     public void updateAchievementProgress() {
-        if (!mixedCatastrophesManagerAccessor.getMixedAchievementsManager().isActive())
+        if (!mixedCatastrophesData.getMixedAchievementsManager().isActive())
             return;
 
-        for (Player player : mixedCatastrophesManagerAccessor.getPlugin().getServer().getOnlinePlayers()) {
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             updateAchievementProgress(player);
         }
     }
@@ -123,14 +122,14 @@ public class EventChangeManager {
     }
 
     public void updateScoreBoard() {
-        MetaData metaData = mixedCatastrophesManagerAccessor.getMetaData();
-        ConstructManager constructManager = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager();
+        MetaData metaData = mixedCatastrophesData.getMetaData();
+        ConstructManager constructManager = mixedCatastrophesData.getRootCatastropheManager().getConstructManager();
 
         List<BlitzardData> blitzardDataList = constructManager.getBlitzardListIsConstructed(metaData.getBlitzardDataList());
         List<LighthouseData> lighthouseDataList = constructManager.getLighthouseListIsConstructed(metaData.getLighthouseDataList());
         List<ScarecrowData> scarecrowDataList = constructManager.getScarecrowListIsConstructed(metaData.getScarecrowDataList());
 
-        for (Player player : mixedCatastrophesManagerAccessor.getPlugin().getServer().getOnlinePlayers()) {
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             aspectScoreManager.updateScoreboard(player, blitzardDataList, lighthouseDataList, scarecrowDataList);
         }
     }

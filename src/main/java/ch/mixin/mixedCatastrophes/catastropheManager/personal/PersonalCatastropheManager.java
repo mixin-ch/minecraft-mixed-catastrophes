@@ -5,7 +5,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamManager
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.rite.RiteManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.TerrorCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
 import net.md_5.bungee.api.ChatColor;
@@ -24,23 +24,23 @@ public class PersonalCatastropheManager extends CatastropheManager {
     private final RiteManager riteManager;
     private final DreamManager dreamManager;
 
-    public PersonalCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
-        terrorCatastropheManager = new TerrorCatastropheManager(mixedCatastrophesManagerAccessor);
-        riteManager = new RiteManager(mixedCatastrophesManagerAccessor);
-        dreamManager = new DreamManager(mixedCatastrophesManagerAccessor);
+    public PersonalCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
+        terrorCatastropheManager = new TerrorCatastropheManager(mixedCatastrophesData);
+        riteManager = new RiteManager(mixedCatastrophesData);
+        dreamManager = new DreamManager(mixedCatastrophesData);
     }
 
     @Override
     public void initializeMetaData() {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+        HashMap<UUID, PlayerData> playerDataMap = mixedCatastrophesData.getMetaData().getPlayerDataMap();
 
         if (playerDataMap == null) {
             playerDataMap = new HashMap<>();
-            metaData.setPlayerDataMap(playerDataMap);
+            mixedCatastrophesData.getMetaData().setPlayerDataMap(playerDataMap);
         }
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             if (!playerDataMap.containsKey(player.getUniqueId())) {
                 initializePlayerData(player);
             } else {
@@ -51,7 +51,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
     }
 
     public void initializePlayerData(Player player) {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+        HashMap<UUID, PlayerData> playerDataMap = mixedCatastrophesData.getMetaData().getPlayerDataMap();
         UUID playerId = player.getUniqueId();
         PlayerData playerData = playerDataMap.get(playerId);
 
@@ -76,11 +76,11 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
-        HashMap<UUID, PlayerData> playerDataMap = metaData.getPlayerDataMap();
+        HashMap<UUID, PlayerData> playerDataMap = mixedCatastrophesData.getMetaData().getPlayerDataMap();
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
 
-        for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
-            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
+            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)
                 continue;
@@ -93,13 +93,13 @@ public class PersonalCatastropheManager extends CatastropheManager {
             lighthouseMap.put(lighthouseLocation, lighthouseData.getLevel() * Constants.LighthouseRangeFactor);
         }
 
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
+            if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
                 continue;
 
             if (!playerDataMap.containsKey(player.getUniqueId())) {
                 initializePlayerData(player);
-                mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard(player);
+                mixedCatastrophesData.getEventChangeManager().updateScoreBoard(player);
             }
 
             PlayerData playerData = playerDataMap.get(player.getUniqueId());
@@ -119,7 +119,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 0));
 
-                    mixedCatastrophesManagerAccessor.getEventChangeManager()
+                    mixedCatastrophesData.getEventChangeManager()
                             .eventChange(player)
                             .withEventSound(Sound.ENTITY_BLAZE_AMBIENT)
                             .withEventMessage("The Lighthouse burns the Red Eye in your Mind.")

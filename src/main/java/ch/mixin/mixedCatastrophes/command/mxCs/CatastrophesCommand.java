@@ -1,8 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -10,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CatastrophesCommand extends SubCommand {
-    public CatastrophesCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public CatastrophesCommand(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -21,6 +20,11 @@ public class CatastrophesCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
+        if (!plugin.isPluginFlawless()) {
+            sender.sendMessage(ChatColor.RED + "Catastrophes has Problems.");
+            return;
+        }
+
         if (!sender.hasPermission("mixedCatastrophes.catastrophes")) {
             sender.sendMessage(ChatColor.RED + "You lack Permission.");
             return;
@@ -35,11 +39,13 @@ public class CatastrophesCommand extends SubCommand {
 
         switch (argument) {
             case "activate":
-                mixedCatastrophesManagerAccessor.getRootCatastropheManager().start();
+                mixedCatastrophesData.getMetaData().setActive(true);
+                mixedCatastrophesData.setFullyFunctional(plugin.isPluginFlawless());
                 sender.sendMessage(ChatColor.GREEN + "Catastrophes activated.");
                 break;
             case "deactivate":
-                mixedCatastrophesManagerAccessor.getRootCatastropheManager().stop();
+                mixedCatastrophesData.getMetaData().setActive(false);
+                mixedCatastrophesData.setFullyFunctional(false);
                 sender.sendMessage(ChatColor.GREEN + "Catastrophes deactivated.");
                 break;
             default:

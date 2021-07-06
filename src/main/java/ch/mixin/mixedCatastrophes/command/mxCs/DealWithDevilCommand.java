@@ -3,8 +3,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs;
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -18,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DealWithDevilCommand extends SubCommand {
-    public DealWithDevilCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public DealWithDevilCommand(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -29,7 +28,12 @@ public class DealWithDevilCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
+        if (!plugin.isPluginFlawless()) {
+            sender.sendMessage(ChatColor.RED + "Catastrophes has Problems.");
+            return;
+        }
+
+        if (!mixedCatastrophesData.getMetaData().isActive()) {
             sender.sendMessage(ChatColor.RED + "Catastrophes is inactive.");
             return;
         }
@@ -45,11 +49,11 @@ public class DealWithDevilCommand extends SubCommand {
         }
 
         Player player = (Player) sender;
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int limit = 5 + playerData.getAspect(AspectType.Death_Seeker);
         if (playerData.getAspect(AspectType.Greyhat_Debt) >= limit) {
-            mixedCatastrophesManagerAccessor.getEventChangeManager()
+            mixedCatastrophesData.getEventChangeManager()
                     .eventChange(player)
                     .withEventMessage("You currently must have less than " + limit + " Debt to do this.")
                     .withColor(ChatColor.WHITE)
@@ -68,7 +72,7 @@ public class DealWithDevilCommand extends SubCommand {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Greyhat_Debt, 1);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

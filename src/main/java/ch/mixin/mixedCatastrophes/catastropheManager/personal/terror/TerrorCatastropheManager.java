@@ -8,7 +8,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker.Sta
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
@@ -29,11 +29,11 @@ public class TerrorCatastropheManager extends CatastropheManager {
     private final StalkerCatastropheManager stalkerCatastropheManager;
     private final ParanoiaCatastropheManager paranoiaCatastropheManager;
 
-    public TerrorCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
-        assaultCatastropheManager = new AssaultCatastropheManager(mixedCatastrophesManagerAccessor);
-        stalkerCatastropheManager = new StalkerCatastropheManager(mixedCatastrophesManagerAccessor);
-        paranoiaCatastropheManager = new ParanoiaCatastropheManager(mixedCatastrophesManagerAccessor);
+    public TerrorCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
+        assaultCatastropheManager = new AssaultCatastropheManager(mixedCatastrophesData);
+        stalkerCatastropheManager = new StalkerCatastropheManager(mixedCatastrophesData);
+        paranoiaCatastropheManager = new ParanoiaCatastropheManager(mixedCatastrophesData);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class TerrorCatastropheManager extends CatastropheManager {
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
         List<ScarecrowData> scarecrowList = getActiveScarecrowList();
 
-        for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
-            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
+            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)
                 continue;
@@ -92,8 +92,8 @@ public class TerrorCatastropheManager extends CatastropheManager {
         }
 
         playerLoop:
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
+            if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
                 continue;
 
             World world = player.getWorld();
@@ -109,12 +109,12 @@ public class TerrorCatastropheManager extends CatastropheManager {
                 continue playerLoop;
             }
 
-            TerrorData terrorData = metaData.getPlayerDataMap().get(player.getUniqueId()).getTerrorData();
-            ScarecrowData strongestScarecrow = mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
+            TerrorData terrorData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getTerrorData();
+            ScarecrowData strongestScarecrow = mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
 
 
-            if (mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isWhispers()) {
+            if (mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isWhispers()) {
                 int timer = terrorData.getTerrorTimer();
                 timer--;
 
@@ -141,11 +141,11 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     public void triggerHorrificWhispers(Player player) {
-        executeHorrificWhispers(player, mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(getActiveScarecrowList(), player.getLocation()));
+        executeHorrificWhispers(player, mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(getActiveScarecrowList(), player.getLocation()));
     }
 
     private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData) {
-        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int terrorPlus = 8 + new Random().nextInt(4 + 1);
         int secretsPlus = 20 + playerData.getAspect(AspectType.Terror);
@@ -173,7 +173,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
         changeMap.put(AspectType.Terror, terrorPlus);
         changeMap.put(AspectType.Secrets, secretsPlus);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -187,10 +187,10 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     private void showHint(Player player) {
-        ArrayList<String> hintList = new ArrayList<>(plugin.getConfig().getStringList("hintList"));
+        ArrayList<String> hintList = new ArrayList<>(mixedCatastrophesData.getPlugin().getConfig().getStringList("hintList"));
         String hint = hintList.get(new Random().nextInt(hintList.size()));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("They Whisper: " + hint)
@@ -200,7 +200,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     private List<ScarecrowData> getActiveScarecrowList() {
-        return mixedCatastrophesManagerAccessor.getRootCatastropheManager().getConstructManager().getScarecrowListIsConstructed(metaData.getScarecrowDataList());
+        return mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getScarecrowListIsConstructed(mixedCatastrophesData.getMetaData().getScarecrowDataList());
     }
 
     public AssaultCatastropheManager getAssaultCatastropheManager() {

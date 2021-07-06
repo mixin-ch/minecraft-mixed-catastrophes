@@ -3,7 +3,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs.terror;
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.stalker.StalkerCauseCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.stalker.StalkerClearCommand;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -15,11 +15,11 @@ import java.util.List;
 public class StalkerCommand extends SubCommand {
     private final HashMap<String, SubCommand> subCommandMap;
 
-    public StalkerCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public StalkerCommand(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
         subCommandMap = new HashMap<>();
-        subCommandMap.put("cause", new StalkerCauseCommand(mixedCatastrophesManagerAccessor));
-        subCommandMap.put("clear", new StalkerClearCommand(mixedCatastrophesManagerAccessor));
+        subCommandMap.put("cause", new StalkerCauseCommand(mixedCatastrophesData));
+        subCommandMap.put("clear", new StalkerClearCommand(mixedCatastrophesData));
     }
 
     @Override

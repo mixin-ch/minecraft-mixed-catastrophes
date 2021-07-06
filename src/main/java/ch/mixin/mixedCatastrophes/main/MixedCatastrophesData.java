@@ -11,8 +11,9 @@ import org.bukkit.World;
 
 import java.util.List;
 
-public class MixedCatastrophesManagerAccessor {
+public class MixedCatastrophesData {
     private final MixedCatastrophesPlugin plugin;
+    private boolean fullyFunctional;
     private MetaData metaData;
     private List<World> affectedWorlds;
     private CatastropheSettings catastropheSettings;
@@ -22,12 +23,20 @@ public class MixedCatastrophesManagerAccessor {
     private Particler particler;
     private MixedAchievementsManager mixedAchievementsManager;
 
-    public MixedCatastrophesManagerAccessor(MixedCatastrophesPlugin plugin) {
+    public MixedCatastrophesData(MixedCatastrophesPlugin plugin) {
         this.plugin = plugin;
     }
 
     public MixedCatastrophesPlugin getPlugin() {
         return plugin;
+    }
+
+    public boolean isFullyFunctional() {
+        return fullyFunctional;
+    }
+
+    public void setFullyFunctional(boolean fullyFunctional) {
+        this.fullyFunctional = fullyFunctional;
     }
 
     public MetaData getMetaData() {

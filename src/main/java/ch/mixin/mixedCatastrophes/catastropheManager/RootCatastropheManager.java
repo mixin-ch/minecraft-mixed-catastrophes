@@ -5,16 +5,14 @@ import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSpl
 import ch.mixin.mixedCatastrophes.catastropheManager.global.timeDistortion.TimeDistortionManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.PersonalCatastropheManager;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.MetaData;
 
 public class RootCatastropheManager {
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
     private final MixedCatastrophesPlugin plugin;
     private final MetaData metaData;
-
-    private boolean started = false;
 
     private final TimeDistortionManager timeDistortionManager;
     private final WeatherCatastropheManager weatherCatastropheManager;
@@ -25,15 +23,15 @@ public class RootCatastropheManager {
     private final int metaDataSaveDuration = 5 * 60;
     private int metaDataSaveTimer;
 
-    public RootCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
-        plugin = mixedCatastrophesManagerAccessor.getPlugin();
-        metaData = mixedCatastrophesManagerAccessor.getMetaData();
-        timeDistortionManager = new TimeDistortionManager(mixedCatastrophesManagerAccessor);
-        weatherCatastropheManager = new WeatherCatastropheManager(mixedCatastrophesManagerAccessor);
-        starSplinterCatastropheManager = new StarSplinterCatastropheManager(mixedCatastrophesManagerAccessor);
-        constructManager = new ConstructManager(mixedCatastrophesManagerAccessor);
-        personalCatastropheManager = new PersonalCatastropheManager(mixedCatastrophesManagerAccessor);
+    public RootCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
+        plugin = mixedCatastrophesData.getPlugin();
+        metaData = mixedCatastrophesData.getMetaData();
+        timeDistortionManager = new TimeDistortionManager(mixedCatastrophesData);
+        weatherCatastropheManager = new WeatherCatastropheManager(mixedCatastrophesData);
+        starSplinterCatastropheManager = new StarSplinterCatastropheManager(mixedCatastrophesData);
+        constructManager = new ConstructManager(mixedCatastrophesData);
+        personalCatastropheManager = new PersonalCatastropheManager(mixedCatastrophesData);
         metaDataSaveTimer = 0;
         initializeMetaData();
         initializeCauser();
@@ -55,43 +53,17 @@ public class RootCatastropheManager {
         personalCatastropheManager.initializeCauser();
     }
 
-    public void start() {
-        if (!started) {
-            started = true;
-            System.out.println("Catastrophes started.");
-            tickTrigger();
-            metaData.setActive(true);
-        }
-    }
-
-    public void stop() {
-        started = false;
-        System.out.println("Catastrophes stopped.");
-        metaData.setActive(false);
-        metaData.save();
-    }
-
-    private void tickTrigger() {
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, this::tick
-                , 20);
-    }
-
-    private void tick() {
-        if (!started)
-            return;
-
+    public void tick() {
         timeDistortionManager.tick();
         weatherCatastropheManager.tick();
         starSplinterCatastropheManager.tick();
         constructManager.tick();
         personalCatastropheManager.tick();
-        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard();
 
-        save();
-        tickTrigger();
+        update();
     }
 
-    private void save() {
+    private void update() {
         timeDistortionManager.updateMetaData();
         weatherCatastropheManager.updateMetaData();
         starSplinterCatastropheManager.updateMetaData();

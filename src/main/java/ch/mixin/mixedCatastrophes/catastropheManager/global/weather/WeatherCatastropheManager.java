@@ -5,7 +5,7 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
 import net.md_5.bungee.api.ChatColor;
@@ -38,28 +38,28 @@ public class WeatherCatastropheManager extends CatastropheManager {
     private int weatherTimer;
     private WeatherCatastropheType activeWeather;
 
-    public WeatherCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public WeatherCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
     public void initializeMetaData() {
-        if (metaData.getWeatherTimer() <= 0) {
-            metaData.setWeatherCatastropheType(WeatherCatastropheType.Nothing);
-            metaData.setWeatherTimer(weatherTimer(WeatherCatastropheType.Nothing));
+        if (mixedCatastrophesData.getMetaData().getWeatherTimer() <= 0) {
+            mixedCatastrophesData.getMetaData().setWeatherCatastropheType(WeatherCatastropheType.Nothing);
+            mixedCatastrophesData.getMetaData().setWeatherTimer(weatherTimer(WeatherCatastropheType.Nothing));
         }
     }
 
     @Override
     public void updateMetaData() {
-        metaData.setWeatherTimer(weatherTimer);
-        metaData.setWeatherCatastropheType(activeWeather);
+        mixedCatastrophesData.getMetaData().setWeatherTimer(weatherTimer);
+        mixedCatastrophesData.getMetaData().setWeatherCatastropheType(activeWeather);
     }
 
     @Override
     public void initializeCauser() {
-        weatherTimer = metaData.getWeatherTimer();
-        activeWeather = metaData.getWeatherCatastropheType();
+        weatherTimer = mixedCatastrophesData.getMetaData().getWeatherTimer();
+        activeWeather = mixedCatastrophesData.getMetaData().getWeatherCatastropheType();
     }
 
     private int weatherTimer(WeatherCatastropheType weatherCatastropheType) {
@@ -89,7 +89,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
             WeatherCatastropheType newWeather;
 
             if (activeWeather == WeatherCatastropheType.Nothing) {
-                HashMap<WeatherCatastropheType, Boolean> weatherSettings = mixedCatastrophesManagerAccessor.getCatastropheSettings().getWeather();
+                HashMap<WeatherCatastropheType, Boolean> weatherSettings = mixedCatastrophesData.getCatastropheSettings().getWeather();
                 newWeather = Functions.getRandomWithWeights(catastropheWeights);
 
                 while (newWeather != WeatherCatastropheType.Nothing && !weatherSettings.get(newWeather)) {
@@ -214,8 +214,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void playEffect(Sound sound, String message, ChatColor chatColor) {
-        for (Player player : plugin.getServer().getOnlinePlayers()) {
-            mixedCatastrophesManagerAccessor.getEventChangeManager()
+        for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
+            mixedCatastrophesData.getEventChangeManager()
                     .eventChange(player)
                     .withEventSound(sound)
                     .withEventMessage(message)
@@ -249,7 +249,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void particleChain(Particle particle, int ticks) {
-        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             ArrayList<Location> openLocations = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -269,13 +269,13 @@ public class WeatherCatastropheManager extends CatastropheManager {
         int remainingTicks = ticks - 1;
 
         if (remainingTicks > 0) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> particleChain(particle, remainingTicks)
+            mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> particleChain(particle, remainingTicks)
                     , 5);
         }
     }
 
     private void enforceRadiantSky() {
-        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -313,12 +313,12 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void enforceThunderStorm() {
-        HashMap<UUID, PlayerData> pcm = metaData.getPlayerDataMap();
+        HashMap<UUID, PlayerData> pcm = mixedCatastrophesData.getMetaData().getPlayerDataMap();
         ArrayList<Location> targets = new ArrayList<>();
         HashMap<Location, Integer> blitzardMap = new HashMap<>();
 
-        for (BlitzardData blitzardData : metaData.getBlitzardDataList()) {
-            World world = plugin.getServer().getWorld(blitzardData.getWorldName());
+        for (BlitzardData blitzardData : mixedCatastrophesData.getMetaData().getBlitzardDataList()) {
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blitzardData.getWorldName());
 
             if (world == null)
                 continue;
@@ -331,7 +331,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
             blitzardMap.put(location, blitzardData.getLevel() * Constants.BlitzardRangeFactor);
         }
 
-        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -406,13 +406,13 @@ public class WeatherCatastropheManager extends CatastropheManager {
         int remainingTicks = ticks - 1;
 
         if (remainingTicks > 0) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> lightningChain(targets, remainingTicks)
+            mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> lightningChain(targets, remainingTicks)
                     , 5);
         }
     }
 
     private void enforceSearingCold() {
-        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -517,7 +517,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void enforceGravityLoss() {
-        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             for (Player player : world.getPlayers()) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 2 * 20, 2));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 12 * 20, 0));
@@ -528,7 +528,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
     private void enforceCatsAndDogs() {
         ArrayList<Location> targets = new ArrayList<>();
 
-        for (World world : mixedCatastrophesManagerAccessor.getAffectedWorlds()) {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
@@ -570,7 +570,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
         int remainingTicks = ticks - 1;
 
         if (remainingTicks > 0) {
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> catsAndDogsChain(targets, remainingTicks)
+            mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> catsAndDogsChain(targets, remainingTicks)
                     , 5);
         }
     }

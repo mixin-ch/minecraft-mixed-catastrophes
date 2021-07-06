@@ -1,6 +1,5 @@
 package ch.mixin.mixedCatastrophes.main;
 
-import ch.mixin.islandgenerator.main.IslandGeneratorPlugin;
 import ch.mixin.mixedAchievements.main.MixedAchievementsPlugin;
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheSettings.CatastropheSettings;
@@ -30,10 +29,9 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     public static String METADATA_FILE_PATH;
     public static File METADATA_FILE;
 
-    public static IslandGeneratorPlugin IslandGeneratorPlugin;
-    public static boolean UseIslandGeneratorPlugin;
     public static MixedAchievementsPlugin MixedAchievementsPlugin;
     public static boolean UseMixedAchievementsPlugin;
+    public static boolean SetupMixedAchievementsPlugin;
 
     static {
         String urlPath = MixedCatastrophesPlugin.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -49,39 +47,56 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     public boolean pluginFlawless;
-    MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    MixedCatastrophesData mixedCatastrophesData;
 
     @Override
     public void onEnable() {
         PLUGIN = this;
         PLUGIN_NAME = getDescription().getName();
         System.out.println(PLUGIN_NAME + " enabled");
-        loadConfig();
-        reload();
+        setup();
+        load();
         start();
     }
 
     @Override
     public void onDisable() {
         System.out.println(PLUGIN_NAME + " disabled");
-        mixedCatastrophesManagerAccessor.getMetaData().save();
+        mixedCatastrophesData.getMetaData().save();
+    }
+
+    private void setup() {
+        mixedCatastrophesData = new MixedCatastrophesData(this);
+
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+        setupMetaData();
+
+        mixedCatastrophesData.setAffectedWorlds(new ArrayList<>());
+        mixedCatastrophesData.setCatastropheSettings(new CatastropheSettings(getConfig()));
+
+        mixedCatastrophesData.setEventChangeManager(new EventChangeManager(mixedCatastrophesData));
+        mixedCatastrophesData.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesData));
+        mixedCatastrophesData.setHelpInventoryManager(new HelpInventoryManager(this));
+        mixedCatastrophesData.setParticler(new Particler(this));
+
+        CommandInitializer.setupCommands(mixedCatastrophesData);
+        EventListenerInitializer.setupEventListener(mixedCatastrophesData);
+
+        mixedCatastrophesData.getMetaData().save();
     }
 
     public void reload() {
+        mixedCatastrophesData.getMetaData().save();
+        load();
+    }
+
+    private void load() {
         super.reloadConfig();
-        initialize();
-        mixedCatastrophesManagerAccessor.getEventChangeManager().updateScoreBoard();
-    }
+        loadMetaData();
+        loadDependentPlugins();
 
-    private void loadConfig() {
-        getConfig().options().copyDefaults(true);
-        saveConfig();
-    }
-
-    private void initialize() {
-        mixedCatastrophesManagerAccessor = new MixedCatastrophesManagerAccessor(this);
-        initializeMetaData();
-        initializeDependentPlugins();
+        mixedCatastrophesData.getCatastropheSettings().initialize(getConfig());
 
         List<World> affectedWorlds = new ArrayList<>();
 
@@ -92,19 +107,10 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
             }
         }
 
-        mixedCatastrophesManagerAccessor.setAffectedWorlds(affectedWorlds);
-        mixedCatastrophesManagerAccessor.setCatastropheSettings(new CatastropheSettings(getConfig()));
-
-        mixedCatastrophesManagerAccessor.setEventChangeManager(new EventChangeManager(mixedCatastrophesManagerAccessor));
-        mixedCatastrophesManagerAccessor.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesManagerAccessor));
-        mixedCatastrophesManagerAccessor.setHelpInventoryManager(new HelpInventoryManager(this));
-        mixedCatastrophesManagerAccessor.setParticler(new Particler(this));
-
-        CommandInitializer.setupCommands(mixedCatastrophesManagerAccessor);
-        EventListenerInitializer.setupEventListener(mixedCatastrophesManagerAccessor);
+        mixedCatastrophesData.setAffectedWorlds(affectedWorlds);
     }
 
-    private void initializeMetaData() {
+    private void setupMetaData() {
         METADATA_DIRECTORY_PATH = ROOT_DIRECTORY_PATH + "/" + PLUGIN_NAME;
         final File folder = new File(METADATA_DIRECTORY_PATH);
         if (!folder.exists() && !folder.mkdirs())
@@ -120,6 +126,10 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
             }
         }
 
+        loadMetaData();
+    }
+
+    private void loadMetaData() {
         String jsonString = String.join("\n", readFile(METADATA_FILE));
         MetaData metaData;
         if (jsonString.equals("")) {
@@ -128,44 +138,42 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
             metaData = new Gson().fromJson(jsonString, MetaData.class);
         }
 
-        mixedCatastrophesManagerAccessor.setMetaData(metaData);
+        mixedCatastrophesData.setMetaData(metaData);
     }
 
-    private void initializeDependentPlugins() {
-        IslandGeneratorPlugin = (IslandGeneratorPlugin) Bukkit.getServer().getPluginManager().getPlugin("IslandGenerator");
-        UseIslandGeneratorPlugin = IslandGeneratorPlugin != null;
-        System.out.println("IslandGeneratorPlugin: " + UseIslandGeneratorPlugin);
-
+    private void loadDependentPlugins() {
         MixedAchievementsPlugin = (MixedAchievementsPlugin) Bukkit.getServer().getPluginManager().getPlugin("MixedAchievements");
         UseMixedAchievementsPlugin = MixedAchievementsPlugin != null;
         System.out.println("MixedAchievementsPlugin: " + UseMixedAchievementsPlugin);
-        mixedCatastrophesManagerAccessor.setMixedAchievementsManager(new MixedAchievementsManager());
-
-        if (UseMixedAchievementsPlugin) {
-            getServer().getScheduler().scheduleSyncDelayedTask(this
-                    , this::tickMixedAchievementsPlugin
-                    , 20);
-        }
-
-    }
-
-    private void tickMixedAchievementsPlugin() {
-        if (MixedAchievementsPlugin.isActive()) {
-            mixedCatastrophesManagerAccessor.getMixedAchievementsManager().initializeAchievements();
-            mixedCatastrophesManagerAccessor.getEventChangeManager().updateAchievementProgress();
-        } else {
-            getServer().getScheduler().scheduleSyncDelayedTask(this
-                    , this::tickMixedAchievementsPlugin
-                    , 20);
-        }
+        mixedCatastrophesData.setMixedAchievementsManager(new MixedAchievementsManager());
     }
 
     private void start() {
-        if (mixedCatastrophesManagerAccessor.getMetaData().isActive()) {
-            mixedCatastrophesManagerAccessor.getRootCatastropheManager().start();
+        pluginFlawless = true;
+        mixedCatastrophesData.setFullyFunctional(mixedCatastrophesData.getMetaData().isActive());
+
+        tick();
+    }
+
+    private void tickTrigger() {
+        getServer().getScheduler().scheduleSyncDelayedTask(this, this::tick
+                , 20);
+    }
+
+    private void tick() {
+        if (UseMixedAchievementsPlugin && MixedAchievementsPlugin.isActive() && !SetupMixedAchievementsPlugin) {
+            SetupMixedAchievementsPlugin = true;
+            mixedCatastrophesData.getMixedAchievementsManager().initializeAchievements();
+            mixedCatastrophesData.getEventChangeManager().updateAchievementProgress();
         }
 
-        pluginFlawless = true;
+        if (mixedCatastrophesData.getMetaData().isActive()) {
+            mixedCatastrophesData.getRootCatastropheManager().tick();
+        }
+
+        mixedCatastrophesData.getEventChangeManager().updateScoreBoard();
+
+        tickTrigger();
     }
 
     public static ArrayList<String> readFile(File file) {

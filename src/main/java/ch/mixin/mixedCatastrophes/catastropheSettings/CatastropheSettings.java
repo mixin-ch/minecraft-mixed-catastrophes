@@ -13,6 +13,12 @@ public class CatastropheSettings {
     private boolean starSplinter;
     private AspectCatastropheSettings aspect = new AspectCatastropheSettings();
 
+    public CatastropheSettings() {
+        for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
+            weather.put(weatherType, false);
+        }
+    }
+
     public CatastropheSettings(ConfigurationSection configuration) {
         initialize(configuration);
     }
@@ -26,6 +32,7 @@ public class CatastropheSettings {
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
 
+        weather = new HashMap<>();
         ConfigurationSection weatherSection = configuration.getConfigurationSection("weather");
 
         for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
@@ -39,10 +46,7 @@ public class CatastropheSettings {
         }
 
         ConfigurationSection aspectSection = configuration.getConfigurationSection("aspect");
-
-        if (aspectSection != null) {
-            aspect.initialize(aspectSection);
-        }
+        aspect = new AspectCatastropheSettings(aspectSection);
     }
 
     public boolean isTimeDistortion() {

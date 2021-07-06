@@ -1,17 +1,14 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -128,8 +125,8 @@ public class AssaultCatastropheManager extends CatastropheManager {
         ), 1.0);
     }
 
-    public AssaultCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public AssaultCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -158,10 +155,10 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, boolean hasScareCrow) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isAssault())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isAssault())
             return;
 
-        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getAssaultTimer();
@@ -191,7 +188,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     public void causeAssault(Player player) {
-        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         World world = player.getWorld();
         Location mainPlayerLocation = player.getLocation();
@@ -228,8 +225,8 @@ public class AssaultCatastropheManager extends CatastropheManager {
 
         HashMap<Location, Integer> lighthouseMap = new HashMap<>();
 
-        for (LighthouseData lighthouseData : metaData.getLighthouseDataList()) {
-            World lightHouseWorld = plugin.getServer().getWorld(lighthouseData.getWorldName());
+        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
+            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
 
             if (lightHouseWorld == null)
                 continue;
@@ -282,7 +279,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             mob.setTarget(player);
         }
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage(assaultPremise.getMessage())

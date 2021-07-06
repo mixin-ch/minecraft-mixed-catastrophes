@@ -6,7 +6,17 @@ public class CelestialFavorCatastropheSettings {
     private boolean saveEssence;
     private boolean starMercy;
 
+    public CelestialFavorCatastropheSettings() {
+    }
+
+    public CelestialFavorCatastropheSettings(ConfigurationSection configuration) {
+        initialize(configuration);
+    }
+
     public void initialize(ConfigurationSection configuration) {
+        if (configuration == null)
+            return;
+
         saveEssence = configuration.getBoolean("saveEssence");
         starMercy = configuration.getBoolean("starMercy");
     }

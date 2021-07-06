@@ -6,7 +6,17 @@ public class MisfortuneCatastropheSettings {
     private boolean collectable;
     private boolean missAttack;
 
+    public MisfortuneCatastropheSettings() {
+    }
+
+    public MisfortuneCatastropheSettings(ConfigurationSection configuration) {
+        initialize(configuration);
+    }
+
     public void initialize(ConfigurationSection configuration) {
+        if (configuration == null)
+            return;
+
         collectable = configuration.getBoolean("collectable");
         missAttack = configuration.getBoolean("missAttack");
     }

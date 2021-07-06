@@ -2,8 +2,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Animals;
@@ -19,17 +18,20 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class MisdeedListener implements Listener {
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
 
-    public MisdeedListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+    public MisdeedListener(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
     @EventHandler
     public void harvestBlock(BlockBreakEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
         Player player = event.getPlayer();
 
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
             return;
 
         Material material = event.getBlock().getType();
@@ -44,7 +46,7 @@ public class MisdeedListener implements Listener {
     }
 
     private void breakWood(Player player) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
             return;
 
         if (new Random().nextDouble() >= 0.02)
@@ -53,7 +55,7 @@ public class MisdeedListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Nature_Conspiracy, 1);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -65,7 +67,7 @@ public class MisdeedListener implements Listener {
     }
 
     private void breakMirror(Player player) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
             return;
 
         if (new Random().nextDouble() >= 0.05)
@@ -74,7 +76,7 @@ public class MisdeedListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Misfortune, 7);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -86,7 +88,7 @@ public class MisdeedListener implements Listener {
     }
 
     private void breakStone(Player player) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
             return;
 
         if (new Random().nextDouble() >= 0.005)
@@ -95,7 +97,7 @@ public class MisdeedListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Misfortune, 1);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
@@ -108,7 +110,10 @@ public class MisdeedListener implements Listener {
 
     @EventHandler
     public void killAnimal(EntityDeathEvent event) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getNatureConspiracy().isCollectable())
             return;
 
         LivingEntity livingEntity = event.getEntity();
@@ -127,7 +132,7 @@ public class MisdeedListener implements Listener {
         if (player == null)
             return;
 
-        if (!mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(player.getWorld()))
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
             return;
 
         if (new Random().nextDouble() >= 0.05)
@@ -136,7 +141,7 @@ public class MisdeedListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Nature_Conspiracy, 1);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

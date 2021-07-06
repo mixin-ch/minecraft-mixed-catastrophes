@@ -1,8 +1,7 @@
 package ch.mixin.mixedCatastrophes.command.mxCs;
 
 import ch.mixin.mixedCatastrophes.command.SubCommand;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelpCommand extends SubCommand {
-    public HelpCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public HelpCommand(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -22,6 +21,11 @@ public class HelpCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
+        if (!plugin.isPluginFlawless()) {
+            sender.sendMessage(ChatColor.RED + "Catastrophes has Problems.");
+            return;
+        }
+
         if (arguments.size() != 0) {
             sender.sendMessage(ChatColor.RED + "Invalid Argument Number.");
             return;
@@ -33,7 +37,7 @@ public class HelpCommand extends SubCommand {
         }
 
         Player player = (Player) sender;
-        mixedCatastrophesManagerAccessor.getHelpInventoryManager().open(player);
+        mixedCatastrophesData.getHelpInventoryManager().open(player);
         sender.sendMessage(ChatColor.GREEN + "Successfully Opened Help.");
     }
 

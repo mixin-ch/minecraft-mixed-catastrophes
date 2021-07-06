@@ -4,43 +4,41 @@ import ch.mixin.mixedCatastrophes.catastropheSettings.aspect.*;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class AspectCatastropheSettings {
-    private TerrorCatastropheSettings terror;
-    private MisfortuneCatastropheSettings misfortune;
-    private NatureConspiracyCatastropheSettings natureConspiracy;
-    private CelestialFavorCatastropheSettings celestialFavor;
-    private GreyhatDebtCatastropheSettings greyhatDebt;
-    private NobilityCatastropheSettings nobility;
+    private TerrorCatastropheSettings terror = new TerrorCatastropheSettings();
+    private MisfortuneCatastropheSettings misfortune = new MisfortuneCatastropheSettings();
+    private NatureConspiracyCatastropheSettings natureConspiracy = new NatureConspiracyCatastropheSettings();
+    private CelestialFavorCatastropheSettings celestialFavor = new CelestialFavorCatastropheSettings();
+    private GreyhatDebtCatastropheSettings greyhatDebt = new GreyhatDebtCatastropheSettings();
+    private NobilityCatastropheSettings nobility = new NobilityCatastropheSettings();
+
+    public AspectCatastropheSettings() {
+    }
+
+    public AspectCatastropheSettings(ConfigurationSection configuration) {
+        initialize(configuration);
+    }
 
     public void initialize(ConfigurationSection configuration) {
+        if (configuration == null)
+            return;
+
         ConfigurationSection terrorSection = configuration.getConfigurationSection("terror");
-        if (terrorSection != null) {
-            terror.initialize(terrorSection);
-        }
+        terror = new TerrorCatastropheSettings(terrorSection);
 
         ConfigurationSection misfortuneSection = configuration.getConfigurationSection("misfortune");
-        if (misfortuneSection != null) {
-            misfortune.initialize(misfortuneSection);
-        }
+        misfortune = new MisfortuneCatastropheSettings(terrorSection);
 
         ConfigurationSection natureConspiracySection = configuration.getConfigurationSection("natureConspiracy");
-        if (natureConspiracySection != null) {
-            natureConspiracy.initialize(natureConspiracySection);
-        }
+        natureConspiracy = new NatureConspiracyCatastropheSettings(terrorSection);
 
         ConfigurationSection celestialFavorSection = configuration.getConfigurationSection("celestialFavor");
-        if (celestialFavorSection != null) {
-            celestialFavor.initialize(celestialFavorSection);
-        }
+        celestialFavor = new CelestialFavorCatastropheSettings(terrorSection);
 
         ConfigurationSection greyhatDebtSection = configuration.getConfigurationSection("greyhatDebt");
-        if (greyhatDebtSection != null) {
-            greyhatDebt.initialize(greyhatDebtSection);
-        }
+        greyhatDebt = new GreyhatDebtCatastropheSettings(terrorSection);
 
         ConfigurationSection nobilitySection = configuration.getConfigurationSection("nobility");
-        if (nobilitySection != null) {
-            nobility.initialize(nobilitySection);
-        }
+        nobility = new NobilityCatastropheSettings(terrorSection);
     }
 
     public TerrorCatastropheSettings getTerror() {

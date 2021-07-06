@@ -1,13 +1,11 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.TerrorData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
-import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -39,8 +37,8 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         soundList.add(Sound.ENTITY_ARROW_SHOOT);
     }
 
-    public ParanoiaCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public ParanoiaCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
@@ -69,10 +67,10 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, boolean hasScareCrow) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getTerror().isParanoia())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isParanoia())
             return;
 
-        PlayerData playerData = metaData.getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getParanoiaTimer();
@@ -155,7 +153,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void insomnia(Player player) {
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int time = 3 * 60;
 
@@ -163,7 +161,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
             playerData.setDreamCooldown(time);
         }
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Nightmares keep you from sleeping.")
@@ -174,7 +172,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void weakness(Player player) {
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 2 * 60;
@@ -184,7 +182,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, amplitude));
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, amplitude));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Dread pulls on your Muscles.")
@@ -195,7 +193,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void vulnerability(Player player) {
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 2 * 60;
@@ -204,7 +202,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
         player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("You feel so vulnerable.")
@@ -215,7 +213,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void paralysis(Player player) {
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = 1 + (int) Math.round(Math.pow(0.05 * extent, 0.5));
@@ -227,7 +225,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, 10));
         player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, time * 20, 0));
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("An icy Touch paralyzes you.")

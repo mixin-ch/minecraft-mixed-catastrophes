@@ -24,10 +24,6 @@ public class MetaData {
     private List<BlazeReactorData> blazeReactorDataList;
     private List<ScarecrowData> scarecrowDataList;
 
-    public MetaData() {
-        save();
-    }
-
     public void save() {
         MixedCatastrophesPlugin.writeFile(MixedCatastrophesPlugin.METADATA_FILE, new Gson().toJson(this));
     }

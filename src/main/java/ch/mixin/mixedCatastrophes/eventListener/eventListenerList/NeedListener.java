@@ -1,9 +1,8 @@
 package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -16,15 +15,18 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.HashMap;
 
 public class NeedListener implements Listener {
-    private final MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor;
+    private final MixedCatastrophesData mixedCatastrophesData;
 
-    public NeedListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        this.mixedCatastrophesManagerAccessor = mixedCatastrophesManagerAccessor;
+    public NeedListener(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
     @EventHandler
     public void entityDamageEvent(EntityDamageEvent event) {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().getAspect().getCelestialFavor().isStarMercy())
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getCelestialFavor().isStarMercy())
             return;
 
         if (!(event.getEntity() instanceof Player))
@@ -40,7 +42,7 @@ public class NeedListener implements Listener {
         if (location.getY() >= 0)
             return;
 
-        PlayerData playerData = mixedCatastrophesManagerAccessor.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Celestial_Favor) <= 0)
             return;
@@ -54,7 +56,7 @@ public class NeedListener implements Listener {
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Celestial_Favor, -1);
 
-        mixedCatastrophesManagerAccessor.getEventChangeManager()
+        mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)

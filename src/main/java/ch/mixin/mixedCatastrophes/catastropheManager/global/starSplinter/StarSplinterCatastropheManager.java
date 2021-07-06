@@ -4,7 +4,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.StarSplinterRemainsData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
@@ -91,17 +91,17 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
     private int starSplinterTimer;
 
-    public StarSplinterCatastropheManager(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public StarSplinterCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
     }
 
     @Override
     public void initializeMetaData() {
-        if (metaData.getStarSplinterTimer() <= 0) {
-            metaData.setStarSplinterTimer(starSplinterTimer());
+        if (mixedCatastrophesData.getMetaData().getStarSplinterTimer() <= 0) {
+            mixedCatastrophesData.getMetaData().setStarSplinterTimer(starSplinterTimer());
         }
-        if (metaData.getStarSplinterRemainsDataList() == null) {
-            metaData.setStarSplinterRemainsDataList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getStarSplinterRemainsDataList() == null) {
+            mixedCatastrophesData.getMetaData().setStarSplinterRemainsDataList(new ArrayList<>());
         }
     }
 
@@ -112,7 +112,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
     @Override
     public void initializeCauser() {
-        starSplinterTimer = metaData.getStarSplinterTimer();
+        starSplinterTimer = mixedCatastrophesData.getMetaData().getStarSplinterTimer();
     }
 
     private int starSplinterTimer() {
@@ -121,7 +121,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
-        if (!mixedCatastrophesManagerAccessor.getCatastropheSettings().isStarSplinter())
+        if (!mixedCatastrophesData.getCatastropheSettings().isStarSplinter())
             return;
 
         starSplinterTimer--;
@@ -130,8 +130,8 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             starSplinterTimer = starSplinterTimer();
             ArrayList<Player> playerList = new ArrayList<>();
 
-            for (Player p : plugin.getServer().getOnlinePlayers()) {
-                if (mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(p.getWorld())) {
+            for (Player p : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
+                if (mixedCatastrophesData.getAffectedWorlds().contains(p.getWorld())) {
                     playerList.add(p);
                 }
             }
@@ -148,8 +148,8 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
     public void causeStarSplinter() {
         ArrayList<Player> playerList = new ArrayList<>();
 
-        for (Player p : plugin.getServer().getOnlinePlayers()) {
-            if (mixedCatastrophesManagerAccessor.getAffectedWorlds().contains(p.getWorld())) {
+        for (Player p : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
+            if (mixedCatastrophesData.getAffectedWorlds().contains(p.getWorld())) {
                 playerList.add(p);
             }
         }
@@ -168,7 +168,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         List<Location> locations = new ArrayList<>();
         ArrayList<Player> playerList = new ArrayList<>();
 
-        for (Player p : plugin.getServer().getOnlinePlayers()) {
+        for (Player p : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             if (world == p.getWorld()) {
                 playerList.add(p);
             }
@@ -188,19 +188,19 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
         Location location = locations.get(new Random().nextInt(locations.size()));
 
-        metaData.getStarSplinterRemainsDataList().add(new StarSplinterRemainsData(starSplinterType, location.getWorld().getName(), Coordinate3D.toCoordinate(location)));
+        mixedCatastrophesData.getMetaData().getStarSplinterRemainsDataList().add(new StarSplinterRemainsData(starSplinterType, location.getWorld().getName(), Coordinate3D.toCoordinate(location)));
 
         world.strikeLightning(location);
         world.createExplosion(location, 4, true, true);
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> spawnSplinterRemains(starSplinterPremise, location)
+        mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> spawnSplinterRemains(starSplinterPremise, location)
                 , 20 * 1);
 
         fireworkChain(location, 30);
 
         for (Player p : playerList) {
             p.playSound(p.getLocation(), Sound.AMBIENT_CAVE, 10.0f, 1.0f);
-            mixedCatastrophesManagerAccessor.getEventChangeManager()
+            mixedCatastrophesData.getEventChangeManager()
                     .eventChange(p)
                     .withEventMessage("A Star-Splinter of " + starSplinterPremise.getName() + ".")
                     .withColor(ChatColor.AQUA)
@@ -216,7 +216,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
         if (amount > 0) {
             int finalAmount = amount;
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> fireworkChain(location, finalAmount)
+            mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> fireworkChain(location, finalAmount)
                     , 20);
         }
     }
@@ -255,7 +255,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             items.add(item);
         }
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> resetItemLores(items)
+        mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> resetItemLores(items)
                 , 20 * 5);
     }
 

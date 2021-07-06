@@ -4,7 +4,7 @@ import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.AssaultCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.StalkerCommand;
 import ch.mixin.mixedCatastrophes.command.mxCs.terror.WhispersCommand;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -16,12 +16,12 @@ import java.util.List;
 public class TerrorCommand extends SubCommand {
     private final HashMap<String, SubCommand> subCommandMap;
 
-    public TerrorCommand(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        super(mixedCatastrophesManagerAccessor);
+    public TerrorCommand(MixedCatastrophesData mixedCatastrophesData) {
+        super(mixedCatastrophesData);
         subCommandMap = new HashMap<>();
-        subCommandMap.put("whispers", new WhispersCommand(mixedCatastrophesManagerAccessor));
-        subCommandMap.put("assault", new AssaultCommand(mixedCatastrophesManagerAccessor));
-        subCommandMap.put("stalker", new StalkerCommand(mixedCatastrophesManagerAccessor));
+        subCommandMap.put("whispers", new WhispersCommand(mixedCatastrophesData));
+        subCommandMap.put("assault", new AssaultCommand(mixedCatastrophesData));
+        subCommandMap.put("stalker", new StalkerCommand(mixedCatastrophesData));
     }
 
     @Override

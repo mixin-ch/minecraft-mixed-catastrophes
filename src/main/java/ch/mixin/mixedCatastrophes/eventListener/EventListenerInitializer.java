@@ -1,20 +1,20 @@
 package ch.mixin.mixedCatastrophes.eventListener;
 
 import ch.mixin.mixedCatastrophes.eventListener.eventListenerList.*;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesManagerAccessor;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 
 public class EventListenerInitializer {
-    public static void setupEventListener(MixedCatastrophesManagerAccessor mixedCatastrophesManagerAccessor) {
-        MixedCatastrophesPlugin plugin = mixedCatastrophesManagerAccessor.getPlugin();
-        plugin.getServer().getPluginManager().registerEvents(new StatusListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new MisdeedListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new ConsequenceListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new ActionListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new NeedListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new InventoryListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new ConstructListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new MixedAchievementListener(mixedCatastrophesManagerAccessor), plugin);
-        plugin.getServer().getPluginManager().registerEvents(new AttackListener(mixedCatastrophesManagerAccessor), plugin);
+    public static void setupEventListener(MixedCatastrophesData mixedCatastrophesData) {
+        MixedCatastrophesPlugin plugin = mixedCatastrophesData.getPlugin();
+        plugin.getServer().getPluginManager().registerEvents(new StatusListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new MisdeedListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ConsequenceListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ActionListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new NeedListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new InventoryListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new ConstructListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new MixedAchievementListener(mixedCatastrophesData), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new AttackListener(mixedCatastrophesData), plugin);
     }
 }
