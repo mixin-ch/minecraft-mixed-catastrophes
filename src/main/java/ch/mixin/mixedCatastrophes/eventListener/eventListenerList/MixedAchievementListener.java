@@ -19,7 +19,7 @@ public class MixedAchievementListener implements Listener {
 
     @EventHandler
     public void achievementComplete(AchievementCompletedEvent event) {
-        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+        if (!mixedCatastrophesData.getPlugin().PluginFlawless)
             return;
 
         if (!event.getSetId().equals(MixedCatastrophesPlugin.PLUGIN_NAME))

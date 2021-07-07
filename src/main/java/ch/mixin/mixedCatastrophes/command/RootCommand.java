@@ -24,7 +24,7 @@ public abstract class RootCommand extends SubCommand implements CommandExecutor 
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!plugin.isPluginFlawless()) {
+        if (!plugin.PluginFlawless) {
             sender.sendMessage(ChatColor.RED + MixedCatastrophesPlugin.PLUGIN_NAME + " Plugin has Problems.");
             return true;
         }

@@ -20,7 +20,7 @@ public class CatastrophesCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.isPluginFlawless()) {
+        if (!plugin.PluginFlawless) {
             sender.sendMessage(ChatColor.RED + "Catastrophes has Problems.");
             return;
         }
@@ -40,7 +40,7 @@ public class CatastrophesCommand extends SubCommand {
         switch (argument) {
             case "activate":
                 mixedCatastrophesData.getMetaData().setActive(true);
-                mixedCatastrophesData.setFullyFunctional(plugin.isPluginFlawless());
+                mixedCatastrophesData.setFullyFunctional(plugin.PluginFlawless);
                 sender.sendMessage(ChatColor.GREEN + "Catastrophes activated.");
                 break;
             case "deactivate":

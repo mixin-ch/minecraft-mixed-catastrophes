@@ -28,7 +28,7 @@ public class DealWithDevilCommand extends SubCommand {
 
     @Override
     public void execute(CommandSender sender, List<String> arguments) {
-        if (!plugin.isPluginFlawless()) {
+        if (!plugin.PluginFlawless) {
             sender.sendMessage(ChatColor.RED + "Catastrophes has Problems.");
             return;
         }

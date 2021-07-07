@@ -17,7 +17,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+        if (!mixedCatastrophesData.getPlugin().PluginFlawless)
             return;
 
         Inventory inventory = event.getInventory();
@@ -31,7 +31,7 @@ public class InventoryListener implements Listener {
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+        if (!mixedCatastrophesData.getPlugin().PluginFlawless)
             return;
 
         Inventory inventory = event.getInventory();

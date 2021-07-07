@@ -25,7 +25,7 @@ public class StatusListener implements Listener {
 
     @EventHandler
     public void join(PlayerJoinEvent event) {
-        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+        if (!mixedCatastrophesData.getPlugin().PluginFlawless)
             return;
 
         Player player = event.getPlayer();
@@ -44,7 +44,7 @@ public class StatusListener implements Listener {
 
     @EventHandler
     public void respawn(PlayerRespawnEvent event) {
-        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+        if (!mixedCatastrophesData.getPlugin().PluginFlawless)
             return;
 
         if (!mixedCatastrophesData.getMetaData().isActive())
@@ -56,7 +56,7 @@ public class StatusListener implements Listener {
 
     @EventHandler
     public void death(PlayerDeathEvent event) {
-        if (!mixedCatastrophesData.getPlugin().isPluginFlawless())
+        if (!mixedCatastrophesData.getPlugin().PluginFlawless)
             return;
 
         if (!mixedCatastrophesData.getMetaData().isActive())

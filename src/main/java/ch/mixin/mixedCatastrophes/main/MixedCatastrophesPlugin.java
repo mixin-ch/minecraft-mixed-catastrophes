@@ -46,7 +46,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         ROOT_DIRECTORY_PATH = decodedPath.substring(0, decodedPath.lastIndexOf("/"));
     }
 
-    public boolean pluginFlawless;
+    public boolean PluginFlawless;
     MixedCatastrophesData mixedCatastrophesData;
 
     @Override
@@ -61,8 +61,8 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        System.out.println(PLUGIN_NAME + " disabled");
         mixedCatastrophesData.getMetaData().save();
+        System.out.println(PLUGIN_NAME + " disabled");
     }
 
     private void setup() {
@@ -149,7 +149,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void start() {
-        pluginFlawless = true;
+        PluginFlawless = true;
         mixedCatastrophesData.setFullyFunctional(mixedCatastrophesData.getMetaData().isActive());
 
         tick();
@@ -198,9 +198,5 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean isPluginFlawless() {
-        return pluginFlawless;
     }
 }
