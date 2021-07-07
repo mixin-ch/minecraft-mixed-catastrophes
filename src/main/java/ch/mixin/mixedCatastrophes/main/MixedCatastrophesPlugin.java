@@ -161,7 +161,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void tick() {
-        if (UseMixedAchievementsPlugin && MixedAchievementsPlugin.isActive() && !SetupMixedAchievementsPlugin) {
+        if (UseMixedAchievementsPlugin && MixedAchievementsPlugin.PluginFlawless && !SetupMixedAchievementsPlugin) {
             SetupMixedAchievementsPlugin = true;
             mixedCatastrophesData.getMixedAchievementsManager().initializeAchievements();
             mixedCatastrophesData.getEventChangeManager().updateAchievementProgress();

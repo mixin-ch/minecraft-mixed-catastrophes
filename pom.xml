@@ -6,7 +6,7 @@
 
     <groupId>ch.mixin</groupId>
     <artifactId>MixedCatastrophes</artifactId>
-    <version>2.3.0-p</version>
+    <version>2.3.1</version>
     <packaging>jar</packaging>
 
     <name>MixedCatastrophes</name>
@@ -77,9 +77,9 @@
         <dependency>
             <groupId>ch.mixin</groupId>
             <artifactId>MixedAchievements</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
             <scope>system</scope>
-            <systemPath>${mixinPluginExport}/MixedAchievements/MixedAchievements-1.0.0.jar</systemPath>
+            <systemPath>${mixinPluginExport}/MixedAchievements/MixedAchievements-1.0.2.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
