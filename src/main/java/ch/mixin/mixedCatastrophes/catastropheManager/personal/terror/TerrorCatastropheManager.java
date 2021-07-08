@@ -173,7 +173,9 @@ public class TerrorCatastropheManager extends CatastropheManager {
         changeMap.put(AspectType.Terror, terrorPlus);
         changeMap.put(AspectType.Secrets, secretsPlus);
 
-        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.05);
+        if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
+            mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.05);
+        }
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)

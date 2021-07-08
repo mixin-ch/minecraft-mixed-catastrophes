@@ -279,7 +279,9 @@ public class AssaultCatastropheManager extends CatastropheManager {
             mob.setTarget(player);
         }
 
-        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.1);
+        if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
+            mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.1);
+        }
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)

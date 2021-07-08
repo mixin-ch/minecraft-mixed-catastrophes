@@ -135,6 +135,9 @@ public class AttackListener implements Listener {
     }
 
     private void playerReceiveDamage(EntityDamageEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isDamageReduction())
+            return;
+
         Player player = (Player) event.getEntity();
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int resolve = playerData.getAspect(AspectType.Resolve);

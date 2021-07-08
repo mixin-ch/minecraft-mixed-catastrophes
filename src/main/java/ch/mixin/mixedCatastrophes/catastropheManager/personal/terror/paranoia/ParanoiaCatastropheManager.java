@@ -131,7 +131,9 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void causeParanoia(Player player, ParanoiaType paranoiaType) {
-        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.05);
+        if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
+            mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.05);
+        }
 
         switch (paranoiaType) {
             case Sounds:

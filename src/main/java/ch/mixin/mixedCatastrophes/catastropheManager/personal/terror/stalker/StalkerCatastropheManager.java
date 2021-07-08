@@ -178,7 +178,9 @@ public class StalkerCatastropheManager extends CatastropheManager {
         StalkerData stalkerData = new StalkerData(world.getName(), coordinate3D, speed, remainingTime);
         mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getTerrorData().getStalkerDatas().add(stalkerData);
 
-        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.2);
+        if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
+            mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.2);
+        }
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
