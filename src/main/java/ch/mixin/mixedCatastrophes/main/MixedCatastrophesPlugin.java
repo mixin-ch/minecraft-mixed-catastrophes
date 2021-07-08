@@ -73,7 +73,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         setupMetaData();
 
         mixedCatastrophesData.setAffectedWorlds(new ArrayList<>());
-        mixedCatastrophesData.setCatastropheSettings(new CatastropheSettings(getConfig()));
+        mixedCatastrophesData.setCatastropheSettings(new CatastropheSettings());
 
         mixedCatastrophesData.setEventChangeManager(new EventChangeManager(mixedCatastrophesData));
         mixedCatastrophesData.setRootCatastropheManager(new RootCatastropheManager(mixedCatastrophesData));

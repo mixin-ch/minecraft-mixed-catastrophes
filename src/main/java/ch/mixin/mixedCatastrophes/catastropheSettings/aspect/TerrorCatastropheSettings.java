@@ -8,13 +8,6 @@ public class TerrorCatastropheSettings {
     private boolean paranoia;
     private boolean stalker;
 
-    public TerrorCatastropheSettings() {
-    }
-
-    public TerrorCatastropheSettings(ConfigurationSection configuration) {
-        initialize(configuration);
-    }
-
     public void initialize(ConfigurationSection configuration) {
         if (configuration == null)
             return;

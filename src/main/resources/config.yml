@@ -29,7 +29,7 @@ interaction:
       starMercy: true
     greyhatDebt:
       seizeDream: true
-    nobility:
+    resolve:
       critAttack: true
 hintList:
   - Type "/mx dealWithDevil" if you are stranded on an Island.

@@ -9,36 +9,18 @@ public class AspectCatastropheSettings {
     private NatureConspiracyCatastropheSettings natureConspiracy = new NatureConspiracyCatastropheSettings();
     private CelestialFavorCatastropheSettings celestialFavor = new CelestialFavorCatastropheSettings();
     private GreyhatDebtCatastropheSettings greyhatDebt = new GreyhatDebtCatastropheSettings();
-    private NobilityCatastropheSettings nobility = new NobilityCatastropheSettings();
-
-    public AspectCatastropheSettings() {
-    }
-
-    public AspectCatastropheSettings(ConfigurationSection configuration) {
-        initialize(configuration);
-    }
+    private ResolveCatastropheSettings resolve = new ResolveCatastropheSettings();
 
     public void initialize(ConfigurationSection configuration) {
         if (configuration == null)
             return;
 
-        ConfigurationSection terrorSection = configuration.getConfigurationSection("terror");
-        terror = new TerrorCatastropheSettings(terrorSection);
-
-        ConfigurationSection misfortuneSection = configuration.getConfigurationSection("misfortune");
-        misfortune = new MisfortuneCatastropheSettings(terrorSection);
-
-        ConfigurationSection natureConspiracySection = configuration.getConfigurationSection("natureConspiracy");
-        natureConspiracy = new NatureConspiracyCatastropheSettings(terrorSection);
-
-        ConfigurationSection celestialFavorSection = configuration.getConfigurationSection("celestialFavor");
-        celestialFavor = new CelestialFavorCatastropheSettings(terrorSection);
-
-        ConfigurationSection greyhatDebtSection = configuration.getConfigurationSection("greyhatDebt");
-        greyhatDebt = new GreyhatDebtCatastropheSettings(terrorSection);
-
-        ConfigurationSection nobilitySection = configuration.getConfigurationSection("nobility");
-        nobility = new NobilityCatastropheSettings(terrorSection);
+        terror.initialize(configuration.getConfigurationSection("terror"));
+        misfortune.initialize( configuration.getConfigurationSection("misfortune"));
+        natureConspiracy.initialize(configuration.getConfigurationSection("natureConspiracy"));
+        celestialFavor.initialize(configuration.getConfigurationSection("celestialFavor"));
+        greyhatDebt.initialize(configuration.getConfigurationSection("greyhatDebt"));
+        resolve.initialize(configuration.getConfigurationSection("resolve"));
     }
 
     public TerrorCatastropheSettings getTerror() {
@@ -81,11 +63,11 @@ public class AspectCatastropheSettings {
         this.greyhatDebt = greyhatDebt;
     }
 
-    public NobilityCatastropheSettings getNobility() {
-        return nobility;
+    public ResolveCatastropheSettings getResolve() {
+        return resolve;
     }
 
-    public void setNobility(NobilityCatastropheSettings nobility) {
-        this.nobility = nobility;
+    public void setResolve(ResolveCatastropheSettings resolve) {
+        this.resolve = resolve;
     }
 }

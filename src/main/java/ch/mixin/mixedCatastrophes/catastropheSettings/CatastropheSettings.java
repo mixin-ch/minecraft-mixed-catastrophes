@@ -1,8 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheSettings;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
-import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.HashMap;
@@ -19,10 +17,6 @@ public class CatastropheSettings {
         }
     }
 
-    public CatastropheSettings(ConfigurationSection configuration) {
-        initialize(configuration);
-    }
-
     public void initialize(ConfigurationSection configuration) {
         ConfigurationSection interactionSection = configuration.getConfigurationSection("interaction");
 
@@ -32,21 +26,23 @@ public class CatastropheSettings {
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
 
-        weather = new HashMap<>();
-        ConfigurationSection weatherSection = configuration.getConfigurationSection("weather");
+        ConfigurationSection weatherSection = interactionSection.getConfigurationSection("weather");
 
-        for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
-            boolean active = false;
+        if (weatherSection != null) {
+            for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
+                boolean active = false;
 
-            if (weatherSection != null) {
-                active = weatherSection.getBoolean(weatherType.toString());
+                if (weatherSection != null) {
+                    String weatherLabel = weatherType.toString();
+                    weatherLabel = weatherLabel.substring(0,1).toLowerCase() + weatherLabel.substring(1);
+                    active = weatherSection.getBoolean(weatherLabel);
+                }
+
+                weather.put(weatherType, active);
             }
-
-            weather.put(weatherType, active);
         }
 
-        ConfigurationSection aspectSection = configuration.getConfigurationSection("aspect");
-        aspect = new AspectCatastropheSettings(aspectSection);
+        aspect.initialize(interactionSection.getConfigurationSection("aspect"));
     }
 
     public boolean isTimeDistortion() {

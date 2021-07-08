@@ -7,13 +7,6 @@ public class NatureConspiracyCatastropheSettings {
     private boolean ravenousFood;
     private boolean theHorde;
 
-    public NatureConspiracyCatastropheSettings() {
-    }
-
-    public NatureConspiracyCatastropheSettings(ConfigurationSection configuration) {
-        initialize(configuration);
-    }
-
     public void initialize(ConfigurationSection configuration) {
         if (configuration == null)
             return;
