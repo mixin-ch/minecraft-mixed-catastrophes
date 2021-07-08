@@ -30,7 +30,9 @@ interaction:
     greyhatDebt:
       seizeDream: true
     resolve:
+      virtue: true
       critAttack: true
+      damageReduction: true
 hintList:
   - Type "/mx dealWithDevil" if you are stranded on an Island.
   - Radiant Sky blinds you, if you have no shelter.
