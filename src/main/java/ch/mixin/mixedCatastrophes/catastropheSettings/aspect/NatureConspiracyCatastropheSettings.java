@@ -7,13 +7,23 @@ public class NatureConspiracyCatastropheSettings {
     private boolean ravenousFood;
     private boolean theHorde;
 
-    public void initialize(ConfigurationSection configuration) {
-        if (configuration == null)
+    public void initialize(ConfigurationSection superSection) {
+        ConfigurationSection natureConspiracySection = superSection.getConfigurationSection("natureConspiracy");
+
+        if (natureConspiracySection == null)
             return;
 
-        collectable = configuration.getBoolean("collectable");
-        ravenousFood = configuration.getBoolean("ravenousFood");
-        theHorde = configuration.getBoolean("theHorde");
+        collectable = natureConspiracySection.getBoolean("collectable");
+        ravenousFood = natureConspiracySection.getBoolean("ravenousFood");
+        theHorde = natureConspiracySection.getBoolean("theHorde");
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        ConfigurationSection natureConspiracySection = superSection.createSection("natureConspiracy");
+
+        natureConspiracySection.set("collectable", collectable);
+        natureConspiracySection.set("ravenousFood", ravenousFood);
+        natureConspiracySection.set("theHorde", theHorde);
     }
 
     public boolean isCollectable() {

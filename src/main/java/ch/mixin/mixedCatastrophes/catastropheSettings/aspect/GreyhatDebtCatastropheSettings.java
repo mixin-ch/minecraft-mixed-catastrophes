@@ -5,11 +5,19 @@ import org.bukkit.configuration.ConfigurationSection;
 public class GreyhatDebtCatastropheSettings {
     private boolean seizeDream;
 
-    public void initialize(ConfigurationSection configuration) {
-        if (configuration == null)
+    public void initialize(ConfigurationSection superSection) {
+        ConfigurationSection greyhatDebtSection = superSection.getConfigurationSection("greyhatDebt");
+
+        if (greyhatDebtSection == null)
             return;
 
-        seizeDream = configuration.getBoolean("seizeDream");
+        seizeDream = greyhatDebtSection.getBoolean("seizeDream");
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        ConfigurationSection greyhatDebtSection = superSection.createSection("greyhatDebt");
+
+        greyhatDebtSection.set("seizeDream", seizeDream);
     }
 
     public boolean isSeizeDream() {

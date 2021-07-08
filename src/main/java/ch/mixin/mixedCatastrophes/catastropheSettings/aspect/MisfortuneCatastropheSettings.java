@@ -6,12 +6,21 @@ public class MisfortuneCatastropheSettings {
     private boolean collectable;
     private boolean missAttack;
 
-    public void initialize(ConfigurationSection configuration) {
-        if (configuration == null)
+    public void initialize(ConfigurationSection superSection) {
+        ConfigurationSection misfortuneSection = superSection.getConfigurationSection("misfortune");
+
+        if (misfortuneSection == null)
             return;
 
-        collectable = configuration.getBoolean("collectable");
-        missAttack = configuration.getBoolean("missAttack");
+        collectable = misfortuneSection.getBoolean("collectable");
+        missAttack = misfortuneSection.getBoolean("missAttack");
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        ConfigurationSection misfortuneSection = superSection.createSection("misfortune");
+
+        misfortuneSection.set("collectable", collectable);
+        misfortuneSection.set("missAttack", missAttack);
     }
 
     public boolean isCollectable() {

@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheSettings;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.catastropheSettings.aspect.*;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -11,16 +12,29 @@ public class AspectCatastropheSettings {
     private GreyhatDebtCatastropheSettings greyhatDebt = new GreyhatDebtCatastropheSettings();
     private ResolveCatastropheSettings resolve = new ResolveCatastropheSettings();
 
-    public void initialize(ConfigurationSection configuration) {
-        if (configuration == null)
+    public void initialize(ConfigurationSection superSection) {
+        ConfigurationSection aspectSection = superSection.getConfigurationSection("aspect");
+
+        if (aspectSection == null)
             return;
 
-        terror.initialize(configuration.getConfigurationSection("terror"));
-        misfortune.initialize( configuration.getConfigurationSection("misfortune"));
-        natureConspiracy.initialize(configuration.getConfigurationSection("natureConspiracy"));
-        celestialFavor.initialize(configuration.getConfigurationSection("celestialFavor"));
-        greyhatDebt.initialize(configuration.getConfigurationSection("greyhatDebt"));
-        resolve.initialize(configuration.getConfigurationSection("resolve"));
+        terror.initialize(aspectSection);
+        misfortune.initialize( aspectSection);
+        natureConspiracy.initialize(aspectSection);
+        celestialFavor.initialize(aspectSection);
+        greyhatDebt.initialize(aspectSection);
+        resolve.initialize(aspectSection);
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        ConfigurationSection aspectSection = superSection.createSection("aspect");
+
+        terror.fillConfig(aspectSection);
+        misfortune.fillConfig( aspectSection);
+        natureConspiracy.fillConfig(aspectSection);
+        celestialFavor.fillConfig(aspectSection);
+        greyhatDebt.fillConfig(aspectSection);
+        resolve.fillConfig(aspectSection);
     }
 
     public TerrorCatastropheSettings getTerror() {

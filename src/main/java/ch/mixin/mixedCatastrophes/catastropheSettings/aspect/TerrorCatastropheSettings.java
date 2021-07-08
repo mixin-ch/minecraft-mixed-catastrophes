@@ -8,14 +8,25 @@ public class TerrorCatastropheSettings {
     private boolean paranoia;
     private boolean stalker;
 
-    public void initialize(ConfigurationSection configuration) {
-        if (configuration == null)
+    public void initialize(ConfigurationSection superSection) {
+        ConfigurationSection terrorSection = superSection.getConfigurationSection("terror");
+
+        if (terrorSection == null)
             return;
 
-        whispers = configuration.getBoolean("whispers");
-        assault = configuration.getBoolean("assault");
-        paranoia = configuration.getBoolean("paranoia");
-        stalker = configuration.getBoolean("stalker");
+        whispers = terrorSection.getBoolean("whispers");
+        assault = terrorSection.getBoolean("assault");
+        paranoia = terrorSection.getBoolean("paranoia");
+        stalker = terrorSection.getBoolean("stalker");
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        ConfigurationSection terrorSection = superSection.createSection("terror");
+
+        terrorSection.set("whispers", whispers);
+        terrorSection.set("assault", assault);
+        terrorSection.set("paranoia", paranoia);
+        terrorSection.set("stalker", stalker);
     }
 
     public boolean isWhispers() {

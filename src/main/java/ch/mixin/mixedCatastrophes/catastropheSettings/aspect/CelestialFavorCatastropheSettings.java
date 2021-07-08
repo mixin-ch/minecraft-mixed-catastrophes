@@ -6,12 +6,21 @@ public class CelestialFavorCatastropheSettings {
     private boolean saveEssence;
     private boolean starMercy;
 
-    public void initialize(ConfigurationSection configuration) {
-        if (configuration == null)
+    public void initialize(ConfigurationSection superSection) {
+        ConfigurationSection celestialMercySection = superSection.getConfigurationSection("celestialMercy");
+
+        if (celestialMercySection == null)
             return;
 
-        saveEssence = configuration.getBoolean("saveEssence");
-        starMercy = configuration.getBoolean("starMercy");
+        saveEssence = celestialMercySection.getBoolean("saveEssence");
+        starMercy = celestialMercySection.getBoolean("starMercy");
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        ConfigurationSection celestialMercySection = superSection.createSection("celestialMercy");
+
+        celestialMercySection.set("saveEssence", saveEssence);
+        celestialMercySection.set("starMercy", starMercy);
     }
 
     public boolean isSaveEssence() {

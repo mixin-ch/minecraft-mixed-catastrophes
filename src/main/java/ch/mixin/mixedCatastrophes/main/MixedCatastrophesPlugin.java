@@ -97,6 +97,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
         loadDependentPlugins();
 
         mixedCatastrophesData.getCatastropheSettings().initialize(getConfig());
+        mixedCatastrophesData.getCatastropheSettings().fillConfig(getConfig());
 
         List<World> affectedWorlds = new ArrayList<>();
 

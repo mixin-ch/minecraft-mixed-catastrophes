@@ -17,8 +17,11 @@ public class CatastropheSettings {
         }
     }
 
-    public void initialize(ConfigurationSection configuration) {
-        ConfigurationSection interactionSection = configuration.getConfigurationSection("interaction");
+    public void initialize(ConfigurationSection superSection) {
+        if (superSection == null)
+            return;
+
+        ConfigurationSection interactionSection = superSection.getConfigurationSection("interaction");
 
         if (interactionSection == null)
             return;
@@ -30,19 +33,30 @@ public class CatastropheSettings {
 
         if (weatherSection != null) {
             for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
-                boolean active = false;
-
-                if (weatherSection != null) {
-                    String weatherLabel = weatherType.toString();
-                    weatherLabel = weatherLabel.substring(0,1).toLowerCase() + weatherLabel.substring(1);
-                    active = weatherSection.getBoolean(weatherLabel);
-                }
-
+                String weatherLabel = weatherType.toString();
+                weatherLabel = weatherLabel.substring(0, 1).toLowerCase() + weatherLabel.substring(1);
+                boolean active = weatherSection.getBoolean(weatherLabel);
                 weather.put(weatherType, active);
             }
         }
 
-        aspect.initialize(interactionSection.getConfigurationSection("aspect"));
+        aspect.initialize(interactionSection);
+    }
+
+    public void fillConfig(ConfigurationSection superSection) {
+        if (superSection == null)
+            return;
+
+        ConfigurationSection interactionSection = superSection.createSection("interaction");
+        ConfigurationSection weatherSection = interactionSection.createSection("weather");
+
+        for (WeatherCatastropheType weatherType : weather.keySet()) {
+            String weatherLabel = weatherType.toString();
+            weatherLabel = weatherLabel.substring(0, 1).toLowerCase() + weatherLabel.substring(1);
+            weatherSection.set(weatherLabel, weather.get(weatherType));
+        }
+
+        aspect.fillConfig(interactionSection);
     }
 
     public boolean isTimeDistortion() {
