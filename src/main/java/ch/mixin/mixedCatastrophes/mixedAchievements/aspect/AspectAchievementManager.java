@@ -90,8 +90,8 @@ public class AspectAchievementManager {
                 true
                 , new ArrayList<>(Arrays.asList(
                 new AchievementStagePreset("Confident", 100)
-                , new AchievementStagePreset("Determined", 250)
-                , new AchievementStagePreset("Unbreakable", 625)
+                , new AchievementStagePreset("Determined", 200)
+                , new AchievementStagePreset("Unbreakable", 400)
         ))));
     }
 

@@ -62,13 +62,13 @@ public class AttackListener implements Listener {
         } else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof Player)) {
             playerHitEntityProjectile(event);
         } else if (damagee instanceof Player) {
-            if (((Player) damagee).isBlocking()){
+            if (((Player) damagee).isBlocking()) {
                 if (damager instanceof LivingEntity) {
                     playerBlockEntityMelee(event);
                 } else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof LivingEntity)) {
                     playerBlockEntityProjectile(event);
                 }
-            }else {
+            } else {
                 playerReceiveDamage(event);
             }
         }
@@ -141,18 +141,22 @@ public class AttackListener implements Listener {
         Player player = (Player) event.getEntity();
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int resolve = playerData.getAspect(AspectType.Resolve);
-        double damageReduction = (int) Math.min(event.getDamage(), resolve * 0.02);
+        double damageReduction = (int) Math.min(event.getDamage(), Math.pow(resolve, 0.5) * 0.25);
 
         if (damageReduction <= 0)
             return;
 
         double newDamage = event.getDamage() - damageReduction;
         event.setDamage(newDamage);
-
-        if (newDamage == 0)
-            event.setCancelled(true);
-
         int resolveChange = -(int) Math.ceil(damageReduction);
+
+        if (newDamage == 0) {
+            if (resolve + resolveChange <= 0)
+                return;
+
+            resolveChange -= 1;
+            event.setCancelled(true);
+        }
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Resolve, resolveChange);
