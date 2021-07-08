@@ -7,7 +7,7 @@ public class CelestialFavorCatastropheSettings {
     private boolean starMercy;
 
     public void initialize(ConfigurationSection superSection) {
-        ConfigurationSection celestialMercySection = superSection.getConfigurationSection("celestialMercy");
+        ConfigurationSection celestialMercySection = superSection.getConfigurationSection("celestialFavor");
 
         if (celestialMercySection == null)
             return;
@@ -17,7 +17,7 @@ public class CelestialFavorCatastropheSettings {
     }
 
     public void fillConfig(ConfigurationSection superSection) {
-        ConfigurationSection celestialMercySection = superSection.createSection("celestialMercy");
+        ConfigurationSection celestialMercySection = superSection.createSection("celestialFavor");
 
         celestialMercySection.set("saveEssence", saveEssence);
         celestialMercySection.set("starMercy", starMercy);
