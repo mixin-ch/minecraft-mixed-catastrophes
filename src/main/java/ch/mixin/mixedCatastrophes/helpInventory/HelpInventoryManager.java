@@ -227,6 +227,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Constants.AspectThemes.get(AspectType.Greyhat_Debt).getMaterial(), 1, slot(2, 8), "Greyhat Debt", new String[]{
                 "Causes Dreams to be confiscated.", "Gained by making a certain Deal."
         });
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.Resolve).getMaterial(), 1, slot(2, 9), "Resolve", new String[]{
+                "Can cause critical Hits and reduces Damage taken.", "Chance to gain on Terror Event.", "Slowly declining."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }

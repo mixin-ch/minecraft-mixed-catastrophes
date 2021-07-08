@@ -3,14 +3,20 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import com.google.gson.Gson;
 import org.bukkit.Sound;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
 import java.util.Random;
 
 public class AttackListener implements Listener {
@@ -21,7 +27,27 @@ public class AttackListener implements Listener {
     }
 
     @EventHandler
-    public void entityDamageByEntity(EntityDamageByEntityEvent event) {
+    public void entityDamage(EntityDamageEvent event) {
+        if (event instanceof EntityDamageByEntityEvent) {
+            entityDamageByEntity((EntityDamageByEntityEvent) event);
+            return;
+        }
+
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
+        Entity entity = event.getEntity();
+
+        if (!(entity instanceof Player))
+            return;
+
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(event.getEntity().getWorld()))
+            return;
+
+        playerReceiveDamage(event);
+    }
+
+    private void entityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!mixedCatastrophesData.isFullyFunctional())
             return;
 
@@ -33,16 +59,17 @@ public class AttackListener implements Listener {
 
         if (damager instanceof Player) {
             playerHitEntityMelee(event);
-        } else if (damager instanceof Arrow && (((Arrow) damager).getShooter() instanceof Player)) {
-            playerHitEntityArrow(event);
+        } else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof Player)) {
+            playerHitEntityProjectile(event);
         } else if (damagee instanceof Player) {
-            if (!((Player) damagee).isBlocking())
-                return;
-
-            if (damager instanceof LivingEntity) {
-                playerBlockEntityMelee(event);
-            } else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof LivingEntity)) {
-                playerBlockEntityProjectile(event);
+            if (((Player) damagee).isBlocking()){
+                if (damager instanceof LivingEntity) {
+                    playerBlockEntityMelee(event);
+                } else if (damager instanceof Projectile && (((Projectile) damager).getShooter() instanceof LivingEntity)) {
+                    playerBlockEntityProjectile(event);
+                }
+            }else {
+                playerReceiveDamage(event);
             }
         }
     }
@@ -69,7 +96,7 @@ public class AttackListener implements Listener {
                         .eventChange(player)
                         .withEventSound(Sound.ENTITY_ITEM_BREAK)
                         .withEventMessage("A Misfire avoided.")
-                        .withCause(AspectType.Nobility)
+                        .withCause(AspectType.Resolve)
                         .finish()
                         .execute();
             } else {
@@ -87,11 +114,13 @@ public class AttackListener implements Listener {
     }
 
     private boolean tryPlayerCrit(PlayerData playerData) {
-        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getNobility().isCritAttack())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isCritAttack())
             return false;
 
         int nobility = playerData.getAspect(AspectType.Nobility);
-        double probability = (nobility) / (nobility + 100.0);
+        int resolve = playerData.getAspect(AspectType.Resolve);
+        double modifier = nobility * 0.5 + resolve * 0.1;
+        double probability = (modifier) / (modifier + 100.0);
         return new Random().nextDouble() < probability;
     }
 
@@ -103,6 +132,32 @@ public class AttackListener implements Listener {
         double probability = (misfortune) / (misfortune + 30.0);
         probability /= 2.0;
         return new Random().nextDouble() < probability;
+    }
+
+    private void playerReceiveDamage(EntityDamageEvent event) {
+        Player player = (Player) event.getEntity();
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int resolve = playerData.getAspect(AspectType.Resolve);
+        double damageReduction = (int) Math.min(event.getDamage(), resolve * 0.02);
+
+        if (damageReduction <= 0)
+            return;
+
+        double newDamage = event.getDamage() - damageReduction;
+        event.setDamage(newDamage);
+
+        if (newDamage == 0)
+            event.setCancelled(true);
+
+        int resolveChange = -(int) Math.ceil(damageReduction);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Resolve, resolveChange);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .execute();
     }
 
     private void playerHitEntityMelee(EntityDamageByEntityEvent event) {
@@ -119,7 +174,7 @@ public class AttackListener implements Listener {
                     .eventChange(player)
                     .withEventSound(Sound.BLOCK_ANVIL_PLACE)
                     .withEventMessage("An exceptional Hit.")
-                    .withCause(AspectType.Nobility)
+                    .withCause(AspectType.Resolve)
                     .finish()
                     .execute();
         } else if (tryPlayerMiss(playerData)) {
@@ -135,10 +190,10 @@ public class AttackListener implements Listener {
         }
     }
 
-    private void playerHitEntityArrow(EntityDamageByEntityEvent event) {
+    private void playerHitEntityProjectile(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
-        Arrow arrow = (Arrow) event.getDamager();
-        Player player = (Player) arrow.getShooter();
+        Projectile projectile = (Projectile) event.getDamager();
+        Player player = (Player) projectile.getShooter();
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (tryPlayerCrit(playerData)) {
@@ -150,7 +205,7 @@ public class AttackListener implements Listener {
                     .eventChange(player)
                     .withEventSound(Sound.BLOCK_ANVIL_PLACE)
                     .withEventMessage("An exceptional Shot.")
-                    .withCause(AspectType.Nobility)
+                    .withCause(AspectType.Resolve)
                     .finish()
                     .execute();
         }
@@ -170,7 +225,7 @@ public class AttackListener implements Listener {
                     .eventChange(player)
                     .withEventSound(Sound.BLOCK_ANVIL_PLACE)
                     .withEventMessage("An exceptional Block.")
-                    .withCause(AspectType.Nobility)
+                    .withCause(AspectType.Resolve)
                     .finish()
                     .execute();
         }
@@ -191,7 +246,7 @@ public class AttackListener implements Listener {
                     .eventChange(player)
                     .withEventSound(Sound.BLOCK_ANVIL_PLACE)
                     .withEventMessage("An exceptional Block.")
-                    .withCause(AspectType.Nobility)
+                    .withCause(AspectType.Resolve)
                     .finish()
                     .execute();
         }

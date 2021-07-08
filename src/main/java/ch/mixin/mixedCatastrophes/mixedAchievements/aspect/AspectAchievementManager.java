@@ -86,6 +86,13 @@ public class AspectAchievementManager {
                 new AchievementStagePreset("Business", 1)
                 , new AchievementStagePreset("sold your Soul", 10)
         ))));
+        presetMap.put(AspectType.Resolve, new AspectAchievementPreset(
+                true
+                , new ArrayList<>(Arrays.asList(
+                new AchievementStagePreset("Confident", 100)
+                , new AchievementStagePreset("Determined", 250)
+                , new AchievementStagePreset("Unbreakable", 625)
+        ))));
     }
 
     public List<BlueprintAchievementLeaf> makeAspectAchievements() {

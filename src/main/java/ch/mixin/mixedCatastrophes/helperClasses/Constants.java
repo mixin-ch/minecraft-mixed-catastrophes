@@ -56,6 +56,7 @@ public class Constants {
         AspectOrder.add(AspectType.Misfortune);
         AspectOrder.add(AspectType.Death_Seeker);
         AspectOrder.add(AspectType.Greyhat_Debt);
+        AspectOrder.add(AspectType.Resolve);
 
         ConstructOrder = new ArrayList<>();
         ConstructOrder.add(ConstructType.GreenWell);
@@ -83,6 +84,7 @@ public class Constants {
         AspectThemes.put(AspectType.Misfortune, new Theme(ChatColor.of("#3F00BF"), Material.FLINT));
         AspectThemes.put(AspectType.Death_Seeker, new Theme(ChatColor.of("#3F005F"), Material.WITHER_SKELETON_SKULL));
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("#BFBFBF"), Material.IRON_HELMET));
+        AspectThemes.put(AspectType.Resolve, new Theme(ChatColor.of("#DFFF7F"), Material.LANTERN));
 
         DreamThemes = new HashMap<>();
         DreamThemes.put(DreamType.SereneDreams, new Theme(ChatColor.of("#FF7FBF"), Material.WHITE_BED));

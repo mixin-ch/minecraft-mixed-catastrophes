@@ -2,6 +2,7 @@ package ch.mixin.mixedCatastrophes.catastropheManager.personal;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.personal.resolve.ResolveCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.rite.RiteManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.TerrorCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
@@ -21,12 +22,14 @@ import java.util.UUID;
 
 public class PersonalCatastropheManager extends CatastropheManager {
     private final TerrorCatastropheManager terrorCatastropheManager;
+    private final ResolveCatastropheManager resolveCatastropheManager;
     private final RiteManager riteManager;
     private final DreamManager dreamManager;
 
     public PersonalCatastropheManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
         terrorCatastropheManager = new TerrorCatastropheManager(mixedCatastrophesData);
+        resolveCatastropheManager = new ResolveCatastropheManager(mixedCatastrophesData);
         riteManager = new RiteManager(mixedCatastrophesData);
         dreamManager = new DreamManager(mixedCatastrophesData);
     }
@@ -67,11 +70,13 @@ public class PersonalCatastropheManager extends CatastropheManager {
     @Override
     public void updateMetaData() {
         terrorCatastropheManager.updateMetaData();
+        resolveCatastropheManager.updateMetaData();
     }
 
     @Override
     public void initializeCauser() {
         terrorCatastropheManager.initializeCauser();
+        resolveCatastropheManager.initializeCauser();
     }
 
     @Override
@@ -131,11 +136,16 @@ public class PersonalCatastropheManager extends CatastropheManager {
             }
         }
 
+        resolveCatastropheManager.tick();
         terrorCatastropheManager.tick();
     }
 
     public TerrorCatastropheManager getTerrorCatastropheManager() {
         return terrorCatastropheManager;
+    }
+
+    public ResolveCatastropheManager getResolveCatastropheManager() {
+        return resolveCatastropheManager;
     }
 
     public RiteManager getRiteManager() {

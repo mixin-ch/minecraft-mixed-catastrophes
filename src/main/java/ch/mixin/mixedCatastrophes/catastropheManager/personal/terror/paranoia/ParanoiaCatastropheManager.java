@@ -76,7 +76,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         int timer = terrorData.getParanoiaTimer();
         timer--;
 
-        if (hasScareCrow){
+        if (hasScareCrow) {
             timer -= 2;
         }
 
@@ -131,6 +131,8 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     }
 
     private void causeParanoia(Player player, ParanoiaType paranoiaType) {
+        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.05);
+
         switch (paranoiaType) {
             case Sounds:
                 sounds(player);
