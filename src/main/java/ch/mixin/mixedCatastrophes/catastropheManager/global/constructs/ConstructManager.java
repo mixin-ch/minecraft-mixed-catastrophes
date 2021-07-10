@@ -3,7 +3,12 @@ package ch.mixin.mixedCatastrophes.catastropheManager.global.constructs;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.*;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.constructs.*;
+import com.gmail.filoghost.holographicdisplays.api.Hologram;
+import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import com.gmail.filoghost.holographicdisplays.api.line.TextLine;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -13,10 +18,13 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class ConstructManager extends CatastropheManager {
+    private HashMap<ConstructData, Hologram> hologramMap = new HashMap<>();
+
     public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
     }
@@ -59,6 +67,124 @@ public class ConstructManager extends CatastropheManager {
         tickScarecrow();
     }
 
+    public void removeHolograms() {
+        if (!mixedCatastrophesData.isUseHolographicDisplays())
+            return;
+
+        MixedCatastrophesPlugin plugin = mixedCatastrophesData.getPlugin();
+
+        for (Hologram hologram : HologramsAPI.getHolograms(plugin)) {
+            hologram.delete();
+        }
+    }
+
+    private void generateGreenWellHologram(GreenWellData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.GreenWell).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.GreenWell.toString()));
+        lines.add(color + "Level: " + data.getLevel());
+
+        if (isConstructed) {
+            lines.add(color + "Active");
+        } else {
+            lines.add(color + "Inactive");
+        }
+
+        generateConstructHologram(data, lines);
+    }
+
+    private void generateBlazeReactorHologram(BlazeReactorData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.BlazeReactor).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.BlazeReactor.toString()));
+        lines.add(color + "Level: " + data.getLevel());
+
+        if (isConstructed) {
+            lines.add(color + "Active");
+        } else {
+            lines.add(color + "Inactive");
+        }
+
+        generateConstructHologram(data, lines);
+    }
+
+    private void generateBlitzardHologram(BlitzardData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.Blitzard).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.Blitzard.toString()));
+        lines.add(color + "Level: " + data.getLevel());
+
+        if (isConstructed) {
+            lines.add(color + "Active");
+        } else {
+            lines.add(color + "Inactive");
+        }
+
+        generateConstructHologram(data, lines);
+    }
+
+    private void generateLighthouseHologram(LighthouseData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.Lighthouse).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.Lighthouse.toString()));
+        lines.add(color + "Level: " + data.getLevel());
+
+        if (isConstructed) {
+            lines.add(color + "Active");
+        } else {
+            lines.add(color + "Inactive");
+        }
+
+        generateConstructHologram(data, lines);
+    }
+
+    private void generateScarecrowHologram(ScarecrowData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.Scarecrow).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.Scarecrow.toString()));
+        lines.add(color + "Terror: " + data.getCollectedTerror());
+
+        if (isConstructed) {
+            lines.add(color + "Active");
+        } else {
+            lines.add(color + "Inactive");
+        }
+
+        generateConstructHologram(data, lines);
+    }
+
+    private void generateConstructHologram(ConstructData data, ArrayList<String> lines) {
+        Hologram hologram = hologramMap.get(data);
+
+        if (hologram == null) {
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(data.getWorldName());
+
+            if (world == null)
+                return;
+
+            Location location = data.getPosition().toLocation(world).add(0.5, 2.5, 0.5);
+            hologram = makeHologram(lines, location);
+            hologramMap.put(data, hologram);
+        } else {
+            fillHologram(hologram, lines);
+        }
+    }
+
+    private Hologram makeHologram(ArrayList<String> lines, Location location) {
+        Hologram hologram = HologramsAPI.createHologram(mixedCatastrophesData.getPlugin(), location);
+        for (String line : lines) {
+            TextLine t = hologram.appendTextLine(line);
+        }
+
+        return hologram;
+    }
+
+    private void fillHologram(Hologram hologram, ArrayList<String> lines) {
+        hologram.clearLines();
+        for (String line : lines) {
+            TextLine t = hologram.appendTextLine(line);
+        }
+    }
 
     private void tickGreenWell() {
         List<GreenWellData> greenWellDataList = mixedCatastrophesData.getMetaData().getGreenWellDataList();
@@ -72,7 +198,10 @@ public class ConstructManager extends CatastropheManager {
             Coordinate3D center = greenWellData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.GreenWell.checkConstructed(center.toLocation(world));
 
-            if (!shapeCompareResult.isConstructed())
+            boolean isConstructed = shapeCompareResult.isConstructed();
+            generateGreenWellHologram(greenWellData, isConstructed);
+
+            if (!isConstructed)
                 return;
 
             int level = greenWellData.getLevel();
@@ -169,7 +298,10 @@ public class ConstructManager extends CatastropheManager {
             Coordinate3D center = blitzardData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.Blitzard.checkConstructed(center.toLocation(world));
 
-            if (!shapeCompareResult.isConstructed())
+            boolean isConstructed = shapeCompareResult.isConstructed();
+            generateBlitzardHologram(blitzardData, isConstructed);
+
+            if (!isConstructed)
                 return;
 
             int level = blitzardData.getLevel();
@@ -194,7 +326,10 @@ public class ConstructManager extends CatastropheManager {
             Coordinate3D center = lighthouseData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.Lighthouse.checkConstructed(center.toLocation(world));
 
-            if (!shapeCompareResult.isConstructed())
+            boolean isConstructed = shapeCompareResult.isConstructed();
+            generateLighthouseHologram(lighthouseData, isConstructed);
+
+            if (!isConstructed)
                 return;
 
             int level = lighthouseData.getLevel();
@@ -220,7 +355,10 @@ public class ConstructManager extends CatastropheManager {
             Location locationCenter = center.toLocation(world);
             ShapeCompareResult shapeCompareResult = Constants.BlazeReactor.checkConstructed(locationCenter);
 
-            if (!shapeCompareResult.isConstructed())
+            boolean isConstructed = shapeCompareResult.isConstructed();
+            generateBlazeReactorHologram(blazeReactorData, isConstructed);
+
+            if (!isConstructed)
                 return;
 
             int level = blazeReactorData.getLevel();
@@ -299,7 +437,10 @@ public class ConstructManager extends CatastropheManager {
             Coordinate3D center = scarecrowData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.Scarecrow.checkConstructed(center.toLocation(world));
 
-            if (!shapeCompareResult.isConstructed())
+            boolean isConstructed = shapeCompareResult.isConstructed();
+            generateScarecrowHologram(scarecrowData, isConstructed);
+
+            if (!isConstructed)
                 return;
 
             List<Coordinate3D> particles = new ArrayList<>();

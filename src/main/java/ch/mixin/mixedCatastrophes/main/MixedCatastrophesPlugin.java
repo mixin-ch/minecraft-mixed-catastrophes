@@ -29,10 +29,6 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     public static String METADATA_FILE_PATH;
     public static File METADATA_FILE;
 
-    public static MixedAchievementsPlugin MixedAchievementsPlugin;
-    public static boolean UseMixedAchievementsPlugin;
-    public static boolean SetupMixedAchievementsPlugin;
-
     static {
         String urlPath = MixedCatastrophesPlugin.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String decodedPath = null;
@@ -89,6 +85,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     public void reload() {
         mixedCatastrophesData.getMetaData().save();
         load();
+        build();
     }
 
     private void load() {
@@ -144,17 +141,25 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void loadDependentPlugins() {
-        MixedAchievementsPlugin = (MixedAchievementsPlugin) Bukkit.getServer().getPluginManager().getPlugin("MixedAchievements");
-        UseMixedAchievementsPlugin = MixedAchievementsPlugin != null;
-        System.out.println("MixedAchievementsPlugin: " + UseMixedAchievementsPlugin);
-        mixedCatastrophesData.setMixedAchievementsManager(new MixedAchievementsManager());
+        mixedCatastrophesData.setMixedAchievementsPlugin((MixedAchievementsPlugin) Bukkit.getServer().getPluginManager().getPlugin("MixedAchievements"));
+        mixedCatastrophesData.setUseMixedAchievementsPlugin(mixedCatastrophesData.getMixedAchievementsPlugin() != null);
+        System.out.println("MixedAchievementsPlugin: " + mixedCatastrophesData.isUseMixedAchievementsPlugin());
+        mixedCatastrophesData.setMixedAchievementsManager(new MixedAchievementsManager(mixedCatastrophesData));
+
+        mixedCatastrophesData.setUseHolographicDisplays(Bukkit.getPluginManager().isPluginEnabled("HolographicDisplays"));
+        System.out.println("HolographicDisplays: " + mixedCatastrophesData.isUseHolographicDisplays());
     }
 
     private void start() {
         PluginFlawless = true;
         mixedCatastrophesData.setFullyFunctional(mixedCatastrophesData.getMetaData().isActive());
 
+        build();
         tick();
+    }
+
+    private void build() {
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().removeHolograms();
     }
 
     private void tickTrigger() {
@@ -163,8 +168,10 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void tick() {
-        if (UseMixedAchievementsPlugin && MixedAchievementsPlugin.PluginFlawless && !SetupMixedAchievementsPlugin) {
-            SetupMixedAchievementsPlugin = true;
+        if (mixedCatastrophesData.isUseHolographicDisplays()
+                && mixedCatastrophesData.getMixedAchievementsPlugin().PluginFlawless
+                && !mixedCatastrophesData.isSetupMixedAchievementsPlugin()) {
+            mixedCatastrophesData.setSetupMixedAchievementsPlugin(true);
             mixedCatastrophesData.getMixedAchievementsManager().initializeAchievements();
             mixedCatastrophesData.getEventChangeManager().updateAchievementProgress();
         }

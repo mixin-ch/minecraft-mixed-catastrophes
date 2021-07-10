@@ -7,6 +7,9 @@ import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementLeaf;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementSet;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
+import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
+import ch.mixin.mixedCatastrophes.eventChange.scoreBoard.AspectScoreManager;
+import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.mixedAchievements.aspect.AspectAchievementManager;
 import ch.mixin.mixedCatastrophes.mixedAchievements.construct.ConstructAchievementManager;
@@ -20,13 +23,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class MixedAchievementsManager {
+    private final MixedCatastrophesData mixedCatastrophesData;
+
     private boolean active = false;
     private AchievementApi achievementApi;
     private AspectAchievementManager aspectAchievementManager;
     private ConstructAchievementManager constructAchievementManager;
 
+    public MixedAchievementsManager(MixedCatastrophesData mixedCatastrophesData) {
+        this.mixedCatastrophesData = mixedCatastrophesData;
+    }
+
     public void initializeAchievements() {
-        if (!MixedCatastrophesPlugin.UseMixedAchievementsPlugin)
+        if (!mixedCatastrophesData.isSetupMixedAchievementsPlugin())
             return;
 
         aspectAchievementManager = new AspectAchievementManager();
@@ -34,7 +43,7 @@ public class MixedAchievementsManager {
         BlueprintAchievementSet blueprintAchievementSet = makeBlueprintAchievementSet();
 
         try {
-            achievementApi = MixedCatastrophesPlugin.MixedAchievementsPlugin.makeAchievementSet(blueprintAchievementSet);
+            achievementApi = mixedCatastrophesData.getMixedAchievementsPlugin().makeAchievementSet(blueprintAchievementSet);
         } catch (ServiceUnavailableException e) {
             e.printStackTrace();
         }

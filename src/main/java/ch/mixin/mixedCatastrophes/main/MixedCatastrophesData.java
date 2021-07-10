@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.main;
 
+import ch.mixin.mixedAchievements.main.MixedAchievementsPlugin;
 import ch.mixin.mixedCatastrophes.catastropheManager.RootCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheSettings.CatastropheSettings;
 import ch.mixin.mixedCatastrophes.eventChange.EventChangeManager;
@@ -22,6 +23,12 @@ public class MixedCatastrophesData {
     private HelpInventoryManager helpInventoryManager;
     private Particler particler;
     private MixedAchievementsManager mixedAchievementsManager;
+
+    private MixedAchievementsPlugin mixedAchievementsPlugin;
+    private boolean useMixedAchievementsPlugin;
+    private boolean setupMixedAchievementsPlugin;
+
+    private boolean useHolographicDisplays;
 
     public MixedCatastrophesData(MixedCatastrophesPlugin plugin) {
         this.plugin = plugin;
@@ -101,5 +108,37 @@ public class MixedCatastrophesData {
 
     public void setMixedAchievementsManager(MixedAchievementsManager mixedAchievementsManager) {
         this.mixedAchievementsManager = mixedAchievementsManager;
+    }
+
+    public MixedAchievementsPlugin getMixedAchievementsPlugin() {
+        return mixedAchievementsPlugin;
+    }
+
+    public void setMixedAchievementsPlugin(MixedAchievementsPlugin mixedAchievementsPlugin) {
+        this.mixedAchievementsPlugin = mixedAchievementsPlugin;
+    }
+
+    public boolean isUseMixedAchievementsPlugin() {
+        return useMixedAchievementsPlugin;
+    }
+
+    public void setUseMixedAchievementsPlugin(boolean useMixedAchievementsPlugin) {
+        this.useMixedAchievementsPlugin = useMixedAchievementsPlugin;
+    }
+
+    public boolean isSetupMixedAchievementsPlugin() {
+        return setupMixedAchievementsPlugin;
+    }
+
+    public void setSetupMixedAchievementsPlugin(boolean setupMixedAchievementsPlugin) {
+        this.setupMixedAchievementsPlugin = setupMixedAchievementsPlugin;
+    }
+
+    public boolean isUseHolographicDisplays() {
+        return useHolographicDisplays;
+    }
+
+    public void setUseHolographicDisplays(boolean useHolographicDisplays) {
+        this.useHolographicDisplays = useHolographicDisplays;
     }
 }
