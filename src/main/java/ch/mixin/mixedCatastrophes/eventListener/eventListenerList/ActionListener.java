@@ -8,7 +8,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.StarSplinterRemainsData;
+import ch.mixin.mixedCatastrophes.metaData.data.StarSplinterRemainsData;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;

@@ -1,10 +1,5 @@
 package ch.mixin.mixedCatastrophes.helperClasses;
 
-import ch.mixin.mixedAchievements.main.MixedAchievementsPlugin;
-import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
-import ch.mixin.mixedCatastrophes.metaData.constructs.ConstructData;
-import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
-import com.google.common.base.CaseFormat;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -12,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class Functions {
@@ -213,5 +207,9 @@ public class Functions {
                 ),
                 " "
         );
+    }
+
+    public static double logarithm(double value, double base) {
+        return Math.log(value) / Math.log(base);
     }
 }

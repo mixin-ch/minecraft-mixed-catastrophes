@@ -6,6 +6,7 @@ public enum ConstructType {
     Blitzard,
     Lighthouse,
     Scarecrow,
+    EnderRail,
     ;
 
     private final String label;

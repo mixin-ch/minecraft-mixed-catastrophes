@@ -3,7 +3,7 @@ package ch.mixin.mixedCatastrophes.command.mxCs;
 import ch.mixin.mixedCatastrophes.command.SubCommand;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;

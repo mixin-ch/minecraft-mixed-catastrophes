@@ -4,10 +4,11 @@ import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.Construct
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
+import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import ch.mixin.mixedCatastrophes.metaData.constructs.*;
+import ch.mixin.mixedCatastrophes.metaData.EnderRailDirection;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.*;
 import ch.mixin.mixedCatastrophes.mixedAchievements.MixedAchievementsManager;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -65,6 +66,9 @@ public class ConstructListener implements Listener {
                 break;
             case PUMPKIN_PIE:
                 makeScarecrow(event);
+                break;
+            case ENDER_PEARL:
+                makeEnderRail(event);
                 break;
         }
     }
@@ -509,5 +513,106 @@ public class ConstructListener implements Listener {
 
         mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.Scarecrow, 1);
+    }
+
+    private void makeEnderRail(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (block.getType() != Material.LAPIS_BLOCK)
+            return;
+
+        EnderRailDirection direction;
+
+        if (Constants.EnderRail_Side.checkConstructed(block.getLocation()).isConstructed()) {
+            direction = EnderRailDirection.Side;
+        } else if (Constants.EnderRail_Up.checkConstructed(block.getLocation()).isConstructed()) {
+            direction = EnderRailDirection.Up;
+        } else if (Constants.EnderRail_Down.checkConstructed(block.getLocation()).isConstructed()) {
+            direction = EnderRailDirection.Down;
+        } else {
+            return;
+        }
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+        EnderRailData enderRailData = null;
+
+        for (EnderRailData data : mixedCatastrophesData.getMetaData().getEnderRailDataList()) {
+            if (center.equals(data.getPosition())) {
+                enderRailData = data;
+                break;
+            }
+        }
+
+        boolean isNew = false;
+
+        if (enderRailData == null) {
+            enderRailData = new EnderRailData(center, world.getName(), 0, direction);
+            isNew = true;
+        }
+
+        if (enderRailData.getDirection() != direction)
+            return;
+
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        double multiplier = Functions.logarithm(2 + enderRailData.getLevel(), 2);
+        int cost = (int) Math.round(250 * multiplier);
+        int costItem = (int) Math.round(multiplier);
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Ender Eyes to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        if (isNew)
+            mixedCatastrophesData.getMetaData().getEnderRailDataList().add(enderRailData);
+
+        enderRailData.setLevel(enderRailData.getLevel() + 1);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Ender Rail has Range " + enderRailData.getLevel() * Constants.EnderRailRangeFactor + ".")
+                .withColor(Constants.ConstructThemes.get(ConstructType.EnderRail).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
+
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
+            return;
+
+        mixedAchievementsManager.updateConstructAchievementProgress(
+                player, ConstructType.EnderRail, enderRailData.getLevel());
     }
 }

@@ -1,4 +1,4 @@
-package ch.mixin.mixedCatastrophes.metaData;
+package ch.mixin.mixedCatastrophes.metaData.data;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;

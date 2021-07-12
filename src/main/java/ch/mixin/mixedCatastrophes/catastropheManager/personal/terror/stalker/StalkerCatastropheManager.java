@@ -1,9 +1,9 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker;
 
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import ch.mixin.mixedCatastrophes.metaData.StalkerData;
-import ch.mixin.mixedCatastrophes.metaData.TerrorData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.StalkerData;
+import ch.mixin.mixedCatastrophes.metaData.data.TerrorData;
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;

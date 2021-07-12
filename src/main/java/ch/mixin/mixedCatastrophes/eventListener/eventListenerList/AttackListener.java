@@ -2,8 +2,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import com.google.gson.Gson;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;

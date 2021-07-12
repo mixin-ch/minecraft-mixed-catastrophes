@@ -5,7 +5,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;

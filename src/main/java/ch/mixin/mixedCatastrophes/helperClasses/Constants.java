@@ -14,6 +14,7 @@ import java.util.List;
 public class Constants {
     public static final int BlitzardRangeFactor = 10;
     public static final int LighthouseRangeFactor = 10;
+    public static final int EnderRailRangeFactor = 100;
     public static final int ScareCrowRange = 50;
 
     public static final List<AspectType> AspectOrder;
@@ -45,6 +46,9 @@ public class Constants {
     public static final ConstructShape Lighthouse;
     public static final ConstructShape BlazeReactor;
     public static final ConstructShape Scarecrow;
+    public static final ConstructShape EnderRail_Side;
+    public static final ConstructShape EnderRail_Up;
+    public static final ConstructShape EnderRail_Down;
 
     static {
         AspectOrder = new ArrayList<>();
@@ -64,6 +68,7 @@ public class Constants {
         ConstructOrder.add(ConstructType.Blitzard);
         ConstructOrder.add(ConstructType.Lighthouse);
         ConstructOrder.add(ConstructType.Scarecrow);
+        ConstructOrder.add(ConstructType.EnderRail);
 
         TimeDistortionTheme = new Theme(ChatColor.of("#7F7FFF"), Material.CLOCK);
 
@@ -71,7 +76,7 @@ public class Constants {
         WeatherThemes.put(WeatherCatastropheType.Nothing, new Theme(ChatColor.of("#FFFFFF"), Material.AIR));
         WeatherThemes.put(WeatherCatastropheType.RadiantSky, new Theme(ChatColor.of("#FFBF3F"), Material.GLOWSTONE));
         WeatherThemes.put(WeatherCatastropheType.SearingCold, new Theme(ChatColor.of("#3F7FFF"), Material.ICE));
-        WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("#00BF7F"), Material.CHAIN));
+        WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("#7FBFFF"), Material.CHAIN));
         WeatherThemes.put(WeatherCatastropheType.GravityLoss, new Theme(ChatColor.of("#BFBFBF"), Material.FEATHER));
         WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("#BF7F5F"), Material.BONE));
 
@@ -100,6 +105,7 @@ public class Constants {
         ConstructThemes.put(ConstructType.Blitzard, new Theme(WeatherThemes.get(WeatherCatastropheType.ThunderStorm).getColor(), Material.IRON_BARS));
         ConstructThemes.put(ConstructType.Lighthouse, new Theme(ChatColor.of("#FFFF00"), Material.LANTERN));
         ConstructThemes.put(ConstructType.Scarecrow, new Theme(AspectThemes.get(AspectType.Terror).getColor(), Material.CARVED_PUMPKIN));
+        ConstructThemes.put(ConstructType.EnderRail, new Theme(ChatColor.of("#00BF7F"), Material.ENDER_PEARL));
 
         Airs = new ArrayList<>();
         Airs.add(Material.AIR);
@@ -340,6 +346,93 @@ public class Constants {
             put(new Coordinate3D(0, -1, 2), Fences);
             put(new Coordinate3D(0, -2, 0), Fences);
             put(new Coordinate3D(0, -3, 0), Fences);
+        }});
+
+        EnderRail_Side = new ConstructShape(RotationSymmetry.Degrees360, new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(-3, 0, -1), Material.END_STONE);
+            put(new Coordinate3D(-3, 0, 0), Material.END_STONE);
+            put(new Coordinate3D(-3, 0, 1), Material.END_STONE);
+            put(new Coordinate3D(-2, 0, -1), Material.END_STONE);
+            put(new Coordinate3D(-2, 0, 0), Material.REDSTONE_BLOCK);
+            put(new Coordinate3D(-2, 0, 1), Material.END_STONE);
+            put(new Coordinate3D(-1, 0, -1), Material.END_STONE);
+            put(new Coordinate3D(-1, 0, 0), Material.END_STONE);
+            put(new Coordinate3D(-1, 0, 1), Material.END_STONE);
+            put(new Coordinate3D(0, 0, -1), Material.END_STONE);
+            put(new Coordinate3D(0, 0, 0), Material.LAPIS_BLOCK);
+            put(new Coordinate3D(0, 0, 1), Material.END_STONE);
+            put(new Coordinate3D(-3, 1, -1), Material.QUARTZ_BLOCK);
+            put(new Coordinate3D(-3, 1, 0), Material.QUARTZ_SLAB);
+            put(new Coordinate3D(-3, 1, 1), Material.QUARTZ_BLOCK);
+            put(new Coordinate3D(-2, 1, -1), Material.END_ROD);
+            put(new Coordinate3D(-2, 1, 0), Material.POWERED_RAIL);
+            put(new Coordinate3D(-2, 1, 1), Material.END_ROD);
+            put(new Coordinate3D(-1, 1, -1), Material.END_ROD);
+            put(new Coordinate3D(-1, 1, 0), Material.POWERED_RAIL);
+            put(new Coordinate3D(-1, 1, 1), Material.END_ROD);
+            put(new Coordinate3D(0, 1, -1), Material.QUARTZ_BLOCK);
+            put(new Coordinate3D(0, 1, 0), Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+            put(new Coordinate3D(0, 1, 1), Material.QUARTZ_BLOCK);
+        }});
+
+        EnderRail_Up = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(-1, 0, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 0, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 0, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(0, 0, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(0, 0, 0), Material.LAPIS_LAZULI);
+            put(new Coordinate3D(0, 0, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 0, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 0, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 0, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 1, -1), Material.END_ROD);
+            put(new Coordinate3D(-1, 1, 1), Material.END_ROD);
+            put(new Coordinate3D(0, 1, 0), Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+            put(new Coordinate3D(1, 1, -1), Material.END_ROD);
+            put(new Coordinate3D(1, 1, 1), Material.END_ROD);
+            put(new Coordinate3D(-1, 2, -1), Material.END_ROD);
+            put(new Coordinate3D(-1, 2, 1), Material.END_ROD);
+            put(new Coordinate3D(1, 2, -1), Material.END_ROD);
+            put(new Coordinate3D(1, 2, 1), Material.END_ROD);
+            put(new Coordinate3D(-1, 3, -1), Material.END_STONE_BRICK_SLAB);
+            put(new Coordinate3D(-1, 3, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 3, 1), Material.END_STONE_BRICK_SLAB);
+            put(new Coordinate3D(0, 3, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(0, 3, 0), Material.END_STONE_BRICKS);
+            put(new Coordinate3D(0, 3, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 3, -1), Material.END_STONE_BRICK_SLAB);
+            put(new Coordinate3D(1, 3, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 3, 1), Material.END_STONE_BRICK_SLAB);
+        }});
+
+        EnderRail_Down = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(-1, 0, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 0, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 0, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(0, 0, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(0, 0, 0), Material.LAPIS_LAZULI);
+            put(new Coordinate3D(0, 0, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 0, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 0, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 0, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 1, -1), Material.END_ROD);
+            put(new Coordinate3D(-1, 1, 1), Material.END_ROD);
+            put(new Coordinate3D(0, 1, 0), Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
+            put(new Coordinate3D(1, 1, -1), Material.END_ROD);
+            put(new Coordinate3D(1, 1, 1), Material.END_ROD);
+            put(new Coordinate3D(-1, 2, -1), Material.END_ROD);
+            put(new Coordinate3D(-1, 2, 1), Material.END_ROD);
+            put(new Coordinate3D(1, 2, -1), Material.END_ROD);
+            put(new Coordinate3D(1, 2, 1), Material.END_ROD);
+            put(new Coordinate3D(-1, 3, -1), Material.END_STONE_BRICK_SLAB);
+            put(new Coordinate3D(-1, 3, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(-1, 3, 1), Material.END_STONE_BRICK_SLAB);
+            put(new Coordinate3D(0, 3, -1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(0, 3, 0), Material.END_STONE_BRICKS);
+            put(new Coordinate3D(0, 3, 1), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 3, -1), Material.END_STONE_BRICK_SLAB);
+            put(new Coordinate3D(1, 3, 0), Material.END_STONE_BRICK_STAIRS);
+            put(new Coordinate3D(1, 3, 1), Material.END_STONE_BRICK_SLAB);
         }});
     }
 }

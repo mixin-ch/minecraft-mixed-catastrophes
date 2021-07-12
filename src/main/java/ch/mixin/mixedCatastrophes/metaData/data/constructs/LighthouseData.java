@@ -1,11 +1,11 @@
-package ch.mixin.mixedCatastrophes.metaData.constructs;
+package ch.mixin.mixedCatastrophes.metaData.data.constructs;
 
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 
-public class GreenWellData extends ConstructData {
+public class LighthouseData extends ConstructData {
     private int level;
 
-    public GreenWellData(Coordinate3D position, String worldName, int level) {
+    public LighthouseData(Coordinate3D position, String worldName, int level) {
         super(position, worldName);
         this.level = level;
     }

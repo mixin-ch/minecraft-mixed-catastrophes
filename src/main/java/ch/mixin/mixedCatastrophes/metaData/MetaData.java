@@ -2,7 +2,9 @@ package ch.mixin.mixedCatastrophes.metaData;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import ch.mixin.mixedCatastrophes.metaData.constructs.*;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.*;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.StarSplinterRemainsData;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -23,6 +25,7 @@ public class MetaData {
     private List<LighthouseData> lighthouseDataList;
     private List<BlazeReactorData> blazeReactorDataList;
     private List<ScarecrowData> scarecrowDataList;
+    private List<EnderRailData> enderRailDataList;
 
     public void save() {
         MixedCatastrophesPlugin.writeFile(MixedCatastrophesPlugin.METADATA_FILE, new Gson().toJson(this));
@@ -130,5 +133,13 @@ public class MetaData {
 
     public void setScarecrowDataList(List<ScarecrowData> scarecrowDataList) {
         this.scarecrowDataList = scarecrowDataList;
+    }
+
+    public List<EnderRailData> getEnderRailDataList() {
+        return enderRailDataList;
+    }
+
+    public void setEnderRailDataList(List<EnderRailData> enderRailDataList) {
+        this.enderRailDataList = enderRailDataList;
     }
 }

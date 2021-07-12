@@ -11,10 +11,10 @@ import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.MetaData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
-import ch.mixin.mixedCatastrophes.metaData.constructs.BlitzardData;
-import ch.mixin.mixedCatastrophes.metaData.constructs.LighthouseData;
-import ch.mixin.mixedCatastrophes.metaData.constructs.ScarecrowData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.BlitzardData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.LighthouseData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.ScarecrowData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 

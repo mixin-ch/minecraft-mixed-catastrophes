@@ -1,7 +1,7 @@
 package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import org.bukkit.Location;
 import org.bukkit.Sound;

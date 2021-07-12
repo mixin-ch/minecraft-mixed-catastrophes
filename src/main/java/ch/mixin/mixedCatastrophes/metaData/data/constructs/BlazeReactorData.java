@@ -1,8 +1,8 @@
-package ch.mixin.mixedCatastrophes.metaData.constructs;
+package ch.mixin.mixedCatastrophes.metaData.data.constructs;
 
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 
-public class BlazeReactorData extends ConstructData{
+public class BlazeReactorData extends ConstructData {
     private int level;
     private int fuel;
 

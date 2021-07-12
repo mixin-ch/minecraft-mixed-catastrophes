@@ -1,4 +1,4 @@
-package ch.mixin.mixedCatastrophes.metaData.constructs;
+package ch.mixin.mixedCatastrophes.metaData.data.constructs;
 
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 
