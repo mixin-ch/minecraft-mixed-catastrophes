@@ -46,6 +46,9 @@ public class ConstructManager extends CatastropheManager {
 
         if (mixedCatastrophesData.getMetaData().getScarecrowDataList() == null)
             mixedCatastrophesData.getMetaData().setScarecrowDataList(new ArrayList<>());
+
+        if (mixedCatastrophesData.getMetaData().getEnderRailDataList() == null)
+            mixedCatastrophesData.getMetaData().setEnderRailDataList(new ArrayList<>());
     }
 
     @Override
