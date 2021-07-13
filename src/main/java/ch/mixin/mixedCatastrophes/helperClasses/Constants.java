@@ -105,7 +105,7 @@ public class Constants {
         ConstructThemes.put(ConstructType.Blitzard, new Theme(WeatherThemes.get(WeatherCatastropheType.ThunderStorm).getColor(), Material.IRON_BARS));
         ConstructThemes.put(ConstructType.Lighthouse, new Theme(ChatColor.of("#FFFF00"), Material.LANTERN));
         ConstructThemes.put(ConstructType.Scarecrow, new Theme(AspectThemes.get(AspectType.Terror).getColor(), Material.CARVED_PUMPKIN));
-        ConstructThemes.put(ConstructType.EnderRail, new Theme(ChatColor.of("#00BF7F"), Material.ENDER_PEARL));
+        ConstructThemes.put(ConstructType.EnderRail, new Theme(ChatColor.of("#00BF7F"), Material.RAIL));
 
         Airs = new ArrayList<>();
         Airs.add(Material.AIR);
@@ -380,7 +380,7 @@ public class Constants {
             put(new Coordinate3D(-1, 0, 0), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(-1, 0, 1), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(0, 0, -1), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(0, 0, 0), Material.LAPIS_LAZULI);
+            put(new Coordinate3D(0, 0, 0), Material.LAPIS_BLOCK);
             put(new Coordinate3D(0, 0, 1), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(1, 0, -1), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(1, 0, 0), Material.END_STONE_BRICK_STAIRS);
@@ -410,7 +410,7 @@ public class Constants {
             put(new Coordinate3D(-1, 0, 0), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(-1, 0, 1), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(0, 0, -1), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(0, 0, 0), Material.LAPIS_LAZULI);
+            put(new Coordinate3D(0, 0, 0), Material.LAPIS_BLOCK);
             put(new Coordinate3D(0, 0, 1), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(1, 0, -1), Material.END_STONE_BRICK_STAIRS);
             put(new Coordinate3D(1, 0, 0), Material.END_STONE_BRICK_STAIRS);

@@ -67,7 +67,7 @@ public class ConstructListener implements Listener {
             case PUMPKIN_PIE:
                 makeScarecrow(event);
                 break;
-            case ENDER_PEARL:
+            case ENDER_EYE:
                 makeEnderRail(event);
                 break;
         }

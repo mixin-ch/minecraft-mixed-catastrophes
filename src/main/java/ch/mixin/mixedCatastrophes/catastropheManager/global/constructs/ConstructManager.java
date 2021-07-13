@@ -4,7 +4,6 @@ import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.*;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
-import ch.mixin.mixedCatastrophes.metaData.data.constructs.ConstructData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.*;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -69,6 +68,7 @@ public class ConstructManager extends CatastropheManager {
         tickLighthouse();
         tickBlazeReactor();
         tickScarecrow();
+        tickEnderRail();
     }
 
     public void removeHolograms() {
@@ -147,6 +147,22 @@ public class ConstructManager extends CatastropheManager {
         ArrayList<String> lines = new ArrayList<>();
         lines.add(color + Functions.splitCamelCase(ConstructType.Scarecrow.toString()));
         lines.add(color + "Terror: " + data.getCollectedTerror());
+
+        if (isConstructed) {
+            lines.add(color + "Active");
+        } else {
+            lines.add(color + "Inactive");
+        }
+
+        generateConstructHologram(data, lines);
+    }
+
+    private void generateEnderRailHologram(EnderRailData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.EnderRail).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.EnderRail.toString()));
+        lines.add(color + "Level: " + data.getLevel());
+        lines.add(color + "Range: " + data.getLevel() * Constants.EnderRailRangeFactor);
 
         if (isConstructed) {
             lines.add(color + "Active");
@@ -459,6 +475,46 @@ public class ConstructManager extends CatastropheManager {
 
             int terror = scarecrowData.getCollectedTerror();
             mixedCatastrophesData.getParticler().spawnParticles(Particle.SOUL, particles, world, new Coordinate3D(0, 0.1 + Math.pow(terror, 0.5) * 0.01, 0), 0.1 + terror * 0.01, 4, 5);
+        }
+    }
+
+    private void tickEnderRail() {
+        List<EnderRailData> dataList = mixedCatastrophesData.getMetaData().getEnderRailDataList();
+
+        for (EnderRailData data : dataList) {
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(data.getWorldName());
+
+            if (world == null)
+                return;
+
+            Coordinate3D center = data.getPosition();
+            ShapeCompareResult shapeCompareResult = null;
+
+            switch (data.getDirection()) {
+                case Side:
+                    shapeCompareResult = Constants.EnderRail_Side.checkConstructed(center.toLocation(world));
+                    break;
+                case Up:
+                    shapeCompareResult = Constants.EnderRail_Up.checkConstructed(center.toLocation(world));
+                    break;
+                case Down:
+                    shapeCompareResult = Constants.EnderRail_Down.checkConstructed(center.toLocation(world));
+                    break;
+            }
+
+            boolean isConstructed = shapeCompareResult.isConstructed();
+            generateEnderRailHologram(data, isConstructed);
+
+            if (!isConstructed)
+                return;
+
+            int level = data.getLevel();
+
+            List<Coordinate3D> particles = new ArrayList<>();
+            particles.add(center);
+            particles.add(center.sum(0, 1, 0));
+
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.PORTAL, particles, world, 1 + level * 0.25, 4, 5);
         }
     }
 
