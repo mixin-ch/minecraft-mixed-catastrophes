@@ -3,13 +3,18 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterPremise;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
+import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
+import ch.mixin.mixedCatastrophes.helperClasses.ShapeCompareResult;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.data.StarSplinterRemainsData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.EnderRailData;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -23,6 +28,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -147,5 +153,178 @@ public class ActionListener implements Listener {
 
         event.setCancelled(true);
         entity.remove();
+    }
+
+    @EventHandler
+    public void enderRail(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(world))
+            return;
+
+        if (!event.getAction().equals(Action.PHYSICAL))
+            return;
+
+        if (event.getClickedBlock().getType() != Material.LIGHT_WEIGHTED_PRESSURE_PLATE
+                && event.getClickedBlock().getType() != Material.HEAVY_WEIGHTED_PRESSURE_PLATE)
+            return;
+
+        Location startLocation = event.getClickedBlock().getLocation().add(0, -1, 0);
+        Coordinate3D startPosition = Coordinate3D.toCoordinate(startLocation);
+        String worldName = world.getName();
+        EnderRailData enderRailData = null;
+        int rotation = 0;
+
+        List<EnderRailData> railsUp = new ArrayList<>();
+        List<EnderRailData> railsDown = new ArrayList<>();
+        List<EnderRailData> rails0D = new ArrayList<>();
+        List<EnderRailData> rails90D = new ArrayList<>();
+        List<EnderRailData> rails180D = new ArrayList<>();
+        List<EnderRailData> rails270D = new ArrayList<>();
+
+        enderRailLoop:
+        for (EnderRailData erd : mixedCatastrophesData.getMetaData().getEnderRailDataList()) {
+            if (!erd.getWorldName().equals(worldName))
+                continue;
+
+            ShapeCompareResult scr = erd.checkConstructed(world);
+
+            if (!scr.isConstructed())
+                continue;
+
+            Coordinate3D pos = erd.getPosition();
+
+            if (pos.equals(startPosition)) {
+                enderRailData = erd;
+                rotation = scr.getRotations();
+                continue;
+            }
+
+            switch (erd.getDirection()) {
+                case Side:
+                    if (startPosition.getY() != pos.getY())
+                        continue enderRailLoop;
+
+                    switch (scr.getRotations()) {
+                        case 0:
+                            if (startPosition.getZ() != pos.getZ())
+                                continue enderRailLoop;
+                            if (startPosition.getX() <= pos.getX())
+                                continue enderRailLoop;
+                            rails0D.add(erd);
+                            break;
+                        case 1:
+                            if (startPosition.getX() != pos.getX())
+                                continue enderRailLoop;
+                            if (startPosition.getZ() <= pos.getZ())
+                                continue enderRailLoop;
+                            rails90D.add(erd);
+                            break;
+                        case 2:
+                            if (startPosition.getZ() != pos.getZ())
+                                continue enderRailLoop;
+                            if (startPosition.getX() >= pos.getX())
+                                continue enderRailLoop;
+                            rails180D.add(erd);
+                            break;
+                        case 3:
+                            if (startPosition.getX() != pos.getX())
+                                continue enderRailLoop;
+                            if (startPosition.getZ() >= pos.getZ())
+                                continue enderRailLoop;
+                            rails270D.add(erd);
+                            break;
+                    }
+                    break;
+
+                case Up:
+                    if (startPosition.getX() != pos.getX())
+                        continue enderRailLoop;
+                    if (startPosition.getZ() != pos.getZ())
+                        continue enderRailLoop;
+                    if (startPosition.getY() <= pos.getY())
+                        continue enderRailLoop;
+                    railsUp.add(erd);
+                    break;
+
+                case Down:
+                    if (startPosition.getX() != pos.getX())
+                        continue enderRailLoop;
+                    if (startPosition.getZ() != pos.getZ())
+                        continue enderRailLoop;
+                    if (startPosition.getY() > pos.getY())
+                        continue enderRailLoop;
+                    railsDown.add(erd);
+                    break;
+            }
+        }
+
+        if (enderRailData == null)
+            return;
+
+        List<EnderRailData> possibleTargets = new ArrayList<>();
+        Location endLocationDisplace = new Location(world, 0.5, 0, 0.5);
+
+        switch (enderRailData.getDirection()) {
+            case Side:
+                switch (rotation) {
+                    case 0:
+                        possibleTargets = rails180D;
+                        endLocationDisplace.add(2, 1, 0);
+                        break;
+                    case 1:
+                        possibleTargets = rails270D;
+                        endLocationDisplace.add(0, 1, 2);
+                        break;
+                    case 2:
+                        possibleTargets = rails0D;
+                        endLocationDisplace.add(-2, 1, 0);
+                        break;
+                    case 3:
+                        possibleTargets = rails90D;
+                        endLocationDisplace.add(0, 1, -2);
+                        break;
+                }
+                break;
+            case Up:
+                possibleTargets = railsDown;
+                endLocationDisplace.add(0, 4, 0);
+                break;
+            case Down:
+                possibleTargets = railsUp;
+                endLocationDisplace.add(0, 4, 0);
+                break;
+        }
+
+        if (possibleTargets.isEmpty())
+            return;
+
+        int maxDistance = enderRailData.getLevel() * Constants.EnderRailRangeFactor;
+        EnderRailData closestTarget = null;
+        double closestdistance = maxDistance + 1;
+
+        for (EnderRailData target : possibleTargets) {
+            double distance = target.getPosition().distance(startPosition);
+
+            if (distance < closestdistance) {
+                closestdistance = distance;
+                closestTarget = target;
+            }
+        }
+
+        if (closestdistance > maxDistance)
+            return;
+
+        Location endLocation = closestTarget.getPosition().toLocation(world).add(endLocationDisplace);
+        player.teleport(endLocation);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withEventSound(Sound.ENTITY_ENDERMAN_TELEPORT)
+                .execute();
     }
 }

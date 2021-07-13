@@ -163,6 +163,7 @@ public class ConstructManager extends CatastropheManager {
         lines.add(color + Functions.splitCamelCase(ConstructType.EnderRail.toString()));
         lines.add(color + "Level: " + data.getLevel());
         lines.add(color + "Range: " + data.getLevel() * Constants.EnderRailRangeFactor);
+        lines.add(color + "Direction: " + data.getDirection());
 
         if (isConstructed) {
             lines.add(color + "Active");
