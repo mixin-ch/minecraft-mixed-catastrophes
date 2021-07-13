@@ -157,6 +157,8 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(greenWellData);
+
         MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
 
         if (!mixedAchievementsManager.isActive())
@@ -252,6 +254,8 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(blazeReactorData);
+
         MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
 
         if (!mixedAchievementsManager.isActive())
@@ -340,6 +344,8 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(blitzardData);
 
         MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
 
@@ -430,6 +436,8 @@ public class ConstructListener implements Listener {
                 .finish()
                 .execute();
 
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(lighthouseData);
+
         MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
 
         if (!mixedAchievementsManager.isActive())
@@ -505,6 +513,8 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(scarecrowData);
 
         MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
 
@@ -606,6 +616,8 @@ public class ConstructListener implements Listener {
                 .withTitle(true)
                 .finish()
                 .execute();
+
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(enderRailData);
 
         MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
 

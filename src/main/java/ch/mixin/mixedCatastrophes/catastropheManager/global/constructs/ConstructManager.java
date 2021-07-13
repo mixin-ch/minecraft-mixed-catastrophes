@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ConstructManager extends CatastropheManager {
-    private HashMap<ConstructData, Hologram> hologramMap = new HashMap<>();
+    private HashMap<ConstructData, ConstructHologram> hologramMap = new HashMap<>();
 
     public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
@@ -94,7 +94,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines);
+        generateConstructHologram(data, lines, isConstructed);
     }
 
     private void generateBlazeReactorHologram(BlazeReactorData data, boolean isConstructed) {
@@ -109,7 +109,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines);
+        generateConstructHologram(data, lines, isConstructed);
     }
 
     private void generateBlitzardHologram(BlitzardData data, boolean isConstructed) {
@@ -124,7 +124,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines);
+        generateConstructHologram(data, lines, isConstructed);
     }
 
     private void generateLighthouseHologram(LighthouseData data, boolean isConstructed) {
@@ -139,7 +139,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines);
+        generateConstructHologram(data, lines, isConstructed);
     }
 
     private void generateScarecrowHologram(ScarecrowData data, boolean isConstructed) {
@@ -154,7 +154,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines);
+        generateConstructHologram(data, lines, isConstructed);
     }
 
     private void generateEnderRailHologram(EnderRailData data, boolean isConstructed) {
@@ -170,23 +170,26 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines);
+        generateConstructHologram(data, lines, isConstructed);
     }
 
-    private void generateConstructHologram(ConstructData data, ArrayList<String> lines) {
-        Hologram hologram = hologramMap.get(data);
+    private void generateConstructHologram(ConstructData data, ArrayList<String> lines, boolean isConstructed) {
+        ConstructHologram constructHologram = hologramMap.get(data);
 
-        if (hologram == null) {
+        if (constructHologram == null) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(data.getWorldName());
 
             if (world == null)
                 return;
 
             Location location = data.getPosition().toLocation(world).add(0.5, 2.5, 0.5);
-            hologram = makeHologram(lines, location);
-            hologramMap.put(data, hologram);
-        } else {
-            fillHologram(hologram, lines);
+            Hologram hologram = makeHologram(lines, location);
+            constructHologram = new ConstructHologram(hologram, isConstructed, false);
+            hologramMap.put(data, constructHologram);
+        } else if (constructHologram.isChanged() || constructHologram.isConstructed() != isConstructed) {
+            constructHologram.setChanged(false);
+            constructHologram.setConstructed(isConstructed);
+            fillHologram(constructHologram.getHologram(), lines);
         }
     }
 
@@ -671,5 +674,14 @@ public class ConstructManager extends CatastropheManager {
         }
 
         return strongestConstruct;
+    }
+
+    public void constructChanged(ConstructData constructData) {
+        ConstructHologram constructHologram = hologramMap.get(constructData);
+
+        if (constructHologram == null)
+            return;
+
+        constructHologram.setChanged(true);
     }
 }
