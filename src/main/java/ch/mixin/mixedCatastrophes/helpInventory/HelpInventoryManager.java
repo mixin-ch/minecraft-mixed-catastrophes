@@ -429,22 +429,22 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Place Blocks in certain Configurations."
         });
-        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.GreenWell).getMaterial(), 1, slot(2, 3), "Green Well", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.GreenWell).getMaterial(), 1, slot(2, 2), "Green Well", new String[]{
                 "Regularly drops Logs of a chosen Kind.", "Spawns Flowers.", "Converts Dirt To Grass."
         }, linkInventoryMap, HelpInventoryType.Constructs_GreenWell);
-        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.BlazeReactor).getMaterial(), 1, slot(2, 4), "Blaze Reactor", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.BlazeReactor).getMaterial(), 1, slot(2, 3), "Blaze Reactor", new String[]{
                 "Regularly drops Cobblestone.", "Drains Water from Cauldrons tofunction."
         }, linkInventoryMap, HelpInventoryType.Constructs_BlazeReactor);
-        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Blitzard).getMaterial(), 1, slot(2, 5), "Blitzard", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Blitzard).getMaterial(), 1, slot(2, 4), "Blitzard", new String[]{
                 "Attracts Lightning."
         }, linkInventoryMap, HelpInventoryType.Constructs_Blitzard);
-        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Lighthouse).getMaterial(), 1, slot(2, 6), "Lighthouse", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Lighthouse).getMaterial(), 1, slot(2, 5), "Lighthouse", new String[]{
                 "Protects against any Terror Event."
         }, linkInventoryMap, HelpInventoryType.Constructs_Lighthouse);
-        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Scarecrow).getMaterial(), 1, slot(2, 7), "Scarecrow", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Scarecrow).getMaterial(), 1, slot(2, 6), "Scarecrow", new String[]{
                 "Increases Terror and Secrets from Horrific Whispers."
         }, linkInventoryMap, HelpInventoryType.Constructs_Scarecrow);
-        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.EnderRail).getMaterial(), 1, slot(2, 8), "Ender Rail", new String[]{
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.EnderRail).getMaterial(), 1, slot(2, 7), "Ender Rail", new String[]{
                 "Teleport between Stations."
         }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail);
 
@@ -651,14 +651,14 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.ENDER_EYE, 1, true, slot(1, 5), "Ender Eye", new String[]{
                 "Click on the Lapis Lazuli Block with Ender Eye.", "Costs Ender Eyes and Secrets."
         });
-        createSlotLink(inventory, Material.RAIL, 1, true, slot(3, 3), "Side", new String[]{
-                "The Configuration for the Station, that points sideways."
+        createSlotLink(inventory, Material.RAIL, 1, true, slot(2, 3), "Side", new String[]{
+                "The Station, that points sideways."
         }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Side);
-        createSlotLink(inventory, Material.RAIL, 1, true, slot(3, 5), "Up", new String[]{
-                "The Configuration for the Station, that points up."
+        createSlotLink(inventory, Material.RAIL, 1, true, slot(2, 5), "Up", new String[]{
+                "The Station, that points up."
         }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
-        createSlotLink(inventory, Material.RAIL, 1, true, slot(3, 7), "Down", new String[]{
-                "The Configuration for the Station, that points down."
+        createSlotLink(inventory, Material.RAIL, 1, true, slot(2, 7), "Down", new String[]{
+                "The Station, that points down."
         }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Down);
 
         return new HelpInventory(inventory, linkInventoryMap);
@@ -669,7 +669,7 @@ public class HelpInventoryManager {
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
-                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail);
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Construct in the following Configuration."
         });
@@ -680,7 +680,7 @@ public class HelpInventoryManager {
         HashMap<Coordinate3D, Material> materialMap = Constants.EnderRail_Side.getMaterialMap();
         for (Coordinate3D c3d : materialMap.keySet()) {
             Material material = materialMap.get(c3d);
-            createSlot(inventory, material, 1, slot(c3d.getZRound() + c3d.getYRound() * 4 + 3, c3d.getXRound() + 2), material.name(), new String[]{});
+            createSlot(inventory, material, 1, slot(-c3d.getXRound() + 3, c3d.getZRound() + c3d.getYRound() * 4 + 3), material.name(), new String[]{});
         }
 
         return new HelpInventory(inventory, linkInventoryMap);
@@ -691,7 +691,7 @@ public class HelpInventoryManager {
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
-                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail);
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Construct in the following Configuration."
         });
@@ -702,7 +702,7 @@ public class HelpInventoryManager {
         HashMap<Coordinate3D, Material> materialMap = Constants.EnderRail_Up.getMaterialMap();
         for (Coordinate3D c3d : materialMap.keySet()) {
             Material material = materialMap.get(c3d);
-            createSlot(inventory, material, 1, slot(c3d.getZRound() + c3d.getYRound() * 4 + 3, c3d.getXRound() + 3), material.name(), new String[]{});
+            createSlot(inventory, material, 1, slot(-c3d.getXRound() + 4, c3d.getZRound() + c3d.getYRound() * 4 + 3), material.name(), new String[]{});
         }
 
         return new HelpInventory(inventory, linkInventoryMap);
@@ -713,7 +713,7 @@ public class HelpInventoryManager {
         HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
 
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
-                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail);
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "Construct in the following Configuration."
         });
@@ -724,7 +724,7 @@ public class HelpInventoryManager {
         HashMap<Coordinate3D, Material> materialMap = Constants.EnderRail_Down.getMaterialMap();
         for (Coordinate3D c3d : materialMap.keySet()) {
             Material material = materialMap.get(c3d);
-            createSlot(inventory, material, 1, slot(c3d.getZRound() + c3d.getYRound() * 4 + 3, c3d.getXRound() + 3), material.name(), new String[]{});
+            createSlot(inventory, material, 1, slot(-c3d.getXRound() + 4, c3d.getZRound() + c3d.getYRound() * 4 + 3), material.name(), new String[]{});
         }
 
         return new HelpInventory(inventory, linkInventoryMap);
