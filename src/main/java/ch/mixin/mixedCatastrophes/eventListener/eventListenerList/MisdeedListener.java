@@ -13,6 +13,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -43,6 +45,44 @@ public class MisdeedListener implements Listener {
         } else if (Constants.Stones.contains(material)) {
             breakStone(player);
         }
+    }
+
+    @EventHandler
+    public void firework(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
+        Player player = event.getPlayer();
+
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
+            return;
+
+        ItemStack handItem = event.getItem();
+
+        if (handItem == null)
+            return;
+
+        if (handItem.getType() != Material.FIREWORK_ROCKET)
+            return;
+
+        if (!player.isGliding())
+            return;
+
+        if (new Random().nextDouble() >= 0.1)
+            return;
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Misfortune, 1);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("The Sky dislikes your Hubris of flying.")
+                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
     }
 
     private void breakWood(Player player) {
