@@ -27,8 +27,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -327,6 +325,9 @@ public class ActionListener implements Listener {
                 .eventChange(player)
                 .withEventSound(Sound.ENTITY_ENDERMAN_TELEPORT)
                 .execute();
+
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
+            return;
 
         double probability = 0.1 / (enderRailData.getLevel());
 

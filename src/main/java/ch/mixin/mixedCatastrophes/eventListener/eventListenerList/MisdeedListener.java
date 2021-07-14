@@ -52,6 +52,9 @@ public class MisdeedListener implements Listener {
         if (!mixedCatastrophesData.isFullyFunctional())
             return;
 
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
+            return;
+
         Player player = event.getPlayer();
 
         if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
