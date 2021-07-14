@@ -24,6 +24,7 @@ public class ConstructAchievementManager {
         buildPresetMap.put(ConstructType.Blitzard, "the Lightnings Favourite");
         buildPresetMap.put(ConstructType.Lighthouse, "the Lantern of Solace");
         buildPresetMap.put(ConstructType.Scarecrow, "the Screams from Beyond");
+        buildPresetMap.put(ConstructType.EnderRail, "the Bridge through Space");
 
         contributePresetMap = new HashMap<>();
         contributePresetMap.put(ConstructType.GreenWell, new ConstructAchievementPreset(
@@ -48,6 +49,11 @@ public class ConstructAchievementManager {
                         new AchievementStagePreset("glowing", 2)
                         , new AchievementStagePreset("shining", 7)
                         , new AchievementStagePreset("radiating", 12)
+                ))));
+        contributePresetMap.put(ConstructType.EnderRail, new ConstructAchievementPreset(
+                new ArrayList<>(Arrays.asList(
+                        new AchievementStagePreset("stabilizing", 2)
+                        , new AchievementStagePreset("converging", 12)
                 ))));
     }
 
