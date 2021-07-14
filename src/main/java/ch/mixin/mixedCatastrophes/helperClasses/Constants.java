@@ -14,7 +14,6 @@ import java.util.List;
 public class Constants {
     public static final int BlitzardRangeFactor = 10;
     public static final int LighthouseRangeFactor = 10;
-    public static final int EnderRailRangeFactor = 100;
     public static final int ScareCrowRange = 50;
 
     public static final List<AspectType> AspectOrder;

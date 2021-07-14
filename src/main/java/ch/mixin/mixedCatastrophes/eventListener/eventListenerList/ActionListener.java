@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterPremise;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
+import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
@@ -26,8 +27,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -302,21 +306,17 @@ public class ActionListener implements Listener {
         if (possibleTargets.isEmpty())
             return;
 
-        int maxDistance = enderRailData.getLevel() * Constants.EnderRailRangeFactor;
         EnderRailData closestTarget = null;
-        double closestdistance = maxDistance + 1;
+        double closestdistance = -1;
 
         for (EnderRailData target : possibleTargets) {
             double distance = target.getPosition().distance(startPosition);
 
-            if (distance < closestdistance) {
+            if (closestdistance == -1 || distance < closestdistance) {
                 closestdistance = distance;
                 closestTarget = target;
             }
         }
-
-        if (closestdistance > maxDistance)
-            return;
 
         Location endLocation = closestTarget.getPosition().toLocation(world).add(endLocationDisplace);
         player.teleport(endLocation);
@@ -324,6 +324,24 @@ public class ActionListener implements Listener {
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
                 .withEventSound(Sound.ENTITY_ENDERMAN_TELEPORT)
+                .execute();
+
+        double probability = 0.1 / (enderRailData.getLevel());
+
+        if (new Random().nextDouble() >= probability)
+            return;
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Misfortune, 1);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("Something went wrong.")
+                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
+                .withTitle(true)
+                .finish()
                 .execute();
     }
 }

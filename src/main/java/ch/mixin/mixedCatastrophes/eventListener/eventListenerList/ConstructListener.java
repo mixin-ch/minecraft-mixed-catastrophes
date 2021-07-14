@@ -570,7 +570,14 @@ public class ConstructListener implements Listener {
             return;
 
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-        double multiplier = Functions.logarithm(2 + enderRailData.getLevel(), 2);
+
+        double multiplier;
+        if (enderRailData.getLevel() == 0) {
+            multiplier = 4;
+        } else {
+            multiplier = Functions.logarithm(2 + enderRailData.getLevel(), 2);
+        }
+
         int cost = (int) Math.round(250 * multiplier);
         int costItem = (int) Math.round(multiplier);
         boolean success = true;
@@ -611,7 +618,7 @@ public class ConstructListener implements Listener {
                 .eventChange(player)
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("The Ender Rail has Range " + enderRailData.getLevel() * Constants.EnderRailRangeFactor + ".")
+                .withEventMessage("The Ender Rail has Stability " + enderRailData.getLevel() + ".")
                 .withColor(Constants.ConstructThemes.get(ConstructType.EnderRail).getColor())
                 .withTitle(true)
                 .finish()
