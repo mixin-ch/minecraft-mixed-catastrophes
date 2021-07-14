@@ -156,6 +156,8 @@ public class ActionListener implements Listener {
 
         event.setCancelled(true);
         entity.remove();
+
+        world.playSound(entity.getLocation(), Sound.BLOCK_ANVIL_PLACE, 1, 1);
     }
 
     @EventHandler
