@@ -5,6 +5,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatas
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
+import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -124,6 +125,10 @@ public class HelpInventoryManager {
         helpInventoryMap.put(HelpInventoryType.Constructs_Lighthouse, makeConstructsLighthouseInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_BlazeReactor, makeConstructsBlazeReactorInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_Scarecrow, makeConstructsScarecrowInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail, makeConstructsEnderRailInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail_Side, makeConstructsEnderRailSideInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail_Up, makeConstructsEnderRailUpInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail_Down, makeConstructsEnderRailDownInventory());
     }
 
     private HelpInventory makeHelpInventory() {
@@ -439,6 +444,9 @@ public class HelpInventoryManager {
         createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.Scarecrow).getMaterial(), 1, slot(2, 7), "Scarecrow", new String[]{
                 "Increases Terror and Secrets from Horrific Whispers."
         }, linkInventoryMap, HelpInventoryType.Constructs_Scarecrow);
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.EnderRail).getMaterial(), 1, slot(2, 8), "Ender Rail", new String[]{
+                "Teleport between Stations."
+        }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -630,6 +638,98 @@ public class HelpInventoryManager {
         return new HelpInventory(inventory, linkInventoryMap);
     }
 
+    private HelpInventory makeConstructsEnderRailInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Ender Rail");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct Stations on the same Axis, pointing at each other.", "Use Ender Eyes to activate.", "Step on the Pressure Plate to teleport."
+        });
+
+        createSlot(inventory, Material.ENDER_EYE, 1, true, slot(1, 5), "Ender Eye", new String[]{
+                "Click on the Lapis Lazuli Block with Ender Eye.", "Costs Ender Eyes and Secrets."
+        });
+        createSlotLink(inventory, Material.RAIL, 1, true, slot(3, 3), "Side", new String[]{
+                "The Configuration for the Station, that points sideways."
+        }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Side);
+        createSlotLink(inventory, Material.RAIL, 1, true, slot(3, 5), "Up", new String[]{
+                "The Configuration for the Station, that points up."
+        }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+        createSlotLink(inventory, Material.RAIL, 1, true, slot(3, 7), "Down", new String[]{
+                "The Configuration for the Station, that points down."
+        }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Down);
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeConstructsEnderRailSideInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 6 * 9, "Ender Rail Side");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration."
+        });
+
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Layer 1", new String[]{});
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Layer 2", new String[]{});
+
+        HashMap<Coordinate3D, Material> materialMap = Constants.EnderRail_Side.getMaterialMap();
+        for (Coordinate3D c3d : materialMap.keySet()) {
+            Material material = materialMap.get(c3d);
+            createSlot(inventory, material, 1, slot(c3d.getZRound() + c3d.getYRound() * 4 + 3, c3d.getXRound() + 2), material.name(), new String[]{});
+        }
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeConstructsEnderRailUpInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 6 * 9, "Ender Rail Up");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration."
+        });
+
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Layer 1", new String[]{});
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Layer 2", new String[]{});
+
+        HashMap<Coordinate3D, Material> materialMap = Constants.EnderRail_Up.getMaterialMap();
+        for (Coordinate3D c3d : materialMap.keySet()) {
+            Material material = materialMap.get(c3d);
+            createSlot(inventory, material, 1, slot(c3d.getZRound() + c3d.getYRound() * 4 + 3, c3d.getXRound() + 3), material.name(), new String[]{});
+        }
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeConstructsEnderRailDownInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 6 * 9, "Ender Rail Down");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs_EnderRail_Up);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration."
+        });
+
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Layer 1", new String[]{});
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Layer 2", new String[]{});
+
+        HashMap<Coordinate3D, Material> materialMap = Constants.EnderRail_Down.getMaterialMap();
+        for (Coordinate3D c3d : materialMap.keySet()) {
+            Material material = materialMap.get(c3d);
+            createSlot(inventory, material, 1, slot(c3d.getZRound() + c3d.getYRound() * 4 + 3, c3d.getXRound() + 3), material.name(), new String[]{});
+        }
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
     private void createSlot(Inventory inventory, Material material, int amount, int slot, String name, String[] lores) {
         createSlot(inventory, material, amount, false, slot, name, lores, false);
     }
@@ -672,7 +772,11 @@ public class HelpInventoryManager {
     }
 
     private void createSlotLink(Inventory inventory, Material material, int amount, int slot, String name, String[] lores, HashMap<Integer, HelpInventoryType> linkInventoryMap, HelpInventoryType helpInventoryType) {
+        createSlotLink(inventory, material, amount, false, slot, name, lores, linkInventoryMap, helpInventoryType);
+    }
+
+    private void createSlotLink(Inventory inventory, Material material, int amount, boolean glowing, int slot, String name, String[] lores, HashMap<Integer, HelpInventoryType> linkInventoryMap, HelpInventoryType helpInventoryType) {
         linkInventoryMap.put(slot, helpInventoryType);
-        createSlot(inventory, material, amount, slot, name, lores, true);
+        createSlot(inventory, material, amount, glowing, slot, name, lores, true);
     }
 }

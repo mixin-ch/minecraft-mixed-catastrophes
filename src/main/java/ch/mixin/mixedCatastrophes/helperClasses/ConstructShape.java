@@ -67,4 +67,16 @@ public class ConstructShape {
 
         return true;
     }
+
+    public RotationSymmetry getRotationSymmetry() {
+        return rotationSymmetry;
+    }
+
+    public HashMap<Coordinate3D, Material> getMaterialMap() {
+        return materialMap;
+    }
+
+    public HashMap<Coordinate3D, List<Material>> getMaterialSetMap() {
+        return materialSetMap;
+    }
 }

@@ -390,19 +390,6 @@ public class Constants {
             put(new Coordinate3D(0, 1, 0), Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
             put(new Coordinate3D(1, 1, -1), Material.END_ROD);
             put(new Coordinate3D(1, 1, 1), Material.END_ROD);
-            put(new Coordinate3D(-1, 2, -1), Material.END_ROD);
-            put(new Coordinate3D(-1, 2, 1), Material.END_ROD);
-            put(new Coordinate3D(1, 2, -1), Material.END_ROD);
-            put(new Coordinate3D(1, 2, 1), Material.END_ROD);
-            put(new Coordinate3D(-1, 3, -1), Material.END_STONE_BRICK_SLAB);
-            put(new Coordinate3D(-1, 3, 0), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(-1, 3, 1), Material.END_STONE_BRICK_SLAB);
-            put(new Coordinate3D(0, 3, -1), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(0, 3, 0), Material.END_STONE_BRICKS);
-            put(new Coordinate3D(0, 3, 1), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(1, 3, -1), Material.END_STONE_BRICK_SLAB);
-            put(new Coordinate3D(1, 3, 0), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(1, 3, 1), Material.END_STONE_BRICK_SLAB);
         }});
 
         EnderRail_Down = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
@@ -420,19 +407,6 @@ public class Constants {
             put(new Coordinate3D(0, 1, 0), Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
             put(new Coordinate3D(1, 1, -1), Material.END_ROD);
             put(new Coordinate3D(1, 1, 1), Material.END_ROD);
-            put(new Coordinate3D(-1, 2, -1), Material.END_ROD);
-            put(new Coordinate3D(-1, 2, 1), Material.END_ROD);
-            put(new Coordinate3D(1, 2, -1), Material.END_ROD);
-            put(new Coordinate3D(1, 2, 1), Material.END_ROD);
-            put(new Coordinate3D(-1, 3, -1), Material.END_STONE_BRICK_SLAB);
-            put(new Coordinate3D(-1, 3, 0), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(-1, 3, 1), Material.END_STONE_BRICK_SLAB);
-            put(new Coordinate3D(0, 3, -1), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(0, 3, 0), Material.END_STONE_BRICKS);
-            put(new Coordinate3D(0, 3, 1), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(1, 3, -1), Material.END_STONE_BRICK_SLAB);
-            put(new Coordinate3D(1, 3, 0), Material.END_STONE_BRICK_STAIRS);
-            put(new Coordinate3D(1, 3, 1), Material.END_STONE_BRICK_SLAB);
         }});
     }
 }

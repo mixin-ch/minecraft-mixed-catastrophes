@@ -3,7 +3,6 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterPremise;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
-import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;

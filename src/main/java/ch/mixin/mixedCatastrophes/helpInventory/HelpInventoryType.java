@@ -16,4 +16,8 @@ public enum HelpInventoryType {
     Constructs_Lighthouse,
     Constructs_BlazeReactor,
     Constructs_Scarecrow,
+    Constructs_EnderRail,
+    Constructs_EnderRail_Side,
+    Constructs_EnderRail_Up,
+    Constructs_EnderRail_Down,
 }
