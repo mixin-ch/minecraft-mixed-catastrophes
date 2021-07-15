@@ -94,7 +94,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed);
+        generateConstructHologram(data, lines, isConstructed, 2);
     }
 
     private void generateBlazeReactorHologram(BlazeReactorData data, boolean isConstructed) {
@@ -109,7 +109,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed);
+        generateConstructHologram(data, lines, isConstructed, 2);
     }
 
     private void generateBlitzardHologram(BlitzardData data, boolean isConstructed) {
@@ -124,7 +124,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed);
+        generateConstructHologram(data, lines, isConstructed, 5);
     }
 
     private void generateLighthouseHologram(LighthouseData data, boolean isConstructed) {
@@ -139,7 +139,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed);
+        generateConstructHologram(data, lines, isConstructed, 5);
     }
 
     private void generateScarecrowHologram(ScarecrowData data, boolean isConstructed) {
@@ -154,7 +154,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed);
+        generateConstructHologram(data, lines, isConstructed, 2);
     }
 
     private void generateEnderRailHologram(EnderRailData data, boolean isConstructed) {
@@ -170,10 +170,10 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed);
+        generateConstructHologram(data, lines, isConstructed, 2);
     }
 
-    private void generateConstructHologram(ConstructData data, ArrayList<String> lines, boolean isConstructed) {
+    private void generateConstructHologram(ConstructData data, ArrayList<String> lines, boolean isConstructed, int height) {
         ConstructHologram constructHologram = hologramMap.get(data);
 
         if (constructHologram == null) {
@@ -182,7 +182,7 @@ public class ConstructManager extends CatastropheManager {
             if (world == null)
                 return;
 
-            Location location = data.getPosition().toLocation(world).add(0.5, 2.5, 0.5);
+            Location location = data.getPosition().toLocation(world).add(0.5, height + 0.5, 0.5);
             Hologram hologram = makeHologram(lines, location);
             constructHologram = new ConstructHologram(hologram, isConstructed, false);
             hologramMap.put(data, constructHologram);
