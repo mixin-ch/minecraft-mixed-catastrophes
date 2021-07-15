@@ -27,6 +27,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -271,6 +272,7 @@ public class ActionListener implements Listener {
 
         List<EnderRailData> possibleTargets = new ArrayList<>();
         Location endLocationDisplace = new Location(world, 0.5, 0, 0.5);
+        Vector playerFacing = player.getLocation().getDirection().setY(0).normalize();
 
         switch (enderRailData.getDirection()) {
             case Side:
@@ -295,11 +297,11 @@ public class ActionListener implements Listener {
                 break;
             case Up:
                 possibleTargets = railsDown;
-                endLocationDisplace.add(0, 4, 0);
+                endLocationDisplace.add(0, 1, 0).add(playerFacing);
                 break;
             case Down:
                 possibleTargets = railsUp;
-                endLocationDisplace.add(0, 4, 0);
+                endLocationDisplace.add(0, 1, 0).add(playerFacing);
                 break;
         }
 
