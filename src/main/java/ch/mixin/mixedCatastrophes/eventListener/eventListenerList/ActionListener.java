@@ -272,7 +272,8 @@ public class ActionListener implements Listener {
 
         List<EnderRailData> possibleTargets = new ArrayList<>();
         Location endLocationDisplace = new Location(world, 0.5, 0, 0.5);
-        Vector playerFacing = player.getLocation().getDirection().setY(0).normalize();
+        Vector playerFacing = player.getLocation().getDirection();
+        Vector playerFacingDisplace = playerFacing.clone().setY(0).normalize();
 
         switch (enderRailData.getDirection()) {
             case Side:
@@ -297,11 +298,11 @@ public class ActionListener implements Listener {
                 break;
             case Up:
                 possibleTargets = railsDown;
-                endLocationDisplace.add(0, 1, 0).add(playerFacing);
+                endLocationDisplace.add(0, 1, 0).add(playerFacingDisplace);
                 break;
             case Down:
                 possibleTargets = railsUp;
-                endLocationDisplace.add(0, 1, 0).add(playerFacing);
+                endLocationDisplace.add(0, 1, 0).add(playerFacingDisplace);
                 break;
         }
 
@@ -321,6 +322,7 @@ public class ActionListener implements Listener {
         }
 
         Location endLocation = closestTarget.getPosition().toLocation(world).add(endLocationDisplace);
+        endLocation.setDirection(playerFacing);
         player.teleport(endLocation);
 
         mixedCatastrophesData.getEventChangeManager()
