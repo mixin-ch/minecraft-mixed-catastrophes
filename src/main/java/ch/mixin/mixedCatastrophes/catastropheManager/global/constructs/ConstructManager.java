@@ -124,7 +124,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 5);
+        generateConstructHologram(data, lines, isConstructed, 6);
     }
 
     private void generateLighthouseHologram(LighthouseData data, boolean isConstructed) {
@@ -139,7 +139,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 5);
+        generateConstructHologram(data, lines, isConstructed, 6);
     }
 
     private void generateScarecrowHologram(ScarecrowData data, boolean isConstructed) {
