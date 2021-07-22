@@ -145,7 +145,7 @@ public class Functions {
     public static Location absoluteRoof(World world, Coordinate2D space) {
         Block block = world.getHighestBlockAt(space.getXRound(), space.getZRound());
 
-        if (block.isPassable()) {
+        if (block.isEmpty()) {
             return null;
         } else {
             return block.getLocation();
