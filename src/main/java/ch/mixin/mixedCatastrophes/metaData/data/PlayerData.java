@@ -10,17 +10,14 @@ public class PlayerData {
     private String playerName;
     private int dreamCooldown;
     private int antiLighthouseTimer;
-    private HashMap<AspectType, Integer> aspects;
-    private TerrorData terrorData;
+    private int skyScornTimer;
+    private HashMap<AspectType, Integer> aspects = new HashMap<>();
+    private TerrorData terrorData = new TerrorData();
 
     public PlayerData(UUID playerId, String playerName) {
         this.playerId = playerId;
         this.playerName = playerName;
-        dreamCooldown = 0;
-        antiLighthouseTimer = 0;
-        aspects = new HashMap<>();
         fillAspects();
-        terrorData = new TerrorData();
     }
 
     public void fillAspects(){
@@ -73,6 +70,14 @@ public class PlayerData {
 
     public void setAntiLighthouseTimer(int antiLighthouseTimer) {
         this.antiLighthouseTimer = antiLighthouseTimer;
+    }
+
+    public int getSkyScornTimer() {
+        return skyScornTimer;
+    }
+
+    public void setSkyScornTimer(int skyScornTimer) {
+        this.skyScornTimer = skyScornTimer;
     }
 
     public HashMap<AspectType, Integer> getAspects() {

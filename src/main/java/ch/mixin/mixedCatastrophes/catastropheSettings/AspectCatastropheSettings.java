@@ -11,6 +11,7 @@ public class AspectCatastropheSettings {
     private CelestialFavorCatastropheSettings celestialFavor = new CelestialFavorCatastropheSettings();
     private GreyhatDebtCatastropheSettings greyhatDebt = new GreyhatDebtCatastropheSettings();
     private ResolveCatastropheSettings resolve = new ResolveCatastropheSettings();
+    private SkyScornCatastropheSettings skyScorn = new SkyScornCatastropheSettings();
 
     public void initialize(ConfigurationSection superSection) {
         ConfigurationSection aspectSection = superSection.getConfigurationSection("aspect");
@@ -24,6 +25,7 @@ public class AspectCatastropheSettings {
         celestialFavor.initialize(aspectSection);
         greyhatDebt.initialize(aspectSection);
         resolve.initialize(aspectSection);
+        skyScorn.initialize(aspectSection);
     }
 
     public void fillConfig(ConfigurationSection superSection) {
@@ -35,6 +37,7 @@ public class AspectCatastropheSettings {
         celestialFavor.fillConfig(aspectSection);
         greyhatDebt.fillConfig(aspectSection);
         resolve.fillConfig(aspectSection);
+        skyScorn.fillConfig(aspectSection);
     }
 
     public TerrorCatastropheSettings getTerror() {
@@ -83,5 +86,13 @@ public class AspectCatastropheSettings {
 
     public void setResolve(ResolveCatastropheSettings resolve) {
         this.resolve = resolve;
+    }
+
+    public SkyScornCatastropheSettings getSkyScorn() {
+        return skyScorn;
+    }
+
+    public void setSkyScorn(SkyScornCatastropheSettings skyScorn) {
+        this.skyScorn = skyScorn;
     }
 }

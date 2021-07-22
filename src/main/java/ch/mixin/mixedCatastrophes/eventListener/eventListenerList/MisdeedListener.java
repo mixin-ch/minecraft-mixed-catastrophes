@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Animals;
@@ -15,6 +16,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -45,47 +48,6 @@ public class MisdeedListener implements Listener {
         } else if (Constants.Stones.contains(material)) {
             breakStone(player);
         }
-    }
-
-    @EventHandler
-    public void firework(PlayerInteractEvent event) {
-        if (!mixedCatastrophesData.isFullyFunctional())
-            return;
-
-        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
-            return;
-
-        Player player = event.getPlayer();
-
-        if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
-            return;
-
-        ItemStack handItem = event.getItem();
-
-        if (handItem == null)
-            return;
-
-        if (handItem.getType() != Material.FIREWORK_ROCKET)
-            return;
-
-        if (!player.isGliding())
-            return;
-
-        if (new Random().nextDouble() >= 0.1)
-            return;
-
-        HashMap<AspectType, Integer> changeMap = new HashMap<>();
-        changeMap.put(AspectType.Misfortune, 1);
-
-        mixedCatastrophesData.getEventChangeManager()
-                .eventChange(player)
-                .withAspectChange(changeMap)
-                .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("The Sky dislikes your Hubris of flying.")
-                .withColor(Constants.AspectThemes.get(AspectType.Misfortune).getColor())
-                .withTitle(true)
-                .finish()
-                .execute();
     }
 
     private void breakWood(Player player) {

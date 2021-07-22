@@ -4,6 +4,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.dream.DreamManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.resolve.ResolveCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.rite.RiteManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.personal.skyScorn.SkyScornCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.TerrorCatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class PersonalCatastropheManager extends CatastropheManager {
     private final TerrorCatastropheManager terrorCatastropheManager;
     private final ResolveCatastropheManager resolveCatastropheManager;
+    private final SkyScornCatastropheManager skyScornCatastropheManager;
     private final RiteManager riteManager;
     private final DreamManager dreamManager;
 
@@ -30,6 +32,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
         super(mixedCatastrophesData);
         terrorCatastropheManager = new TerrorCatastropheManager(mixedCatastrophesData);
         resolveCatastropheManager = new ResolveCatastropheManager(mixedCatastrophesData);
+        skyScornCatastropheManager = new SkyScornCatastropheManager(mixedCatastrophesData);
         riteManager = new RiteManager(mixedCatastrophesData);
         dreamManager = new DreamManager(mixedCatastrophesData);
     }
@@ -65,18 +68,21 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
         playerData.fillAspects();
         terrorCatastropheManager.initializePlayerData(playerData);
+        skyScornCatastropheManager.initializePlayerData(playerData);
     }
 
     @Override
     public void updateMetaData() {
         terrorCatastropheManager.updateMetaData();
         resolveCatastropheManager.updateMetaData();
+        skyScornCatastropheManager.updateMetaData();
     }
 
     @Override
     public void initializeCauser() {
         terrorCatastropheManager.initializeCauser();
         resolveCatastropheManager.initializeCauser();
+        skyScornCatastropheManager.initializeCauser();
     }
 
     @Override
@@ -138,6 +144,7 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
         resolveCatastropheManager.tick();
         terrorCatastropheManager.tick();
+        skyScornCatastropheManager.tick();
     }
 
     public TerrorCatastropheManager getTerrorCatastropheManager() {
@@ -146,6 +153,10 @@ public class PersonalCatastropheManager extends CatastropheManager {
 
     public ResolveCatastropheManager getResolveCatastropheManager() {
         return resolveCatastropheManager;
+    }
+
+    public SkyScornCatastropheManager getSkyScornCatastropheManager() {
+        return skyScornCatastropheManager;
     }
 
     public RiteManager getRiteManager() {

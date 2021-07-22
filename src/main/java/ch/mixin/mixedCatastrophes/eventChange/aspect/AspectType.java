@@ -10,6 +10,7 @@ public enum AspectType {
     Celestial_Favor,
     Nobility,
     Resolve,
+    SkyScorn,
     ;
 
     private final String label;

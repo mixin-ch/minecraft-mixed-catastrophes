@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
+import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -11,9 +12,13 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -59,6 +64,76 @@ public class ConsequenceListener implements Listener {
                     .withEventSound(Sound.BLOCK_BREWING_STAND_BREW)
                     .withEventMessage("Your Food is eating you from the Inside.")
                     .withCause(AspectType.Nature_Conspiracy)
+                    .withTitle(true)
+                    .finish()
+                    .execute();
+        }
+    }
+
+    @EventHandler
+    public void elytraBoost(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.isFullyFunctional())
+            return;
+
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
+            return;
+
+        if (event.getHand() != EquipmentSlot.HAND)
+            return;
+
+        boolean isCollectable = mixedCatastrophesData.getCatastropheSettings().getAspect().getSkyScorn().isCollectable();
+        boolean isTearFlesh = mixedCatastrophesData.getCatastropheSettings().getAspect().getSkyScorn().isTearFlesh();
+
+        if (!isCollectable && !isTearFlesh)
+            return;
+
+        Player player = event.getPlayer();
+
+        if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
+            return;
+
+        ItemStack handItem = event.getItem();
+
+        if (handItem == null)
+            return;
+
+        if (handItem.getType() != Material.FIREWORK_ROCKET)
+            return;
+
+        if (!player.isGliding())
+            return;
+
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int skyScorn = playerData.getAspect(AspectType.SkyScorn);
+        double probability = (5.0 + skyScorn) / (20.0 + skyScorn);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+
+        if (isCollectable) {
+            changeMap.put(AspectType.SkyScorn, 1);
+        }
+
+        if (new Random().nextDouble() < probability && isTearFlesh) {
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (1 + skyScorn) * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (1 + skyScorn) * 20, 9));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 3 * 20, 0));
+
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventSound(Sound.AMBIENT_CAVE)
+                    .withAspectChange(changeMap)
+                    .withEventMessage("The Sky tears your flesh.")
+                    .withCause(AspectType.SkyScorn)
+                    .withTitle(true)
+                    .finish()
+                    .execute();
+        } else if (isCollectable) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withAspectChange(changeMap)
+                    .withEventSound(Sound.AMBIENT_CAVE)
+                    .withEventMessage("The Sky dislikes your Hubris of flying.")
+                    .withColor(Constants.AspectThemes.get(AspectType.SkyScorn).getColor())
                     .withTitle(true)
                     .finish()
                     .execute();

@@ -93,6 +93,13 @@ public class AspectAchievementManager {
                 , new AchievementStagePreset("Determined", 200)
                 , new AchievementStagePreset("Unbreakable", 400)
         ))));
+        presetMap.put(AspectType.SkyScorn, new AspectAchievementPreset(
+                true
+                , new ArrayList<>(Arrays.asList(
+                new AchievementStagePreset("to the Sky", 1)
+                , new AchievementStagePreset("frequent Flyer", 10)
+                , new AchievementStagePreset("unchained Hubris", 50)
+        ))));
     }
 
     public List<BlueprintAchievementLeaf> makeAspectAchievements() {

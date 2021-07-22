@@ -37,7 +37,7 @@ public class ConstructListener implements Listener {
         if (!mixedCatastrophesData.isFullyFunctional())
             return;
 
-        if (event.getAction() != Action.RIGHT_CLICK_BLOCK)
+        if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK)
             return;
 
         if (event.getHand() != EquipmentSlot.HAND)
@@ -49,7 +49,10 @@ public class ConstructListener implements Listener {
         if (!mixedCatastrophesData.getAffectedWorlds().contains(world))
             return;
 
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        ItemStack itemStack = event.getItem();
+
+        if (itemStack == null)
+            return;
 
         switch (itemStack.getType()) {
             case BONE_MEAL:

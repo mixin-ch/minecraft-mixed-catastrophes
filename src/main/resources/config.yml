@@ -33,6 +33,9 @@ interaction:
       virtue: true
       critAttack: true
       damageReduction: true
+    skyScorn:
+      collectable: true
+      tearFlesh: true
 hintList:
   - Type "/mx dealWithDevil" if you are stranded on an Island.
   - Radiant Sky blinds you, if you have no shelter.
