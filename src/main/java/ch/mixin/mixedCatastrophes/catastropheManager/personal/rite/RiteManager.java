@@ -3,7 +3,6 @@ package ch.mixin.mixedCatastrophes.catastropheManager.personal.rite;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
-import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
@@ -490,7 +489,6 @@ public class RiteManager {
                 .withTitle(true)
                 .finish()
                 .execute();
-
 
         Coordinate3D startPoint = Coordinate3D.toCoordinate(player.getLocation());
         Location destination = null;
