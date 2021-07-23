@@ -12,10 +12,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class NeedListener implements Listener {
     private final MixedCatastrophesData mixedCatastrophesData;
+    private final HashMap<UUID, LocalDateTime> playerVoidTimeMap = new HashMap<>();
 
     public NeedListener(MixedCatastrophesData mixedCatastrophesData) {
         this.mixedCatastrophesData = mixedCatastrophesData;
@@ -42,12 +46,21 @@ public class NeedListener implements Listener {
         if (location.getY() >= 0)
             return;
 
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime pastVoid = playerVoidTimeMap.get(player.getUniqueId());
+
+        if (pastVoid != null && Duration.between(pastVoid, now).getSeconds() <= 5) {
+            event.setCancelled(true);
+            return;
+        }
+
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         if (playerData.getAspect(AspectType.Celestial_Favor) <= 0)
             return;
 
         event.setCancelled(true);
+        playerVoidTimeMap.put(player.getUniqueId(), now);
 
         player.teleport(location.clone().add(0, -2 - location.getY(), 0));
         player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 20 * 20, 4));
