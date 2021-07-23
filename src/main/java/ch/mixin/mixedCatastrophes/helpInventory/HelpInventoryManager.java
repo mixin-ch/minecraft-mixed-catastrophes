@@ -235,6 +235,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Constants.AspectThemes.get(AspectType.Resolve).getMaterial(), 1, slot(2, 9), "Resolve", new String[]{
                 "Can cause critical Hits and reduces Damage taken.", "Chance to gain on Terror Event.", "Slowly declining."
         });
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.SkyScorn).getMaterial(), 1, slot(3, 1), "Sky Scorn", new String[]{
+                "May cause bad Things when using Elytra Boost.", "Gained when using Elytra Boost.", "Slowly declining."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -351,13 +354,16 @@ public class HelpInventoryManager {
                 "The Resources and Secrets will be lost.", "You will lose dangerous Aspects."
         });
         createSlot(inventory, Material.SOUL_SAND, 1, slot(2, 3), "Remove Nature Conspiracy (Soul Sand)", new String[]{
-                "Modifier (Top Block).", "Secrets -1000.", "Nature Conspiracy -50%."
+                "Modifier (Top Block).", "Secrets -1000.", "Nature Conspiracy -3 -35%."
         });
-        createSlot(inventory, Material.BOOKSHELF, 1, slot(2, 5), "Remove Misfortune (Bookshelf)", new String[]{
-                "Modifier (Top Block).", "Secrets -1000.", "Misfortune -50%."
+        createSlot(inventory, Material.BOOKSHELF, 1, slot(2, 4), "Remove Misfortune (Bookshelf)", new String[]{
+                "Modifier (Top Block).", "Secrets -1000.", "Misfortune -3 -35%."
         });
-        createSlot(inventory, Material.TERRACOTTA, 1, slot(2, 7), "Remove Terror (Terracotta)", new String[]{
-                "Modifier (Top Block).", "Secrets -500.", "Terror -50%."
+        createSlot(inventory, Material.TERRACOTTA, 1, slot(2, 5), "Remove Terror (Terracotta)", new String[]{
+                "Modifier (Top Block).", "Secrets -500.", "Terror -3 -35%."
+        });
+        createSlot(inventory, Material.LAPIS_BLOCK, 1, slot(2, 6), "Remove Sky Scorn (Lapis Lazuli)", new String[]{
+                "Modifier (Top Block).", "Secrets -1000.", "Sky Scorn -3 -35%."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);
@@ -402,7 +408,7 @@ public class HelpInventoryManager {
                 "Slight Terror Loss.", "Secrets +10", "10 Minute Cooldown."
         });
         createSlot(inventory, Constants.DreamThemes.get(DreamType.SkyDreams).getMaterial(), 1, slot(2, 4), "Sky Dreams (Lapis Lazuli)", new String[]{
-                "Moderate Terror Loss.", "Moderate Secret Loss.", "Jump Boost 2, Slow Falling 1", "10 Minute Cooldown."
+                "Moderate Terror Loss.", "Slight Sky Scorn Loss.", "Moderate Secret Loss.", "10 Minute Cooldown."
         });
         createSlot(inventory, Constants.DreamThemes.get(DreamType.BloodstainedDreams).getMaterial(), 1, slot(2, 5), "Bloodstained Dreams (Redstone)", new String[]{
                 "Slight Terror Gain.", "Moderate Secret Gain.", "10 Minute Cooldown.", "10 Minutes of damage while near a Lighthouse."
