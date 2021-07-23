@@ -195,6 +195,7 @@ public class DreamManager {
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int terrorMinus = (int) Math.min(Math.round(10 + 0.2 * playerData.getAspect(AspectType.Terror)), playerData.getAspect(AspectType.Terror));
+        int skyScornMinus = Math.min(1, playerData.getAspect(AspectType.SkyScorn));
         int cost = 2 * terrorMinus;
 
         if (playerData.getAspect(AspectType.Secrets) < cost) {
@@ -213,12 +214,10 @@ public class DreamManager {
         int time = 10 * 60;
         playerData.setDreamCooldown(time);
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, time * 20, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, time * 20, 0));
-
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Terror, -terrorMinus);
         changeMap.put(AspectType.Secrets, -cost);
+        changeMap.put(AspectType.SkyScorn, -skyScornMinus);
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)

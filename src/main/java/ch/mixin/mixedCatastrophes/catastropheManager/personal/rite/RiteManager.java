@@ -18,11 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RiteManager {
-    private final MixedCatastrophesPlugin plugin;
     private final MixedCatastrophesData mixedCatastrophesData;
 
     public RiteManager(MixedCatastrophesData mixedCatastrophesData) {
-        plugin = mixedCatastrophesData.getPlugin();
         this.mixedCatastrophesData = mixedCatastrophesData;
     }
 
@@ -187,6 +185,9 @@ public class RiteManager {
             case TERRACOTTA:
                 removeTerror(player, blockN1, blockN2);
                 break;
+            case LAPIS_BLOCK:
+                removeSkyScorn(player, blockN1, blockN2);
+                break;
         }
     }
 
@@ -211,7 +212,8 @@ public class RiteManager {
         blockN1.setType(Material.COBBLESTONE);
         blockN2.setType(Material.COBBLESTONE);
 
-        int curseMod = (int) -Math.round(playerData.getAspect(AspectType.Nature_Conspiracy) * 0.5);
+        int curse = playerData.getAspect(AspectType.Nature_Conspiracy);
+        int curseMod = (int) -Math.min(curse, 3 + Math.round(curse * 0.35));
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
@@ -251,7 +253,8 @@ public class RiteManager {
         blockN1.setType(Material.COBBLESTONE);
         blockN2.setType(Material.COBBLESTONE);
 
-        int curseMod = (int) -Math.round(playerData.getAspect(AspectType.Misfortune) * 0.5);
+        int curse = playerData.getAspect(AspectType.Misfortune);
+        int curseMod = (int) -Math.min(curse, 3 + Math.round(curse * 0.35));
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
@@ -291,7 +294,8 @@ public class RiteManager {
         blockN1.setType(Material.COBBLESTONE);
         blockN2.setType(Material.COBBLESTONE);
 
-        int curseMod = (int) -Math.round(playerData.getAspect(AspectType.Terror) * 0.5);
+        int curse = playerData.getAspect(AspectType.Terror);
+        int curseMod = (int) -Math.min(curse, 3 + Math.round(curse * 0.35));
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
         changeMap.put(AspectType.Secrets, -cost);
@@ -302,6 +306,47 @@ public class RiteManager {
                 .withAspectChange(changeMap)
                 .withEventSound(Sound.AMBIENT_CAVE)
                 .withEventMessage("The Terrors of the World diminish.")
+                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
+    }
+
+    private void removeSkyScorn(Player player, Block blockN1, Block blockN2) {
+        int cost = 1000;
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+
+        if (playerData.getAspect(AspectType.SkyScorn) <= 0) {
+            return;
+        }
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            return;
+        }
+
+        blockN1.setType(Material.COBBLESTONE);
+        blockN2.setType(Material.COBBLESTONE);
+
+        int curse = playerData.getAspect(AspectType.SkyScorn);
+        int curseMod = (int) -Math.min(curse, 3 + Math.round(curse * 0.35));
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+        changeMap.put(AspectType.SkyScorn, curseMod);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("You relief the Sky.")
                 .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                 .withTitle(true)
                 .finish()
