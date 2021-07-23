@@ -7,8 +7,6 @@ import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementLeaf;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementSet;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
-import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
-import ch.mixin.mixedCatastrophes.eventChange.scoreBoard.AspectScoreManager;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.mixedAchievements.aspect.AspectAchievementManager;
@@ -74,6 +72,11 @@ public class MixedAchievementsManager {
             BlueprintAchievementElementMap.put(slot, achievement);
             slot++;
         }
+    }
+
+    public void resetAchievements(Player player) {
+        aspectAchievementManager.resetAchievements(achievementApi, player);
+        constructAchievementManager.resetAchievements(achievementApi, player);
     }
 
     public void updateAspectAchievementProgress(Player player, HashMap<AspectType, Integer> aspects, HashMap<AspectType, Integer> changeMap) {

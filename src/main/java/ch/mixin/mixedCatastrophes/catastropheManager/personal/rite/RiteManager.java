@@ -1,21 +1,21 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.personal.rite;
 
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
+import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
+import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
+import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class RiteManager {
     private final MixedCatastrophesData mixedCatastrophesData;
@@ -40,6 +40,9 @@ public class RiteManager {
                 break;
             case GLOWSTONE:
                 receiveBlessing(player, blockN1, blockN2);
+                break;
+            case HAY_BLOCK:
+                ultimatum(player, blockN1, blockN2);
                 break;
             default:
                 return;
@@ -185,9 +188,6 @@ public class RiteManager {
             case TERRACOTTA:
                 removeTerror(player, blockN1, blockN2);
                 break;
-            case LAPIS_BLOCK:
-                removeSkyScorn(player, blockN1, blockN2);
-                break;
         }
     }
 
@@ -314,47 +314,6 @@ public class RiteManager {
         ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
     }
 
-    private void removeSkyScorn(Player player, Block blockN1, Block blockN2) {
-        int cost = 1000;
-        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-
-        if (playerData.getAspect(AspectType.SkyScorn) <= 0) {
-            return;
-        }
-
-        if (playerData.getAspect(AspectType.Secrets) < cost) {
-            mixedCatastrophesData.getEventChangeManager()
-                    .eventChange(player)
-                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
-                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
-                    .finish()
-                    .execute();
-            return;
-        }
-
-        blockN1.setType(Material.COBBLESTONE);
-        blockN2.setType(Material.COBBLESTONE);
-
-        int curse = playerData.getAspect(AspectType.SkyScorn);
-        int curseMod = (int) -Math.min(curse, 3 + Math.round(curse * 0.35));
-
-        HashMap<AspectType, Integer> changeMap = new HashMap<>();
-        changeMap.put(AspectType.Secrets, -cost);
-        changeMap.put(AspectType.SkyScorn, curseMod);
-
-        mixedCatastrophesData.getEventChangeManager()
-                .eventChange(player)
-                .withAspectChange(changeMap)
-                .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("You relief the Sky.")
-                .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
-                .withTitle(true)
-                .finish()
-                .execute();
-
-        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
-    }
-
     private void receiveBlessing(Player player, Block blockN1, Block blockN2) {
         Material materialN1 = blockN1.getType();
         Material materialN2 = blockN2.getType();
@@ -365,6 +324,9 @@ public class RiteManager {
                 break;
             case BOOKSHELF:
                 gainTerror(player, blockN1, blockN2);
+                break;
+            case COAL_BLOCK:
+                gainResolve(player, blockN1, blockN2);
                 break;
         }
     }
@@ -447,6 +409,115 @@ public class RiteManager {
                 .execute();
 
         ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
+    }
+
+    private void gainResolve(Player player, Block blockN1, Block blockN2) {
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int terror = playerData.getAspects().get(AspectType.Terror);
+        int nobility = playerData.getAspects().get(AspectType.Nobility);
+        int cost = (int) Math.ceil(5 * (10 + Math.pow(terror + nobility, 0.5)));
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            return;
+        }
+
+        blockN1.setType(Material.COBBLESTONE);
+        blockN2.setType(Material.COBBLESTONE);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventMessage("The Fire lights your Determination.")
+                .withColor(Constants.AspectThemes.get(AspectType.Resolve).getColor())
+                .finish()
+                .execute();
+
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03);
+        mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().showVirtue(player);
+    }
+
+    private void ultimatum(Player player, Block blockN1, Block blockN2) {
+        Material materialN1 = blockN1.getType();
+        Material materialN2 = blockN2.getType();
+
+        switch (materialN1) {
+            case SOUL_SAND:
+                initiateVoid(player, blockN1, blockN2);
+                break;
+        }
+    }
+
+    private void initiateVoid(Player player, Block blockN1, Block blockN2) {
+        int cost = 1000;
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+
+        cost += 100 * playerData.getAspect(AspectType.Death_Seeker);
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            return;
+        }
+
+        blockN1.setType(Material.COBBLESTONE);
+        blockN2.setType(Material.COBBLESTONE);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+
+        for (AspectType aspectType : Constants.AspectOrder) {
+            changeMap.put(aspectType, -playerData.getAspect(aspectType));
+        }
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("Nothing remains.")
+                .withColor(Constants.AspectThemes.get(AspectType.Death_Seeker).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
+
+
+        Coordinate3D startPoint = Coordinate3D.toCoordinate(player.getLocation());
+        Location destination = null;
+        int displaceMin = 250;
+        int displaceMax = 500;
+        Random random = new Random();
+
+        while (destination == null) {
+            Coordinate3D c3d = startPoint.clone();
+            c3d.setX(c3d.getX() + (random.nextBoolean() ? 1 : -1) * (random.nextInt(displaceMax - displaceMin + 1) + displaceMin));
+            c3d.setZ(c3d.getZ() + (random.nextBoolean() ? 1 : -1) * (random.nextInt(displaceMax - displaceMin + 1) + displaceMin));
+
+            destination = Functions.relativeGround(player.getWorld(), c3d);
+        }
+
+        destination.add(0, 1, 0);
+        player.setBedSpawnLocation(null);
+        player.teleport(destination);
+        player.getInventory().clear();
+        player.getInventory().addItem(HelpInventoryManager.HelpBookItem);
+        player.getActivePotionEffects().clear();
+        player.setHealth(20);
+        player.setFoodLevel(20);
+        player.setExp(0);
+
+        mixedCatastrophesData.getMixedAchievementsManager().resetAchievements(player);
+        ritesParticles(player.getWorld(), Coordinate3D.toCoordinate(blockN1.getLocation()), cost * 0.03 * 10);
     }
 
     private void ritesParticles(World world, Coordinate3D topBlock, double multiplier) {

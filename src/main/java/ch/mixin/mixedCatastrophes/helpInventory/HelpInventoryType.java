@@ -9,6 +9,7 @@ public enum HelpInventoryType {
     Rites_Sacrifice,
     Rites_Curse,
     Rites_Blessing,
+    Rites_Ultimatum,
     Dreams,
     Constructs,
     Constructs_GreenWell,

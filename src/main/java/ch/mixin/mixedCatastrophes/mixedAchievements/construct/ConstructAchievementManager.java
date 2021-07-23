@@ -5,9 +5,11 @@ import ch.mixin.mixedAchievements.blueprint.AchievementItemSetup;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementLeaf;
 import ch.mixin.mixedAchievements.blueprint.BlueprintAchievementStage;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
+import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Theme;
 import ch.mixin.mixedCatastrophes.mixedAchievements.AchievementStagePreset;
+import ch.mixin.mixedCatastrophes.mixedAchievements.aspect.AspectAchievementPreset;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -105,6 +107,23 @@ public class ConstructAchievementManager {
         }
 
         return blueprintAchievementLeafList;
+    }
+
+    public void resetAchievements(AchievementApi achievementApi, Player player) {
+        String playerId = player.getUniqueId().toString();
+
+        for (ConstructType constructType : buildPresetMap.keySet()) {
+            if (buildPresetMap.containsKey(constructType)){
+                String achievementId = constructType.toString() + "_build";
+                achievementApi.setPoints(achievementId, playerId, 0);
+                achievementApi.setStage(achievementId, playerId, 0);
+            }
+            if (contributePresetMap.containsKey(constructType)){
+                String achievementId = constructType.toString() + "_contribute";
+                achievementApi.setPoints(achievementId, playerId, 0);
+                achievementApi.setStage(achievementId, playerId, 0);
+            }
+        }
     }
 
     public void updateAchievementProgress(AchievementApi achievementApi, Player player, ConstructType constructType, int value) {

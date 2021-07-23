@@ -114,8 +114,8 @@ public class ConsequenceListener implements Listener {
         }
 
         if (new Random().nextDouble() < probability && isTearFlesh) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (10 + skyScorn) * 20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (10 + skyScorn) * 20, 9));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (10) * 20, (int) Math.floor(skyScorn * 0.2)));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (10) * 20, skyScorn));
             player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 3 * 20, 0));
 
             mixedCatastrophesData.getEventChangeManager()

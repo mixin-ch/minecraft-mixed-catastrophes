@@ -118,6 +118,7 @@ public class HelpInventoryManager {
         helpInventoryMap.put(HelpInventoryType.Rites_Sacrifice, makeRitesSacrificeInventory());
         helpInventoryMap.put(HelpInventoryType.Rites_Curse, makeRitesCurseInventory());
         helpInventoryMap.put(HelpInventoryType.Rites_Blessing, makeRitesBlessingInventory());
+        helpInventoryMap.put(HelpInventoryType.Rites_Ultimatum, makeRitesUltimatumInventory());
         helpInventoryMap.put(HelpInventoryType.Dreams, makeDreamsInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs, makeConstructsInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_GreenWell, makeConstructsGreenWellInventory());
@@ -251,18 +252,21 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
                 "The bottom Block determines the Rite Type.", "The top Block determines the Modifier.", "Light a Fire on the top to execute the Rite."
         });
-        createSlotLink(inventory, Material.GLASS, 1, slot(2, 2), "Resource Production (Glass)", new String[]{
+        createSlotLink(inventory, Material.GLASS, 1, slot(2, 3), "Resource Production (Glass)", new String[]{
                 "Rite Type (Bottom Block).", "Trade Secrets for Materials."
         }, linkInventoryMap, HelpInventoryType.Rites_Production);
         createSlotLink(inventory, Material.STONE_BRICKS, 1, slot(2, 4), "Resource Sacrifice (Stone Bricks)", new String[]{
                 "Rite Type (Bottom Block).", "Sacrifice Materials for Secrets."
         }, linkInventoryMap, HelpInventoryType.Rites_Sacrifice);
-        createSlotLink(inventory, Material.QUARTZ_BLOCK, 1, slot(2, 6), "Curse Removal (Quartz)", new String[]{
+        createSlotLink(inventory, Material.QUARTZ_BLOCK, 1, slot(2, 5), "Curse Removal (Quartz)", new String[]{
                 "Rite Type (Bottom Block).", "Use Secrets to remove a Curse."
         }, linkInventoryMap, HelpInventoryType.Rites_Curse);
-        createSlotLink(inventory, Material.GLOWSTONE, 1, slot(2, 8), "Blessing Invocation (Glowstone)", new String[]{
+        createSlotLink(inventory, Material.GLOWSTONE, 1, slot(2, 6), "Blessing Invocation (Glowstone)", new String[]{
                 "Rite Type (Bottom Block).", "Use Secrets to gain a Blessing."
         }, linkInventoryMap, HelpInventoryType.Rites_Blessing);
+        createSlotLink(inventory, Material.HAY_BLOCK, 1, slot(2, 7), "Ultimatum (Hay)", new String[]{
+                "Rite Type (Bottom Block).", "Use Secrets to perform an Ultimatum."
+        }, linkInventoryMap, HelpInventoryType.Rites_Ultimatum);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -354,16 +358,13 @@ public class HelpInventoryManager {
                 "The Resources and Secrets will be lost.", "You will lose dangerous Aspects."
         });
         createSlot(inventory, Material.SOUL_SAND, 1, slot(2, 3), "Remove Nature Conspiracy (Soul Sand)", new String[]{
-                "Modifier (Top Block).", "Secrets -1000.", "Nature Conspiracy -3 -35%."
+                "Modifier (Top Block).", "Secrets -1000.", "Nature Conspiracy - (3 + 35%)."
         });
-        createSlot(inventory, Material.BOOKSHELF, 1, slot(2, 4), "Remove Misfortune (Bookshelf)", new String[]{
-                "Modifier (Top Block).", "Secrets -1000.", "Misfortune -3 -35%."
+        createSlot(inventory, Material.BOOKSHELF, 1, slot(2, 5), "Remove Misfortune (Bookshelf)", new String[]{
+                "Modifier (Top Block).", "Secrets -1000.", "Misfortune - (3 + 35%)."
         });
-        createSlot(inventory, Material.TERRACOTTA, 1, slot(2, 5), "Remove Terror (Terracotta)", new String[]{
-                "Modifier (Top Block).", "Secrets -500.", "Terror -3 -35%."
-        });
-        createSlot(inventory, Material.LAPIS_BLOCK, 1, slot(2, 6), "Remove Sky Scorn (Lapis Lazuli)", new String[]{
-                "Modifier (Top Block).", "Secrets -1000.", "Sky Scorn -3 -35%."
+        createSlot(inventory, Material.TERRACOTTA, 1, slot(2, 7), "Remove Terror (Terracotta)", new String[]{
+                "Modifier (Top Block).", "Secrets -500.", "Terror - (3 + 35%)."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);
@@ -381,8 +382,27 @@ public class HelpInventoryManager {
         createSlot(inventory, Material.LAPIS_BLOCK, 1, slot(2, 3), "Celestial Favor (Lapis Lazuli)", new String[]{
                 "Modifier (Top Block).", "Secrets -750.", "Celestial Favor +1."
         });
-        createSlot(inventory, Material.BOOKSHELF, 1, slot(2, 7), "Terror (Bookshelf)", new String[]{
-                "Modifier (Top Block).", "Secrets -(50+Terror).", "Terror +50."
+        createSlot(inventory, Material.BOOKSHELF, 1, slot(2, 5), "Terror (Bookshelf)", new String[]{
+                "Modifier (Top Block).", "Secrets - (50 + Terror).", "Terror +50."
+        });
+        createSlot(inventory, Material.COAL_BLOCK, 1, slot(2, 7), "Resolve (Coal)", new String[]{
+                "Modifier (Top Block).", "Costs Secrets dependent on Resolve Trigger.", "Trigger Resolve."
+        });
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeRitesUltimatumInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 3 * 9, "Rite Ultimatum");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Rites);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "The Resources and Secrets will be lost.", "You will perform something extraordinary."
+        });
+        createSlot(inventory, Material.SOUL_SAND, 1, slot(2, 5), "Initiate Void (Soul Sand)", new String[]{
+                "Modifier (Top Block).", "Secrets - (1000 + 100 per Death Seeker).", "Loose all Aspects.", "Loose all Mixed Achievements.", "Loose Inventory.", "Teleport to random Location."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);

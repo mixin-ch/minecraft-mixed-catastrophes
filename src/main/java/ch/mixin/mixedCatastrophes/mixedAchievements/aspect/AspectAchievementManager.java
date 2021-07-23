@@ -143,6 +143,21 @@ public class AspectAchievementManager {
         return blueprintAchievementLeafList;
     }
 
+    public void resetAchievements(AchievementApi achievementApi, Player player) {
+        String playerId = player.getUniqueId().toString();
+
+        for (AspectType aspectType : presetMap.keySet()) {
+            AspectAchievementPreset preset = presetMap.get(aspectType);
+
+            if (preset == null)
+                continue;
+
+            String achievementId = aspectType.toString();
+            achievementApi.setPoints(achievementId, playerId, 0);
+            achievementApi.setStage(achievementId, playerId, 0);
+        }
+    }
+
     public void updateAchievementProgress(AchievementApi achievementApi, Player player, HashMap<AspectType, Integer> aspects, HashMap<AspectType, Integer> changeMap) {
         String playerId = player.getUniqueId().toString();
 

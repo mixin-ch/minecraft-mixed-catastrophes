@@ -162,6 +162,7 @@ public class TerrorCatastropheManager extends CatastropheManager {
             color = Constants.ConstructThemes.get(ConstructType.Scarecrow).getColor();
             int collectedTerror = (int) Math.ceil(0.9 * scarecrowData.getCollectedTerror() + 0.1 * playerData.getAspect(AspectType.Terror));
             scarecrowData.setCollectedTerror(collectedTerror);
+            mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(scarecrowData);
         }
 
         int nobility = playerData.getAspect(AspectType.Nobility);

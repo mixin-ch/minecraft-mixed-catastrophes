@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ConstructManager extends CatastropheManager {
-    private HashMap<ConstructData, ConstructHologram> hologramMap = new HashMap<>();
+    private final HashMap<ConstructData, ConstructHologram> hologramMap = new HashMap<>();
 
     public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
