@@ -105,7 +105,7 @@ public class ConsequenceListener implements Listener {
 
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int skyScorn = playerData.getAspect(AspectType.SkyScorn);
-        double probability = (5.0 + skyScorn) / (20.0 + skyScorn);
+        double probability = 0.5 * (skyScorn) / (10.0 + skyScorn);
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
 
@@ -114,15 +114,15 @@ public class ConsequenceListener implements Listener {
         }
 
         if (new Random().nextDouble() < probability && isTearFlesh) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (1 + skyScorn) * 20, 0));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (1 + skyScorn) * 20, 9));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, (10 + skyScorn) * 20, 0));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, (10 + skyScorn) * 20, 9));
             player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 3 * 20, 0));
 
             mixedCatastrophesData.getEventChangeManager()
                     .eventChange(player)
                     .withEventSound(Sound.AMBIENT_CAVE)
                     .withAspectChange(changeMap)
-                    .withEventMessage("The Sky tears your flesh.")
+                    .withEventMessage("The Sky fractures you Body.")
                     .withCause(AspectType.SkyScorn)
                     .withTitle(true)
                     .finish()

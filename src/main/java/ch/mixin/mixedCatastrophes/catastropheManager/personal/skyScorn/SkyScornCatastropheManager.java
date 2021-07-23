@@ -4,7 +4,6 @@ import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -42,8 +41,10 @@ public class SkyScornCatastropheManager extends CatastropheManager {
                 continue;
 
             PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+            int skyScorn = playerData.getAspect(AspectType.SkyScorn);
+            int loss = (int) Math.ceil(0.1 * skyScorn);
 
-            if (playerData.getAspect(AspectType.SkyScorn) <= 0)
+            if (loss <= 0)
                 continue;
 
             int timer = playerData.getSkyScornTimer();
@@ -53,7 +54,7 @@ public class SkyScornCatastropheManager extends CatastropheManager {
                 timer = skyScornTimer();
 
                 HashMap<AspectType, Integer> changeMap = new HashMap<>();
-                changeMap.put(AspectType.SkyScorn, -1);
+                changeMap.put(AspectType.SkyScorn, -loss);
 
                 mixedCatastrophesData.getEventChangeManager()
                         .eventChange(player)
