@@ -495,8 +495,10 @@ public class RiteManager {
         int displaceMin = 250;
         int displaceMax = 500;
         Random random = new Random();
+        int tries = 0;
 
-        while (destination == null) {
+        while (destination == null && tries < 100) {
+            tries++;
             Coordinate3D c3d = startPoint.clone();
             c3d.setX(c3d.getX() + (random.nextBoolean() ? 1 : -1) * (random.nextInt(displaceMax - displaceMin + 1) + displaceMin));
             c3d.setZ(c3d.getZ() + (random.nextBoolean() ? 1 : -1) * (random.nextInt(displaceMax - displaceMin + 1) + displaceMin));
@@ -504,7 +506,12 @@ public class RiteManager {
             destination = Functions.relativeGround(player.getWorld(), c3d);
         }
 
-        destination.add(0, 1, 0);
+        if (destination == null){
+            destination = player.getLocation();
+        }else{
+            destination.add(0, 1, 0);
+        }
+
         player.setBedSpawnLocation(null);
         player.teleport(destination);
         player.getInventory().clear();
