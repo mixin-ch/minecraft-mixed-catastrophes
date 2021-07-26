@@ -55,7 +55,7 @@ public class ConstructListener implements Listener {
             return;
 
         switch (itemStack.getType()) {
-            case BONE_MEAL:
+            case WHEAT_SEEDS:
                 makeGreenWell(event);
                 break;
             case MAGMA_CREAM:
@@ -131,7 +131,7 @@ public class ConstructListener implements Listener {
         if (itemStack.getAmount() < costItem) {
             mixedCatastrophesData.getEventChangeManager()
                     .eventChange(player)
-                    .withEventMessage("You need at least " + costItem + " Bone Meal to do this.")
+                    .withEventMessage("You need at least " + costItem + " Wheat Seeds to do this.")
                     .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
                     .finish()
                     .execute();
