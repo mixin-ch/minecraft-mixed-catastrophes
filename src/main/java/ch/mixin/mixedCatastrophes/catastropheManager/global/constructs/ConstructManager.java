@@ -216,7 +216,7 @@ public class ConstructManager extends CatastropheManager {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(greenWellData.getWorldName());
 
             if (world == null)
-                return;
+                continue;
 
             Coordinate3D center = greenWellData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.GreenWell.checkConstructed(center.toLocation(world));
@@ -225,7 +225,7 @@ public class ConstructManager extends CatastropheManager {
             generateGreenWellHologram(greenWellData, isConstructed);
 
             if (!isConstructed)
-                return;
+                continue;
 
             int level = greenWellData.getLevel();
             Location locationCenter = center.toLocation(world);
@@ -236,9 +236,6 @@ public class ConstructManager extends CatastropheManager {
             particles.add(center.sum(0, 1, 0));
 
             mixedCatastrophesData.getParticler().spawnParticles(Particle.VILLAGER_HAPPY, particles, world, level * 0.25, 4, 5);
-
-            if (!Constants.GreenWell.checkConstructed(locationCenter).isConstructed())
-                return;
 
             List<Coordinate2D> square = Functions.getSquareEdge(center.to2D(), 1);
             List<Material> logs = new ArrayList<>();
@@ -316,7 +313,7 @@ public class ConstructManager extends CatastropheManager {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blitzardData.getWorldName());
 
             if (world == null)
-                return;
+                continue;
 
             Coordinate3D center = blitzardData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.Blitzard.checkConstructed(center.toLocation(world));
@@ -325,7 +322,7 @@ public class ConstructManager extends CatastropheManager {
             generateBlitzardHologram(blitzardData, isConstructed);
 
             if (!isConstructed)
-                return;
+                continue;
 
             int level = blitzardData.getLevel();
 
@@ -344,7 +341,7 @@ public class ConstructManager extends CatastropheManager {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
 
             if (world == null)
-                return;
+                continue;
 
             Coordinate3D center = lighthouseData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.Lighthouse.checkConstructed(center.toLocation(world));
@@ -353,7 +350,7 @@ public class ConstructManager extends CatastropheManager {
             generateLighthouseHologram(lighthouseData, isConstructed);
 
             if (!isConstructed)
-                return;
+                continue;
 
             int level = lighthouseData.getLevel();
 
@@ -372,7 +369,7 @@ public class ConstructManager extends CatastropheManager {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blazeReactorData.getWorldName());
 
             if (world == null)
-                return;
+                continue;
 
             Coordinate3D center = blazeReactorData.getPosition();
             Location locationCenter = center.toLocation(world);
@@ -382,7 +379,7 @@ public class ConstructManager extends CatastropheManager {
             generateBlazeReactorHologram(blazeReactorData, isConstructed);
 
             if (!isConstructed)
-                return;
+                continue;
 
             int level = blazeReactorData.getLevel();
             int fuel = blazeReactorData.getFuel();
@@ -428,7 +425,7 @@ public class ConstructManager extends CatastropheManager {
             }
 
             if (fuel == 0)
-                return;
+                continue;
 
             fuel--;
             blazeReactorData.setFuel(fuel);
@@ -455,7 +452,7 @@ public class ConstructManager extends CatastropheManager {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(scarecrowData.getWorldName());
 
             if (world == null)
-                return;
+                continue;
 
             Coordinate3D center = scarecrowData.getPosition();
             ShapeCompareResult shapeCompareResult = Constants.Scarecrow.checkConstructed(center.toLocation(world));
@@ -464,7 +461,7 @@ public class ConstructManager extends CatastropheManager {
             generateScarecrowHologram(scarecrowData, isConstructed);
 
             if (!isConstructed)
-                return;
+                continue;
 
             List<Coordinate3D> particles = new ArrayList<>();
             particles.add(new Coordinate3D(0, 0, -2));
@@ -488,7 +485,7 @@ public class ConstructManager extends CatastropheManager {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(data.getWorldName());
 
             if (world == null)
-                return;
+                continue;
 
             Coordinate3D center = data.getPosition();
             ShapeCompareResult shapeCompareResult = null;
@@ -509,7 +506,7 @@ public class ConstructManager extends CatastropheManager {
             generateEnderRailHologram(data, isConstructed);
 
             if (!isConstructed)
-                return;
+                continue;
 
             int level = data.getLevel();
 

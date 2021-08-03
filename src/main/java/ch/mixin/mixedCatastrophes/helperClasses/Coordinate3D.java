@@ -88,6 +88,15 @@ public class Coordinate3D {
     }
 
     @Override
+    public String toString() {
+        return "Coordinate3D{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
