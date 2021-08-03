@@ -10,6 +10,7 @@ public class CatastropheSettings {
     private HashMap<WeatherCatastropheType, Boolean> weather = new HashMap<>();
     private boolean starSplinter;
     private AspectCatastropheSettings aspect = new AspectCatastropheSettings();
+    private boolean preventNaturalIronGolem;
 
     public CatastropheSettings() {
         for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
@@ -28,6 +29,7 @@ public class CatastropheSettings {
 
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
+        preventNaturalIronGolem = interactionSection.getBoolean("preventNaturalIronGolem");
 
         ConfigurationSection weatherSection = interactionSection.getConfigurationSection("weather");
 
@@ -48,6 +50,11 @@ public class CatastropheSettings {
             return;
 
         ConfigurationSection interactionSection = superSection.createSection("interaction");
+
+        interactionSection.set("timeDistortion", timeDistortion);
+        interactionSection.set("starSplinter", starSplinter);
+        interactionSection.set("preventNaturalIronGolem", preventNaturalIronGolem);
+
         ConfigurationSection weatherSection = interactionSection.createSection("weather");
 
         for (WeatherCatastropheType weatherType : weather.keySet()) {
@@ -89,5 +96,13 @@ public class CatastropheSettings {
 
     public void setAspect(AspectCatastropheSettings aspect) {
         this.aspect = aspect;
+    }
+
+    public boolean isPreventNaturalIronGolem() {
+        return preventNaturalIronGolem;
+    }
+
+    public void setPreventNaturalIronGolem(boolean preventNaturalIronGolem) {
+        this.preventNaturalIronGolem = preventNaturalIronGolem;
     }
 }
