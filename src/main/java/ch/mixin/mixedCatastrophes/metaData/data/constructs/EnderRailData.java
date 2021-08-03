@@ -12,7 +12,7 @@ public class EnderRailData extends ConstructData {
     private EnderRailDirection direction;
 
     public EnderRailData(Coordinate3D position, String worldName, int level, EnderRailDirection direction) {
-        super(position, worldName);
+        super(position, worldName,0);
         this.level = level;
         this.direction = direction;
     }

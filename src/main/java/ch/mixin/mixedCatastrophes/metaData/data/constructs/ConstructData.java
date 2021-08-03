@@ -5,10 +5,16 @@ import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 public abstract class ConstructData {
     protected Coordinate3D position;
     protected String worldName;
+    protected int inactiveTime;
 
-    protected ConstructData(Coordinate3D position, String worldName) {
+    protected ConstructData(Coordinate3D position, String worldName, int inactiveTime) {
         this.position = position;
         this.worldName = worldName;
+        this.inactiveTime = inactiveTime;
+    }
+
+    public void inactiveTick(){
+        inactiveTime++;
     }
 
     public Coordinate3D getPosition() {
@@ -25,5 +31,13 @@ public abstract class ConstructData {
 
     public void setWorldName(String worldName) {
         this.worldName = worldName;
+    }
+
+    public int getInactiveTime() {
+        return inactiveTime;
+    }
+
+    public void setInactiveTime(int inactiveTime) {
+        this.inactiveTime = inactiveTime;
     }
 }

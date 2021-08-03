@@ -6,7 +6,7 @@ public class LighthouseData extends ConstructData {
     private int level;
 
     public LighthouseData(Coordinate3D position, String worldName, int level) {
-        super(position, worldName);
+        super(position, worldName,0);
         this.level = level;
     }
 

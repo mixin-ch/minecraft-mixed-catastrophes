@@ -7,7 +7,7 @@ public class BlazeReactorData extends ConstructData {
     private int fuel;
 
     public BlazeReactorData(Coordinate3D position, String worldName, int level, int fuel) {
-        super(position, worldName);
+        super(position, worldName,0);
         this.level = level;
         this.fuel = fuel;
     }

@@ -6,7 +6,7 @@ public class GreenWellData extends ConstructData {
     private int level;
 
     public GreenWellData(Coordinate3D position, String worldName, int level) {
-        super(position, worldName);
+        super(position, worldName,0);
         this.level = level;
     }
 

@@ -6,7 +6,7 @@ public class ScarecrowData extends ConstructData {
     private int collectedTerror;
 
     public ScarecrowData(Coordinate3D position, String worldName, int collectedTerror) {
-        super(position, worldName);
+        super(position, worldName,0);
         this.collectedTerror = collectedTerror;
     }
 

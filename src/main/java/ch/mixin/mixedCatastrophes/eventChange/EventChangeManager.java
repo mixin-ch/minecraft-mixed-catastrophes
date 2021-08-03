@@ -125,7 +125,7 @@ public class EventChangeManager {
         MetaData metaData = mixedCatastrophesData.getMetaData();
         ConstructManager constructManager = mixedCatastrophesData.getRootCatastropheManager().getConstructManager();
 
-        List<BlitzardData> blitzardDataList = constructManager.getBlitzardListIsConstructed(metaData.getBlitzardDataList());
+        List<BlitzardData> blitzardDataList = constructManager.getBlitzardListIsActive(metaData.getBlitzardDataList());
         List<LighthouseData> lighthouseDataList = constructManager.getLighthouseListIsConstructed(metaData.getLighthouseDataList());
         List<ScarecrowData> scarecrowDataList = constructManager.getScarecrowListIsConstructed(metaData.getScarecrowDataList());
 
