@@ -36,7 +36,7 @@ public class EnvironmentListener implements Listener {
         if (!event.getEntityType().equals(EntityType.IRON_GOLEM))
             return;
 
-        if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL))
+        if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.VILLAGE_DEFENSE))
             return;
 
         event.setCancelled(true);
