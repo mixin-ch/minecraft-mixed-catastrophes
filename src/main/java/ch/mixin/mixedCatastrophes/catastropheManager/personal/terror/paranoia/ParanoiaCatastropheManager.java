@@ -179,12 +179,11 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-        int time = 2 * 60;
-        int amplitude = (int) Math.floor(Math.pow(0.005 * extent, 0.5));
+        int time = (int) Math.floor(60 * Math.pow(0.005 * extent, 0.5));
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, amplitude));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, amplitude));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, amplitude));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, 1));
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
@@ -196,25 +195,25 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
                 .execute();
     }
 
-    private void vulnerability(Player player) {
-        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-
-        int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-        int time = 2 * 60;
-        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5));
-
-        player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
-
-        mixedCatastrophesData.getEventChangeManager()
-                .eventChange(player)
-                .withEventSound(Sound.AMBIENT_CAVE)
-                .withEventMessage("You feel so vulnerable.")
-                .withCause(AspectType.Terror)
-                .withTitle(true)
-                .finish()
-                .execute();
-    }
+//    private void vulnerability(Player player) {
+//        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+//
+//        int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
+//        int time = 2 * 60;
+//        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5));
+//
+//        player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
+//        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
+//
+//        mixedCatastrophesData.getEventChangeManager()
+//                .eventChange(player)
+//                .withEventSound(Sound.AMBIENT_CAVE)
+//                .withEventMessage("You feel so vulnerable.")
+//                .withCause(AspectType.Terror)
+//                .withTitle(true)
+//                .finish()
+//                .execute();
+//    }
 
     private void paralysis(Player player) {
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
