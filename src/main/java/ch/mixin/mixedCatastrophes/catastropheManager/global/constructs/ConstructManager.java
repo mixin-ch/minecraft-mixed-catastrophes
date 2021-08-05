@@ -282,7 +282,10 @@ public class ConstructManager extends CatastropheManager {
             ConstructCache constructCache = cacheMap.get(greenWellData);
 
             boolean isActive = constructCache.isActive();
-            generateGreenWellHologram(greenWellData, isActive);
+
+            if (mixedCatastrophesData.isUseHolographicDisplays()) {
+                generateGreenWellHologram(greenWellData, isActive);
+            }
 
             if (!isActive)
                 continue;
@@ -382,7 +385,10 @@ public class ConstructManager extends CatastropheManager {
             ConstructCache constructCache = cacheMap.get(blazeReactorData);
 
             boolean isActive = constructCache.isActive();
-            generateBlazeReactorHologram(blazeReactorData, isActive);
+
+            if (mixedCatastrophesData.isUseHolographicDisplays()) {
+                generateBlazeReactorHologram(blazeReactorData, isActive);
+            }
 
             if (!isActive)
                 continue;
@@ -468,7 +474,10 @@ public class ConstructManager extends CatastropheManager {
             ConstructCache constructCache = cacheMap.get(blitzardData);
 
             boolean isActive = constructCache.isActive();
-            generateBlitzardHologram(blitzardData, isActive);
+
+            if (mixedCatastrophesData.isUseHolographicDisplays()) {
+                generateBlitzardHologram(blitzardData, isActive);
+            }
 
             if (!isActive)
                 continue;
@@ -500,7 +509,10 @@ public class ConstructManager extends CatastropheManager {
             ConstructCache constructCache = cacheMap.get(lighthouseData);
 
             boolean isActive = constructCache.isActive();
-            generateLighthouseHologram(lighthouseData, isActive);
+
+            if (mixedCatastrophesData.isUseHolographicDisplays()) {
+                generateLighthouseHologram(lighthouseData, isActive);
+            }
 
             if (!isActive)
                 continue;
@@ -532,7 +544,10 @@ public class ConstructManager extends CatastropheManager {
             ConstructCache constructCache = cacheMap.get(scarecrowData);
 
             boolean isActive = constructCache.isActive();
-            generateScarecrowHologram(scarecrowData, isActive);
+
+            if (mixedCatastrophesData.isUseHolographicDisplays()) {
+                generateScarecrowHologram(scarecrowData, isActive);
+            }
 
             if (!isActive)
                 continue;
@@ -572,7 +587,10 @@ public class ConstructManager extends CatastropheManager {
 
             ConstructCache constructCache = cacheMap.get(enderRailData);
             boolean isActive = constructCache.isActive();
-            generateEnderRailHologram(enderRailData, isActive);
+
+            if (mixedCatastrophesData.isUseHolographicDisplays()) {
+                generateEnderRailHologram(enderRailData, isActive);
+            }
 
             if (!isActive)
                 continue;
