@@ -4,6 +4,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.helperClasses.*;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
+import ch.mixin.mixedCatastrophes.metaData.MetaData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.*;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
@@ -17,13 +18,16 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
 
 public class ConstructManager extends CatastropheManager {
     private final HashMap<ConstructData, ConstructCache> cacheMap = new HashMap<>();
 
-    private final int checkConstructedDuration = 10;
-    private int checkConstructedTimer;
+    private double constructCheckValue = 0;
+    private List<ConstructData> constructToCheckList = new ArrayList<>();
 
     public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
@@ -63,18 +67,135 @@ public class ConstructManager extends CatastropheManager {
         if (mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers().size() == 0)
             return;
 
+        tickConstructCache();
+
         tickGreenWell();
         tickBlitzard();
         tickLighthouse();
         tickBlazeReactor();
         tickScarecrow();
         tickEnderRail();
+    }
 
-        if (checkConstructedTimer <= 0) {
-            checkConstructedTimer = checkConstructedDuration;
+    private void tickConstructCache() {
+        MetaData metaData = mixedCatastrophesData.getMetaData();
+        List<ConstructData> constructDataList = new ArrayList<>();
+        constructDataList.addAll(metaData.getGreenWellDataList());
+        constructDataList.addAll(metaData.getBlazeReactorList());
+        constructDataList.addAll(metaData.getBlitzardDataList());
+        constructDataList.addAll(metaData.getLighthouseDataList());
+        constructDataList.addAll(metaData.getScarecrowDataList());
+        constructDataList.addAll(metaData.getEnderRailDataList());
+
+        for (int i = 0; i < constructToCheckList.size(); i++) {
+            ConstructData constructToCheck = constructToCheckList.get(i);
+
+            if (!constructDataList.contains(constructToCheck)) {
+                constructToCheckList.remove(i);
+                i--;
+            }
         }
 
-        checkConstructedTimer--;
+        for (int i = 0; i < constructDataList.size(); i++) {
+            ConstructData constructData = constructDataList.get(i);
+
+            if (!constructToCheckList.contains(constructData))
+                constructToCheckList.add(constructData);
+
+            ConstructCache constructCache = cacheMap.get(constructData);
+
+            if (constructCache == null) {
+                constructCache = new ConstructCache(null, false, false, null);
+                cacheMap.put(constructData, constructCache);
+            }
+        }
+
+        constructCheckValue += mixedCatastrophesData.getCatastropheSettings().getConstructCheckPerTick();
+        int amount = (int) Math.floor(constructCheckValue);
+        constructCheckValue -= amount;
+
+        for (int i = 0; i < amount && i < constructToCheckList.size(); i++) {
+            ConstructData constructData = constructToCheckList.get(0);
+            constructToCheckList.remove(0);
+            constructToCheckList.add(constructData);
+            fillCacheChange(constructData, false);
+        }
+
+        for (int i = 0; i < constructDataList.size(); i++) {
+            ConstructData constructData = constructDataList.get(i);
+            ConstructCache constructCache = cacheMap.get(constructData);
+            fillCacheChange(constructData, true);
+
+            if (!constructCache.isActive()) {
+                constructData.inactiveTick();
+
+                if (constructData.getInactiveTime() >= 60 * 60) {
+                    cacheMap.remove(constructData);
+                    constructDataList.remove(i);
+                    i--;
+                }
+            }
+        }
+    }
+
+    private void fillCacheChange(ConstructData constructData, boolean conditionNull) {
+        ConstructCache constructCache = cacheMap.get(constructData);
+        World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
+
+        if (world == null) {
+            constructCache.setActive(false);
+            constructCache.setChanged(false);
+        } else if (constructCache.getShapeCompareResult() == null || !conditionNull) {
+            Location location = constructData.getPosition().toLocation(world);
+            ShapeCompareResult shapeCompareResult = checkConstructed(constructData, location);
+
+            if (shapeCompareResult == null) {
+                shapeCompareResult = new ShapeCompareResult(false, 0);
+            }
+
+            constructCache.setShapeCompareResult(shapeCompareResult);
+
+            if (!constructCache.isChanged())
+                constructCache.setChanged(constructCache.isActive() != shapeCompareResult.isConstructed());
+
+            constructCache.setActive(shapeCompareResult.isConstructed());
+        }
+    }
+
+    private ShapeCompareResult checkConstructed(ConstructData constructData, Location location) {
+        ShapeCompareResult shapeCompareResult = null;
+
+        if (constructData instanceof GreenWellData) {
+            shapeCompareResult = Constants.GreenWell.checkConstructed(location);
+        } else if (constructData instanceof BlazeReactorData) {
+            BlazeReactorData blazeReactorData = (BlazeReactorData) constructData;
+
+            shapeCompareResult = Constants.BlazeReactor.checkConstructed(location, blazeReactorData.getRotation());
+        } else if (constructData instanceof BlitzardData) {
+            shapeCompareResult = Constants.Blitzard.checkConstructed(location);
+        } else if (constructData instanceof LighthouseData) {
+            shapeCompareResult = Constants.Lighthouse.checkConstructed(location);
+        } else if (constructData instanceof ScarecrowData) {
+            ScarecrowData scarecrowData = (ScarecrowData) constructData;
+
+            shapeCompareResult = Constants.Scarecrow.checkConstructed(location, scarecrowData.getRotation());
+        } else if (constructData instanceof EnderRailData) {
+            EnderRailData enderRailData = (EnderRailData) constructData;
+
+            switch (enderRailData.getDirection()) {
+                case Side:
+                    shapeCompareResult = Constants.EnderRail_Side.checkConstructed(location, enderRailData.getRotation());
+                    break;
+                case Up:
+                    shapeCompareResult = Constants.EnderRail_Up.checkConstructed(location);
+                    break;
+                case Down:
+                    shapeCompareResult = Constants.EnderRail_Down.checkConstructed(location);
+                    break;
+            }
+        }
+
+        return shapeCompareResult;
     }
 
     public void removeHolograms() {
@@ -100,7 +221,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 2);
+        generateConstructHologram(data, lines, 2);
     }
 
     private void generateBlazeReactorHologram(BlazeReactorData data, boolean isConstructed) {
@@ -115,7 +236,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 2);
+        generateConstructHologram(data, lines, 2);
     }
 
     private void generateBlitzardHologram(BlitzardData data, boolean isConstructed) {
@@ -130,7 +251,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 6);
+        generateConstructHologram(data, lines, 6);
     }
 
     private void generateLighthouseHologram(LighthouseData data, boolean isConstructed) {
@@ -145,7 +266,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 6);
+        generateConstructHologram(data, lines, 6);
     }
 
     private void generateScarecrowHologram(ScarecrowData data, boolean isConstructed) {
@@ -160,7 +281,7 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 2);
+        generateConstructHologram(data, lines, 2);
     }
 
     private void generateEnderRailHologram(EnderRailData data, boolean isConstructed) {
@@ -176,10 +297,10 @@ public class ConstructManager extends CatastropheManager {
             lines.add(color + "Inactive");
         }
 
-        generateConstructHologram(data, lines, isConstructed, 3);
+        generateConstructHologram(data, lines, 3);
     }
 
-    private void generateConstructHologram(ConstructData data, ArrayList<String> lines, boolean isConstructed, int height) {
+    private void generateConstructHologram(ConstructData data, ArrayList<String> lines, int height) {
         World world = mixedCatastrophesData.getPlugin().getServer().getWorld(data.getWorldName());
 
         if (world == null)
@@ -191,9 +312,8 @@ public class ConstructManager extends CatastropheManager {
             Location location = data.getPosition().toLocation(world).add(0.5, height + 0.5, 0.5);
             Hologram hologram = makeHologram(lines, location);
             constructCache.setHologram(hologram);
-        } else if (constructCache.isChanged() || constructCache.isActive() != isConstructed) {
+        } else if (constructCache.isChanged()) {
             constructCache.setChanged(false);
-            constructCache.setActive(isConstructed);
             fillHologram(constructCache.getHologram(), lines);
         }
     }
@@ -214,86 +334,8 @@ public class ConstructManager extends CatastropheManager {
         }
     }
 
-    private void tickConstructCache(List<ConstructData> constructDataList) {
-        for (int i = 0; i < constructDataList.size(); i++) {
-            ConstructData constructData = constructDataList.get(i);
-            ConstructCache constructCache = cacheMap.get(constructData);
-
-            if (constructCache == null) {
-                constructCache = new ConstructCache(null, true, false, null);
-                cacheMap.put(constructData, constructCache);
-            }
-
-            boolean newlyActive = constructCache.isActive();
-            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
-
-            if (world == null) {
-                newlyActive = false;
-            } else if (checkConstructedTimer <= 0 || constructCache.getShapeCompareResult() == null) {
-                Location location = constructData.getPosition().toLocation(world);
-                ShapeCompareResult shapeCompareResult = null;
-
-                if (constructData instanceof GreenWellData) {
-                    shapeCompareResult = Constants.GreenWell.checkConstructed(location);
-                } else if (constructData instanceof BlazeReactorData) {
-                    BlazeReactorData blazeReactorData = (BlazeReactorData) constructData;
-
-                    shapeCompareResult = Constants.BlazeReactor.checkConstructed(location, blazeReactorData.getRotation());
-                } else if (constructData instanceof BlitzardData) {
-                    shapeCompareResult = Constants.Blitzard.checkConstructed(location);
-                } else if (constructData instanceof LighthouseData) {
-                    shapeCompareResult = Constants.Lighthouse.checkConstructed(location);
-                } else if (constructData instanceof ScarecrowData) {
-                    ScarecrowData scarecrowData = (ScarecrowData) constructData;
-
-                    shapeCompareResult = Constants.Scarecrow.checkConstructed(location, scarecrowData.getRotation());
-                } else if (constructData instanceof EnderRailData) {
-                    EnderRailData enderRailData = (EnderRailData) constructData;
-
-                    switch (enderRailData.getDirection()) {
-                        case Side:
-                            shapeCompareResult = Constants.EnderRail_Side.checkConstructed(location, enderRailData.getRotation());
-                            break;
-                        case Up:
-                            shapeCompareResult = Constants.EnderRail_Up.checkConstructed(location);
-                            break;
-                        case Down:
-                            shapeCompareResult = Constants.EnderRail_Down.checkConstructed(location);
-                            break;
-                    }
-                }
-
-                if (shapeCompareResult == null){
-                    shapeCompareResult = new ShapeCompareResult(false,0);
-                }
-
-                constructCache.setShapeCompareResult(shapeCompareResult);
-                newlyActive = shapeCompareResult.isConstructed();
-            }
-
-            if (constructCache.isActive() != newlyActive) {
-                constructCache.setChanged(true);
-            }
-
-            constructCache.setActive(newlyActive);
-
-            if (!constructCache.isActive()) {
-                constructData.inactiveTick();
-
-                if (constructData.getInactiveTime() >= 60 * 60) {
-                    cacheMap.remove(constructData);
-                    constructDataList.remove(i);
-                    i--;
-                }
-            }
-        }
-    }
-
     private void tickGreenWell() {
         List<GreenWellData> greenWellDataList = mixedCatastrophesData.getMetaData().getGreenWellDataList();
-
-        List<? extends ConstructData> constructDataList = greenWellDataList;
-        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (GreenWellData greenWellData : greenWellDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(greenWellData.getWorldName());
@@ -395,9 +437,6 @@ public class ConstructManager extends CatastropheManager {
     private void tickBlazeReactor() {
         List<BlazeReactorData> blazeReactorDataList = mixedCatastrophesData.getMetaData().getBlazeReactorList();
 
-        List<? extends ConstructData> constructDataList = blazeReactorDataList;
-        tickConstructCache((List<ConstructData>) constructDataList);
-
         for (BlazeReactorData blazeReactorData : blazeReactorDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blazeReactorData.getWorldName());
 
@@ -484,9 +523,6 @@ public class ConstructManager extends CatastropheManager {
     private void tickBlitzard() {
         List<BlitzardData> blitzardDataList = mixedCatastrophesData.getMetaData().getBlitzardDataList();
 
-        List<? extends ConstructData> constructDataList = blitzardDataList;
-        tickConstructCache((List<ConstructData>) constructDataList);
-
         for (BlitzardData blitzardData : blitzardDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blitzardData.getWorldName());
 
@@ -519,9 +555,6 @@ public class ConstructManager extends CatastropheManager {
     private void tickLighthouse() {
         List<LighthouseData> lighthouseDataList = mixedCatastrophesData.getMetaData().getLighthouseDataList();
 
-        List<? extends ConstructData> constructDataList = lighthouseDataList;
-        tickConstructCache((List<ConstructData>) constructDataList);
-
         for (LighthouseData lighthouseData : lighthouseDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
 
@@ -553,9 +586,6 @@ public class ConstructManager extends CatastropheManager {
 
     private void tickScarecrow() {
         List<ScarecrowData> scarecrowDataList = mixedCatastrophesData.getMetaData().getScarecrowDataList();
-
-        List<? extends ConstructData> constructDataList = scarecrowDataList;
-        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (ScarecrowData scarecrowData : scarecrowDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(scarecrowData.getWorldName());
@@ -593,9 +623,6 @@ public class ConstructManager extends CatastropheManager {
 
     private void tickEnderRail() {
         List<EnderRailData> enderRailDataList = mixedCatastrophesData.getMetaData().getEnderRailDataList();
-
-        List<? extends ConstructData> constructDataList = enderRailDataList;
-        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (EnderRailData enderRailData : enderRailDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(enderRailData.getWorldName());

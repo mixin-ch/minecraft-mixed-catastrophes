@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.constructs;
 
 import ch.mixin.mixedCatastrophes.helperClasses.ShapeCompareResult;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.ConstructData;
 import com.gmail.filoghost.holographicdisplays.api.Hologram;
 
 public class ConstructCache {

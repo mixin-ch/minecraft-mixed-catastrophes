@@ -3,14 +3,16 @@ worlds:
 commands:
   dealWithDevil: true
 interaction:
+  constructCheckPerTick: 0.25
   timeDistortion: true
+  starSplinter: true
+  preventNaturalIronGolem: false
   weather:
     radiantSky: true
     searingCold: true
     thunderStorm: true
     gravityLoss: true
     catsAndDogs: true
-  starSplinter: true
   aspect:
     terror:
       whispers: true
@@ -36,7 +38,6 @@ interaction:
     skyScorn:
       collectable: true
       tearFlesh: true
-  preventNaturalIronGolem: false
 hintList:
   - Type "/mx dealWithDevil" if you are stranded on an Island.
   - Radiant Sky blinds you, if you have no shelter.
