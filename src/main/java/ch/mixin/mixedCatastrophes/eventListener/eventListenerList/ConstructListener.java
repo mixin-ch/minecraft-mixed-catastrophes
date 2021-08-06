@@ -5,6 +5,7 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
+import ch.mixin.mixedCatastrophes.helperClasses.ShapeCompareResult;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.EnderRailDirection;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
@@ -189,7 +190,9 @@ public class ConstructListener implements Listener {
         if (block == null)
             return;
 
-        if (!Constants.BlazeReactor.checkConstructed(block.getLocation()).isConstructed())
+        ShapeCompareResult shapeCompareResult = Constants.BlazeReactor.checkConstructed(block.getLocation());
+
+        if (!shapeCompareResult.isConstructed())
             return;
 
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
@@ -205,7 +208,7 @@ public class ConstructListener implements Listener {
         boolean isNew = false;
 
         if (blazeReactorData == null) {
-            blazeReactorData = new BlazeReactorData(center, world.getName(), 0, 0);
+            blazeReactorData = new BlazeReactorData(center, world.getName(), 0, shapeCompareResult.getRotations(), 0);
             isNew = true;
         }
 
@@ -462,7 +465,9 @@ public class ConstructListener implements Listener {
         if (block.getType() != Material.JACK_O_LANTERN)
             return;
 
-        if (!Constants.Scarecrow.checkConstructed(block.getLocation()).isConstructed())
+        ShapeCompareResult shapeCompareResult = Constants.Scarecrow.checkConstructed(block.getLocation());
+
+        if (!shapeCompareResult.isConstructed())
             return;
 
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
@@ -472,7 +477,7 @@ public class ConstructListener implements Listener {
                 return;
         }
 
-        ScarecrowData scarecrowData = new ScarecrowData(center, world.getName(), 0);
+        ScarecrowData scarecrowData = new ScarecrowData(center, world.getName(), shapeCompareResult.getRotations(), 0);
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int cost = 500;
         int costItem = 1;
@@ -540,17 +545,29 @@ public class ConstructListener implements Listener {
         if (block.getType() != Material.LAPIS_BLOCK)
             return;
 
-        EnderRailDirection direction;
+        ShapeCompareResult shapeCompareResult;
+        EnderRailDirection direction = null;
 
-        if (Constants.EnderRail_Side.checkConstructed(block.getLocation()).isConstructed()) {
+        shapeCompareResult = Constants.EnderRail_Side.checkConstructed(block.getLocation());
+
+        if (shapeCompareResult.isConstructed()) {
             direction = EnderRailDirection.Side;
-        } else if (Constants.EnderRail_Up.checkConstructed(block.getLocation()).isConstructed()) {
-            direction = EnderRailDirection.Up;
-        } else if (Constants.EnderRail_Down.checkConstructed(block.getLocation()).isConstructed()) {
-            direction = EnderRailDirection.Down;
         } else {
-            return;
+            shapeCompareResult = Constants.EnderRail_Up.checkConstructed(block.getLocation());
+
+            if (shapeCompareResult.isConstructed()) {
+                direction = EnderRailDirection.Up;
+            } else {
+                shapeCompareResult = Constants.EnderRail_Down.checkConstructed(block.getLocation());
+
+                if (shapeCompareResult.isConstructed()) {
+                    direction = EnderRailDirection.Down;
+                }
+            }
         }
+
+        if (direction == null)
+            return;
 
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         EnderRailData enderRailData = null;
@@ -565,7 +582,7 @@ public class ConstructListener implements Listener {
         boolean isNew = false;
 
         if (enderRailData == null) {
-            enderRailData = new EnderRailData(center, world.getName(), 0, direction);
+            enderRailData = new EnderRailData(center, world.getName(), 0, shapeCompareResult.getRotations(), direction);
             isNew = true;
         }
 

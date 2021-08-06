@@ -40,14 +40,14 @@ public class ConstructShape {
         }
 
         for (int rotation = 0; rotation < rotationPossibilities; rotation++) {
-            if (checkConstructed(location, rotation))
+            if (checkConstructed(location, rotation).isConstructed())
                 return new ShapeCompareResult(true, rotation);
         }
 
         return new ShapeCompareResult(false, 0);
     }
 
-    private boolean checkConstructed(Location location, int rotation) {
+    public ShapeCompareResult checkConstructed(Location location, int rotation) {
         Coordinate3D center = Coordinate3D.toCoordinate(location);
         World world = location.getWorld();
 
@@ -55,17 +55,17 @@ public class ConstructShape {
             Material material = materialMap.get(cd3);
 
             if (!center.sum(cd3.rotateY90Clockwise(rotation)).toLocation(world).getBlock().getType().equals(material))
-                return false;
+                return new ShapeCompareResult(false, rotation);
         }
 
         for (Coordinate3D cd3 : materialSetMap.keySet()) {
             List<Material> materialList = materialSetMap.get(cd3);
 
             if (!materialList.contains(center.sum(cd3.rotateY90Clockwise(rotation)).toLocation(world).getBlock().getType()))
-                return false;
+                return new ShapeCompareResult(false, rotation);
         }
 
-        return true;
+        return new ShapeCompareResult(true, rotation);
     }
 
     public RotationSymmetry getRotationSymmetry() {

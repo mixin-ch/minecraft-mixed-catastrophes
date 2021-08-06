@@ -9,11 +9,13 @@ import org.bukkit.World;
 
 public class EnderRailData extends ConstructData {
     private int level;
+    private int rotation;
     private EnderRailDirection direction;
 
-    public EnderRailData(Coordinate3D position, String worldName, int level, EnderRailDirection direction) {
+    public EnderRailData(Coordinate3D position, String worldName, int level, int rotation, EnderRailDirection direction) {
         super(position, worldName,0);
         this.level = level;
+        this.rotation = rotation;
         this.direction = direction;
     }
 
@@ -41,6 +43,14 @@ public class EnderRailData extends ConstructData {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public int getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(int rotation) {
+        this.rotation = rotation;
     }
 
     public EnderRailDirection getDirection() {

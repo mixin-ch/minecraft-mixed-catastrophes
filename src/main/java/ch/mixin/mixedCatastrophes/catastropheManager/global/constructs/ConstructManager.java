@@ -214,12 +214,7 @@ public class ConstructManager extends CatastropheManager {
         }
     }
 
-
-    private void tickConstructCache(List<ConstructData> constructDataList, ConstructShape constructShape) {
-        tickConstructCache(constructDataList, new ArrayList<>(Arrays.asList(constructShape)));
-    }
-
-    private void tickConstructCache(List<ConstructData> constructDataList, List<ConstructShape> constructShapeList) {
+    private void tickConstructCache(List<ConstructData> constructDataList) {
         for (int i = 0; i < constructDataList.size(); i++) {
             ConstructData constructData = constructDataList.get(i);
             ConstructCache constructCache = cacheMap.get(constructData);
@@ -238,11 +233,38 @@ public class ConstructManager extends CatastropheManager {
                 Location location = constructData.getPosition().toLocation(world);
                 ShapeCompareResult shapeCompareResult = null;
 
-                for (ConstructShape constructShape : constructShapeList){
-                    shapeCompareResult = constructShape.checkConstructed(location);
+                if (constructData instanceof GreenWellData) {
+                    shapeCompareResult = Constants.GreenWell.checkConstructed(location);
+                } else if (constructData instanceof BlazeReactorData) {
+                    BlazeReactorData blazeReactorData = (BlazeReactorData) constructData;
 
-                    if (shapeCompareResult.isConstructed())
-                        break;
+                    shapeCompareResult = Constants.BlazeReactor.checkConstructed(location, blazeReactorData.getRotation());
+                } else if (constructData instanceof BlitzardData) {
+                    shapeCompareResult = Constants.Blitzard.checkConstructed(location);
+                } else if (constructData instanceof LighthouseData) {
+                    shapeCompareResult = Constants.Lighthouse.checkConstructed(location);
+                } else if (constructData instanceof ScarecrowData) {
+                    ScarecrowData scarecrowData = (ScarecrowData) constructData;
+
+                    shapeCompareResult = Constants.Scarecrow.checkConstructed(location, scarecrowData.getRotation());
+                } else if (constructData instanceof EnderRailData) {
+                    EnderRailData enderRailData = (EnderRailData) constructData;
+
+                    switch (enderRailData.getDirection()) {
+                        case Side:
+                            shapeCompareResult = Constants.EnderRail_Side.checkConstructed(location, enderRailData.getRotation());
+                            break;
+                        case Up:
+                            shapeCompareResult = Constants.EnderRail_Up.checkConstructed(location);
+                            break;
+                        case Down:
+                            shapeCompareResult = Constants.EnderRail_Down.checkConstructed(location);
+                            break;
+                    }
+                }
+
+                if (shapeCompareResult == null){
+                    shapeCompareResult = new ShapeCompareResult(false,0);
                 }
 
                 constructCache.setShapeCompareResult(shapeCompareResult);
@@ -271,7 +293,7 @@ public class ConstructManager extends CatastropheManager {
         List<GreenWellData> greenWellDataList = mixedCatastrophesData.getMetaData().getGreenWellDataList();
 
         List<? extends ConstructData> constructDataList = greenWellDataList;
-        tickConstructCache((List<ConstructData>) constructDataList, Constants.GreenWell);
+        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (GreenWellData greenWellData : greenWellDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(greenWellData.getWorldName());
@@ -374,7 +396,7 @@ public class ConstructManager extends CatastropheManager {
         List<BlazeReactorData> blazeReactorDataList = mixedCatastrophesData.getMetaData().getBlazeReactorList();
 
         List<? extends ConstructData> constructDataList = blazeReactorDataList;
-        tickConstructCache((List<ConstructData>) constructDataList, Constants.BlazeReactor);
+        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (BlazeReactorData blazeReactorData : blazeReactorDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blazeReactorData.getWorldName());
@@ -463,7 +485,7 @@ public class ConstructManager extends CatastropheManager {
         List<BlitzardData> blitzardDataList = mixedCatastrophesData.getMetaData().getBlitzardDataList();
 
         List<? extends ConstructData> constructDataList = blitzardDataList;
-        tickConstructCache((List<ConstructData>) constructDataList, Constants.Blitzard);
+        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (BlitzardData blitzardData : blitzardDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blitzardData.getWorldName());
@@ -498,7 +520,7 @@ public class ConstructManager extends CatastropheManager {
         List<LighthouseData> lighthouseDataList = mixedCatastrophesData.getMetaData().getLighthouseDataList();
 
         List<? extends ConstructData> constructDataList = lighthouseDataList;
-        tickConstructCache((List<ConstructData>) constructDataList, Constants.Lighthouse);
+        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (LighthouseData lighthouseData : lighthouseDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
@@ -533,7 +555,7 @@ public class ConstructManager extends CatastropheManager {
         List<ScarecrowData> scarecrowDataList = mixedCatastrophesData.getMetaData().getScarecrowDataList();
 
         List<? extends ConstructData> constructDataList = scarecrowDataList;
-        tickConstructCache((List<ConstructData>) constructDataList, Constants.Scarecrow);
+        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (ScarecrowData scarecrowData : scarecrowDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(scarecrowData.getWorldName());
@@ -573,11 +595,7 @@ public class ConstructManager extends CatastropheManager {
         List<EnderRailData> enderRailDataList = mixedCatastrophesData.getMetaData().getEnderRailDataList();
 
         List<? extends ConstructData> constructDataList = enderRailDataList;
-        tickConstructCache((List<ConstructData>) constructDataList, new ArrayList<>(Arrays.asList(
-                Constants.EnderRail_Side,
-                Constants.EnderRail_Down,
-                Constants.EnderRail_Up
-        )));
+        tickConstructCache((List<ConstructData>) constructDataList);
 
         for (EnderRailData enderRailData : enderRailDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(enderRailData.getWorldName());
