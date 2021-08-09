@@ -74,22 +74,8 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
-        HashMap<Location, Integer> lighthouseMap = new HashMap<>();
+        List<LighthouseData> lighthouseList = getActiveLighthouseList();
         List<ScarecrowData> scarecrowList = getActiveScarecrowList();
-
-        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
-            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
-
-            if (lightHouseWorld == null)
-                continue;
-
-            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
-
-            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
-                continue;
-
-            lighthouseMap.put(lighthouseLocation, lighthouseData.getLevel() * Constants.LighthouseRangeFactor);
-        }
 
         playerLoop:
         for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
@@ -99,11 +85,15 @@ public class TerrorCatastropheManager extends CatastropheManager {
             World world = player.getWorld();
             Location playerLocation = player.getLocation();
 
-            for (Location lighthouseLocation : lighthouseMap.keySet()) {
-                if (world != lighthouseLocation.getWorld())
+            for (LighthouseData lighthouseData : lighthouseList) {
+                World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
+
+                if (world != lightHouseWorld)
                     continue;
 
-                if (lighthouseLocation.distance(playerLocation) > lighthouseMap.get(lighthouseLocation))
+                Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
+
+                if (lighthouseLocation.distance(playerLocation) > lighthouseData.getLevel() * Constants.LighthouseRangeFactor)
                     continue;
 
                 continue playerLoop;
@@ -112,7 +102,6 @@ public class TerrorCatastropheManager extends CatastropheManager {
             TerrorData terrorData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId()).getTerrorData();
             ScarecrowData strongestScarecrow = mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
-
 
             if (mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isWhispers()) {
                 int timer = terrorData.getTerrorTimer();
@@ -206,6 +195,10 @@ public class TerrorCatastropheManager extends CatastropheManager {
 
     private List<ScarecrowData> getActiveScarecrowList() {
         return mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getScarecrowListIsConstructed(mixedCatastrophesData.getMetaData().getScarecrowDataList());
+    }
+
+    private List<LighthouseData> getActiveLighthouseList() {
+        return mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getLighthouseListIsConstructed(mixedCatastrophesData.getMetaData().getLighthouseDataList());
     }
 
     public AssaultCatastropheManager getAssaultCatastropheManager() {

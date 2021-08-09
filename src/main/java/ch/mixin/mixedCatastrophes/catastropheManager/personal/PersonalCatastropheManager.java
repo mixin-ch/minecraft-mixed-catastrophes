@@ -18,7 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class PersonalCatastropheManager extends CatastropheManager {
@@ -88,21 +90,9 @@ public class PersonalCatastropheManager extends CatastropheManager {
     @Override
     public void tick() {
         HashMap<UUID, PlayerData> playerDataMap = mixedCatastrophesData.getMetaData().getPlayerDataMap();
-        HashMap<Location, Integer> lighthouseMap = new HashMap<>();
 
-        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
-            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
-
-            if (lightHouseWorld == null)
-                continue;
-
-            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
-
-            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
-                continue;
-
-            lighthouseMap.put(lighthouseLocation, lighthouseData.getLevel() * Constants.LighthouseRangeFactor);
-        }
+        List<LighthouseData> lighthouseList = mixedCatastrophesData.getRootCatastropheManager().getConstructManager()
+                .getLighthouseListIsConstructed(mixedCatastrophesData.getMetaData().getLighthouseDataList());
 
         for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
@@ -121,11 +111,15 @@ public class PersonalCatastropheManager extends CatastropheManager {
                 if (playerData.getAntiLighthouseTimer() % 10 != 0)
                     continue;
 
-                for (Location lighthouseLocation : lighthouseMap.keySet()) {
-                    if (player.getWorld() != lighthouseLocation.getWorld())
+                for (LighthouseData lighthouseData : lighthouseList) {
+                    World world = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
+
+                    if (player.getWorld() != world)
                         continue;
 
-                    if (lighthouseLocation.distance(player.getLocation()) > lighthouseMap.get(lighthouseLocation))
+                    Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
+
+                    if (lighthouseLocation.distance(player.getLocation()) > lighthouseData.getLevel() * Constants.LighthouseRangeFactor)
                         continue;
 
                     player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 10 * 20, 0));
