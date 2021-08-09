@@ -198,7 +198,7 @@ public class ConstructListener implements Listener {
         Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
         BlazeReactorData blazeReactorData = null;
 
-        for (BlazeReactorData brd : mixedCatastrophesData.getMetaData().getBlazeReactorList()) {
+        for (BlazeReactorData brd : mixedCatastrophesData.getMetaData().getBlazeReactorDataList()) {
             if (center.equals(brd.getPosition())) {
                 blazeReactorData = brd;
                 break;
@@ -242,7 +242,7 @@ public class ConstructListener implements Listener {
             return;
 
         if (isNew)
-            mixedCatastrophesData.getMetaData().getBlazeReactorList().add(blazeReactorData);
+            mixedCatastrophesData.getMetaData().getBlazeReactorDataList().add(blazeReactorData);
 
         blazeReactorData.setLevel(blazeReactorData.getLevel() + 1);
         itemStack.setAmount(itemStack.getAmount() - costItem);

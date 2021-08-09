@@ -27,7 +27,6 @@ public class ConstructManager extends CatastropheManager {
     private final HashMap<ConstructData, ConstructCache> cacheMap = new HashMap<>();
 
     private double constructCheckValue = 0;
-    private List<ConstructData> constructToCheckList = new ArrayList<>();
 
     public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
@@ -44,8 +43,8 @@ public class ConstructManager extends CatastropheManager {
         if (mixedCatastrophesData.getMetaData().getLighthouseDataList() == null)
             mixedCatastrophesData.getMetaData().setLighthouseDataList(new ArrayList<>());
 
-        if (mixedCatastrophesData.getMetaData().getBlazeReactorList() == null)
-            mixedCatastrophesData.getMetaData().setBlazeReactorList(new ArrayList<>());
+        if (mixedCatastrophesData.getMetaData().getBlazeReactorDataList() == null)
+            mixedCatastrophesData.getMetaData().setBlazeReactorDataList(new ArrayList<>());
 
         if (mixedCatastrophesData.getMetaData().getScarecrowDataList() == null)
             mixedCatastrophesData.getMetaData().setScarecrowDataList(new ArrayList<>());
@@ -81,27 +80,13 @@ public class ConstructManager extends CatastropheManager {
         MetaData metaData = mixedCatastrophesData.getMetaData();
         List<ConstructData> constructDataList = new ArrayList<>();
         constructDataList.addAll(metaData.getGreenWellDataList());
-        constructDataList.addAll(metaData.getBlazeReactorList());
+        constructDataList.addAll(metaData.getBlazeReactorDataList());
         constructDataList.addAll(metaData.getBlitzardDataList());
         constructDataList.addAll(metaData.getLighthouseDataList());
         constructDataList.addAll(metaData.getScarecrowDataList());
         constructDataList.addAll(metaData.getEnderRailDataList());
 
-        for (int i = 0; i < constructToCheckList.size(); i++) {
-            ConstructData constructToCheck = constructToCheckList.get(i);
-
-            if (!constructDataList.contains(constructToCheck)) {
-                constructToCheckList.remove(i);
-                i--;
-            }
-        }
-
-        for (int i = 0; i < constructDataList.size(); i++) {
-            ConstructData constructData = constructDataList.get(i);
-
-            if (!constructToCheckList.contains(constructData))
-                constructToCheckList.add(constructData);
-
+        for (ConstructData constructData : constructDataList) {
             ConstructCache constructCache = cacheMap.get(constructData);
 
             if (constructCache == null) {
@@ -114,11 +99,18 @@ public class ConstructManager extends CatastropheManager {
         int amount = (int) Math.floor(constructCheckValue);
         constructCheckValue -= amount;
 
-        for (int i = 0; i < amount && i < constructToCheckList.size(); i++) {
-            ConstructData constructData = constructToCheckList.get(0);
-            constructToCheckList.remove(0);
-            constructToCheckList.add(constructData);
-            fillCacheChange(constructData, false);
+        List<ConstructData> constructCheckedList = new ArrayList<>();
+
+        for (int i = 0; i < amount && constructCheckedList.size() < constructDataList.size(); i++) {
+            while (true) {
+                ConstructData constructData = constructDataList.get(new Random().nextInt(constructDataList.size()));
+
+                if (!constructCheckedList.contains(constructData)) {
+                    constructCheckedList.add(constructData);
+                    fillCacheChange(constructData, false);
+                    break;
+                }
+            }
         }
 
         for (int i = 0; i < constructDataList.size(); i++) {
@@ -131,8 +123,20 @@ public class ConstructManager extends CatastropheManager {
 
                 if (constructData.getInactiveTime() >= 60 * 60) {
                     cacheMap.remove(constructData);
-                    constructDataList.remove(i);
-                    i--;
+
+                    if (constructData instanceof GreenWellData) {
+                        metaData.getGreenWellDataList().remove(constructData);
+                    } else if (constructData instanceof BlazeReactorData) {
+                        metaData.getBlazeReactorDataList().remove(constructData);
+                    } else if (constructData instanceof BlitzardData) {
+                        metaData.getBlitzardDataList().remove(constructData);
+                    } else if (constructData instanceof LighthouseData) {
+                        metaData.getLighthouseDataList().remove(constructData);
+                    } else if (constructData instanceof ScarecrowData) {
+                        metaData.getScarecrowDataList().remove(constructData);
+                    } else if (constructData instanceof EnderRailData) {
+                        metaData.getEnderRailDataList().remove(constructData);
+                    }
                 }
             }
         }
@@ -369,7 +373,12 @@ public class ConstructManager extends CatastropheManager {
             List<Material> logs = new ArrayList<>();
 
             for (Coordinate2D field : square) {
-                logs.add(field.to3D(center.getY()).toLocation(world).getBlock().getType());
+                Material material = field.to3D(center.getY()).toLocation(world).getBlock().getType();
+
+                if (!Constants.Logs.contains(material))
+                    continue;
+
+                logs.add(material);
             }
 
             Random random = new Random();
@@ -421,7 +430,7 @@ public class ConstructManager extends CatastropheManager {
                 }
             }
 
-            if (successfulAmount > 0) {
+            if (successfulAmount > 0 && logs.size() > 0) {
                 world.dropItem(locationCenterMiddle, new ItemStack(logs.get(new Random().nextInt(logs.size())), successfulAmount));
             }
         }
@@ -435,7 +444,7 @@ public class ConstructManager extends CatastropheManager {
     }
 
     private void tickBlazeReactor() {
-        List<BlazeReactorData> blazeReactorDataList = mixedCatastrophesData.getMetaData().getBlazeReactorList();
+        List<BlazeReactorData> blazeReactorDataList = mixedCatastrophesData.getMetaData().getBlazeReactorDataList();
 
         for (BlazeReactorData blazeReactorData : blazeReactorDataList) {
             World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blazeReactorData.getWorldName());

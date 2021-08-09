@@ -1,25 +1,19 @@
 package ch.mixin.mixedCatastrophes.eventChange;
 
 
-import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectChange;
-import ch.mixin.mixedCatastrophes.eventChange.scoreBoard.AspectScoreManager;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.eventChange.message.EventMessage;
 import ch.mixin.mixedCatastrophes.eventChange.message.Messager;
+import ch.mixin.mixedCatastrophes.eventChange.scoreBoard.AspectScoreManager;
 import ch.mixin.mixedCatastrophes.eventChange.sound.EventSound;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.MetaData;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
-import ch.mixin.mixedCatastrophes.metaData.data.constructs.BlitzardData;
-import ch.mixin.mixedCatastrophes.metaData.data.constructs.LighthouseData;
-import ch.mixin.mixedCatastrophes.metaData.data.constructs.ScarecrowData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class EventChangeManager {
     private final MixedCatastrophesData mixedCatastrophesData;
@@ -122,15 +116,8 @@ public class EventChangeManager {
     }
 
     public void updateScoreBoard() {
-        MetaData metaData = mixedCatastrophesData.getMetaData();
-        ConstructManager constructManager = mixedCatastrophesData.getRootCatastropheManager().getConstructManager();
-
-        List<BlitzardData> blitzardDataList = constructManager.getBlitzardListIsActive(metaData.getBlitzardDataList());
-        List<LighthouseData> lighthouseDataList = constructManager.getLighthouseListIsConstructed(metaData.getLighthouseDataList());
-        List<ScarecrowData> scarecrowDataList = constructManager.getScarecrowListIsConstructed(metaData.getScarecrowDataList());
-
         for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
-            aspectScoreManager.updateScoreboard(player, blitzardDataList, lighthouseDataList, scarecrowDataList);
+            aspectScoreManager.updateScoreboard(player);
         }
     }
 

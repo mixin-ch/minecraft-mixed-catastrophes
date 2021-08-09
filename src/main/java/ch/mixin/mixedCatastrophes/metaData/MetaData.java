@@ -111,14 +111,6 @@ public class MetaData {
         this.lighthouseDataList = lighthouseDataList;
     }
 
-    public List<BlazeReactorData> getBlazeReactorList() {
-        return blazeReactorDataList;
-    }
-
-    public void setBlazeReactorList(List<BlazeReactorData> blazeReactorDataList) {
-        this.blazeReactorDataList = blazeReactorDataList;
-    }
-
     public List<BlazeReactorData> getBlazeReactorDataList() {
         return blazeReactorDataList;
     }
