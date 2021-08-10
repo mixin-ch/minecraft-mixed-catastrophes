@@ -212,7 +212,7 @@ public class ActionListener implements Listener {
                     if (startPosition.getY() != pos.getY())
                         continue enderRailLoop;
 
-                    switch (rotation) {
+                    switch (erd.getRotations()) {
                         case 0:
                             if (startPosition.getZ() != pos.getZ())
                                 continue enderRailLoop;
