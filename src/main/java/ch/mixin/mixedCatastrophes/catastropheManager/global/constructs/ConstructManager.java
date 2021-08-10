@@ -26,7 +26,7 @@ import java.util.Random;
 public class ConstructManager extends CatastropheManager {
     private final HashMap<ConstructData, ConstructCache> cacheMap = new HashMap<>();
 
-    private double constructCheckValue = 0;
+    private int constructCheckTimer = 0;
 
     public ConstructManager(MixedCatastrophesData mixedCatastrophesData) {
         super(mixedCatastrophesData);
@@ -69,12 +69,14 @@ public class ConstructManager extends CatastropheManager {
         tickConstructCache();
 
         tickGreenWell();
+        tickBlazeReactor();
         tickBlitzard();
         tickLighthouse();
-        tickBlazeReactor();
         tickScarecrow();
         tickEnderRail();
     }
+
+    private boolean calc = true;
 
     private void tickConstructCache() {
         MetaData metaData = mixedCatastrophesData.getMetaData();
@@ -86,6 +88,14 @@ public class ConstructManager extends CatastropheManager {
         constructDataList.addAll(metaData.getScarecrowDataList());
         constructDataList.addAll(metaData.getEnderRailDataList());
 
+        boolean check = false;
+        constructCheckTimer--;
+
+        if (constructCheckTimer <= 0) {
+            check = true;
+            constructCheckTimer += mixedCatastrophesData.getCatastropheSettings().getConstructCheckPeriod();
+        }
+
         for (ConstructData constructData : constructDataList) {
             ConstructCache constructCache = cacheMap.get(constructData);
 
@@ -93,30 +103,27 @@ public class ConstructManager extends CatastropheManager {
                 constructCache = new ConstructCache(null, false, false, null);
                 cacheMap.put(constructData, constructCache);
             }
-        }
 
-        constructCheckValue += mixedCatastrophesData.getCatastropheSettings().getConstructCheckPerTick();
-        int amount = (int) Math.floor(constructCheckValue);
-        constructCheckValue -= amount;
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
 
-        List<ConstructData> constructCheckedList = new ArrayList<>();
+            if (world == null) {
+                constructCache.setActive(false);
+                constructCache.setChanged(false);
+            } else if (constructCache.getShapeCompareResult() == null || check) {
+                Location location = constructData.getPosition().toLocation(world);
+                ShapeCompareResult shapeCompareResult = checkConstructed(constructData, location);
 
-        for (int i = 0; i < amount && constructCheckedList.size() < constructDataList.size(); i++) {
-            while (true) {
-                ConstructData constructData = constructDataList.get(new Random().nextInt(constructDataList.size()));
-
-                if (!constructCheckedList.contains(constructData)) {
-                    constructCheckedList.add(constructData);
-                    fillCacheChange(constructData, false);
-                    break;
+                if (shapeCompareResult == null) {
+                    shapeCompareResult = new ShapeCompareResult(false, 0);
                 }
-            }
-        }
 
-        for (int i = 0; i < constructDataList.size(); i++) {
-            ConstructData constructData = constructDataList.get(i);
-            ConstructCache constructCache = cacheMap.get(constructData);
-            fillCacheChange(constructData, true);
+                constructCache.setShapeCompareResult(shapeCompareResult);
+
+                if (!constructCache.isChanged())
+                    constructCache.setChanged(constructCache.isActive() != shapeCompareResult.isConstructed());
+
+                constructCache.setActive(shapeCompareResult.isConstructed());
+            }
 
             if (!constructCache.isActive()) {
                 constructData.inactiveTick();
@@ -144,26 +151,6 @@ public class ConstructManager extends CatastropheManager {
 
     private void fillCacheChange(ConstructData constructData, boolean conditionNull) {
         ConstructCache constructCache = cacheMap.get(constructData);
-        World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
-
-        if (world == null) {
-            constructCache.setActive(false);
-            constructCache.setChanged(false);
-        } else if (constructCache.getShapeCompareResult() == null || !conditionNull) {
-            Location location = constructData.getPosition().toLocation(world);
-            ShapeCompareResult shapeCompareResult = checkConstructed(constructData, location);
-
-            if (shapeCompareResult == null) {
-                shapeCompareResult = new ShapeCompareResult(false, 0);
-            }
-
-            constructCache.setShapeCompareResult(shapeCompareResult);
-
-            if (!constructCache.isChanged())
-                constructCache.setChanged(constructCache.isActive() != shapeCompareResult.isConstructed());
-
-            constructCache.setActive(shapeCompareResult.isConstructed());
-        }
     }
 
     private ShapeCompareResult checkConstructed(ConstructData constructData, Location location) {
@@ -819,7 +806,7 @@ public class ConstructManager extends CatastropheManager {
         constructCache.setChanged(true);
     }
 
-    public boolean isConstructActive(ConstructData constructData){
+    public boolean isConstructActive(ConstructData constructData) {
         ConstructCache constructCache = cacheMap.get(constructData);
 
         if (constructCache == null)

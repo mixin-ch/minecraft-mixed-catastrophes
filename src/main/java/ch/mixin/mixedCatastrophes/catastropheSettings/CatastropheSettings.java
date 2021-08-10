@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.HashMap;
 
 public class CatastropheSettings {
-    private double constructCheckPerTick;
+    private double constructCheckPeriod;
     private boolean timeDistortion;
     private boolean starSplinter;
     private boolean preventNaturalIronGolem;
@@ -28,7 +28,7 @@ public class CatastropheSettings {
         if (interactionSection == null)
             return;
 
-        constructCheckPerTick = interactionSection.getDouble("constructCheckPerTick");
+        constructCheckPeriod = interactionSection.getDouble("constructCheckPeriod");
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
         preventNaturalIronGolem = interactionSection.getBoolean("preventNaturalIronGolem");
@@ -53,7 +53,7 @@ public class CatastropheSettings {
 
         ConfigurationSection interactionSection = superSection.createSection("interaction");
 
-        interactionSection.set("constructCheckPerTick", constructCheckPerTick);
+        interactionSection.set("constructCheckPeriod", constructCheckPeriod);
         interactionSection.set("timeDistortion", timeDistortion);
         interactionSection.set("starSplinter", starSplinter);
         interactionSection.set("preventNaturalIronGolem", preventNaturalIronGolem);
@@ -69,12 +69,12 @@ public class CatastropheSettings {
         aspect.fillConfig(interactionSection);
     }
 
-    public double getConstructCheckPerTick() {
-        return constructCheckPerTick;
+    public double getConstructCheckPeriod() {
+        return constructCheckPeriod;
     }
 
-    public void setConstructCheckPerTick(double constructCheckPerTick) {
-        this.constructCheckPerTick = constructCheckPerTick;
+    public void setConstructCheckPeriod(double constructCheckPeriod) {
+        this.constructCheckPeriod = constructCheckPeriod;
     }
 
     public boolean isTimeDistortion() {
