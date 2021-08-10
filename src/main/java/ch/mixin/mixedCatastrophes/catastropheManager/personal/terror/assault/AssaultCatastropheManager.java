@@ -18,6 +18,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class AssaultCatastropheManager extends CatastropheManager {
@@ -223,24 +224,8 @@ public class AssaultCatastropheManager extends CatastropheManager {
             playerLocations.add(p.getLocation());
         }
 
-        HashMap<Location, Integer> lighthouseMap = new HashMap<>();
-
-        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
-            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
-
-            if (lightHouseWorld == null)
-                continue;
-
-            if (world != lightHouseWorld)
-                continue;
-
-            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
-
-            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
-                continue;
-
-            lighthouseMap.put(lighthouseLocation, lighthouseData.getLevel() * Constants.LighthouseRangeFactor);
-        }
+        List<LighthouseData> lighthouseList = mixedCatastrophesData.getRootCatastropheManager().getConstructManager()
+                .getLighthouseListIsConstructed(mixedCatastrophesData.getMetaData().getLighthouseDataList());
 
         spaceLoop:
         for (Coordinate2D space : spaces) {
@@ -255,10 +240,16 @@ public class AssaultCatastropheManager extends CatastropheManager {
             if (Math.abs(player.getLocation().getY() - groundP1.getY()) > 15)
                 continue;
 
-            for (Location lighthouseLocation : lighthouseMap.keySet()) {
-                int range = lighthouseMap.get(lighthouseLocation);
 
-                if (lighthouseLocation.distance(groundP1) <= range)
+            for (LighthouseData lighthouseData : lighthouseList) {
+                World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
+
+                if (world != lightHouseWorld)
+                    continue;
+
+                Location lighthouseLocation = lighthouseData.getPosition().toLocation(world);
+
+                if (lighthouseLocation.distance(groundP1) <= lighthouseData.getLevel() * Constants.LighthouseRangeFactor)
                     continue spaceLoop;
             }
 

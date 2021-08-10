@@ -8,6 +8,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.BlitzardData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.LighthouseData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
 import org.bukkit.block.Furnace;
@@ -17,10 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 public class WeatherCatastropheManager extends CatastropheManager {
     private static final HashMap<WeatherCatastropheType, Double> catastropheWeights;
@@ -315,21 +313,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
     private void enforceThunderStorm() {
         HashMap<UUID, PlayerData> pcm = mixedCatastrophesData.getMetaData().getPlayerDataMap();
         ArrayList<Location> targets = new ArrayList<>();
-        HashMap<Location, Integer> blitzardMap = new HashMap<>();
-
-        for (BlitzardData blitzardData : mixedCatastrophesData.getMetaData().getBlitzardDataList()) {
-            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(blitzardData.getWorldName());
-
-            if (world == null)
-                continue;
-
-            Location location = blitzardData.getPosition().toLocation(world);
-
-            if (!Constants.Blitzard.checkConstructed(location).isConstructed())
-                continue;
-
-            blitzardMap.put(location, blitzardData.getLevel() * Constants.BlitzardRangeFactor);
-        }
+        List<BlitzardData> blitzardList = mixedCatastrophesData.getRootCatastropheManager().getConstructManager()
+                .getBlitzardListIsActive(mixedCatastrophesData.getMetaData().getBlitzardDataList());
 
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
             ArrayList<Coordinate2D> spaces = new ArrayList<>();
@@ -346,7 +331,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 double probability = misfortune / (20.0 + misfortune);
 
                 if (new Random().nextDouble() < probability) {
-                    targets.add(rerouteBlitzard(blitzardMap, location));
+                    targets.add(rerouteBlitzard(blitzardList, location));
                 }
             }
 
@@ -357,7 +342,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
                     if (roofAbove == null)
                         continue;
 
-                    targets.add(rerouteBlitzard(blitzardMap, roofAbove));
+                    targets.add(rerouteBlitzard(blitzardList, roofAbove));
                 }
             }
         }
@@ -365,28 +350,13 @@ public class WeatherCatastropheManager extends CatastropheManager {
         lightningChain(targets, 4);
     }
 
-    private Location rerouteBlitzard(HashMap<Location, Integer> blitzardMap, Location baseLocation) {
-        Location strongestBlitzard = null;
+    private Location rerouteBlitzard(List<BlitzardData> blitzardList, Location baseLocation) {
+        BlitzardData strongestBlitzard = mixedCatastrophesData.getRootCatastropheManager().getConstructManager()
+                .getStrongestBlitzard(blitzardList, baseLocation);
         double strongestPull = -1;
 
-        for (Location blitzardLocation : blitzardMap.keySet()) {
-            if (blitzardLocation.getWorld() != baseLocation.getWorld())
-                continue;
-
-            double pull = blitzardMap.get(blitzardLocation) - blitzardLocation.distance(baseLocation);
-
-            if (pull < 0)
-                continue;
-
-            if (pull <= strongestPull)
-                continue;
-
-            strongestPull = pull;
-            strongestBlitzard = blitzardLocation;
-        }
-
         if (strongestBlitzard != null) {
-            return Functions.absoluteRoof(strongestBlitzard.getWorld(), Coordinate2D.convert(strongestBlitzard));
+            return strongestBlitzard.getPosition().toLocation(baseLocation.getWorld());
         } else {
             return baseLocation;
         }

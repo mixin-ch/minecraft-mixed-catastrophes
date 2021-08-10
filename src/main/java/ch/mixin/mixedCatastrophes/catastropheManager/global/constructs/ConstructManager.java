@@ -188,7 +188,7 @@ public class ConstructManager extends CatastropheManager {
 
             switch (enderRailData.getDirection()) {
                 case Side:
-                    shapeCompareResult = Constants.EnderRail_Side.checkConstructed(location, enderRailData.getRotation());
+                    shapeCompareResult = Constants.EnderRail_Side.checkConstructed(location, enderRailData.getRotations());
                     break;
                 case Up:
                     shapeCompareResult = Constants.EnderRail_Up.checkConstructed(location);
@@ -817,5 +817,14 @@ public class ConstructManager extends CatastropheManager {
             return;
 
         constructCache.setChanged(true);
+    }
+
+    public boolean isConstructActive(ConstructData constructData){
+        ConstructCache constructCache = cacheMap.get(constructData);
+
+        if (constructCache == null)
+            return false;
+
+        return constructCache.isActive();
     }
 }

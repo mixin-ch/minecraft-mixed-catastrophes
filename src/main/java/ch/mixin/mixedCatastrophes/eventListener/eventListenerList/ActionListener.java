@@ -8,7 +8,6 @@ import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import ch.mixin.mixedCatastrophes.helperClasses.ShapeCompareResult;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.data.StarSplinterRemainsData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.EnderRailData;
@@ -195,16 +194,16 @@ public class ActionListener implements Listener {
             if (!erd.getWorldName().equals(worldName))
                 continue;
 
-            ShapeCompareResult scr = erd.checkConstructed(world);
+            boolean active = mixedCatastrophesData.getRootCatastropheManager().getConstructManager().isConstructActive(erd);
 
-            if (!scr.isConstructed())
+            if (!active)
                 continue;
 
             Coordinate3D pos = erd.getPosition();
 
             if (pos.equals(startPosition)) {
                 enderRailData = erd;
-                rotation = scr.getRotations();
+                rotation = erd.getRotations();
                 continue;
             }
 
@@ -213,7 +212,7 @@ public class ActionListener implements Listener {
                     if (startPosition.getY() != pos.getY())
                         continue enderRailLoop;
 
-                    switch (scr.getRotations()) {
+                    switch (rotation) {
                         case 0:
                             if (startPosition.getZ() != pos.getZ())
                                 continue enderRailLoop;

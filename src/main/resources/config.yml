@@ -3,7 +3,7 @@ worlds:
 commands:
   dealWithDevil: true
 interaction:
-  constructCheckPerTick: 0.25
+  constructCheckPerTick: 1
   timeDistortion: true
   starSplinter: true
   preventNaturalIronGolem: false

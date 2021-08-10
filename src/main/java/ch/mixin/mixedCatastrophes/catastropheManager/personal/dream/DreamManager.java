@@ -6,6 +6,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesPlugin;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.BlitzardData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.LighthouseData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
@@ -17,10 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public class DreamManager {
     private final static ArrayList<DreamType> dreamOrder;
@@ -247,25 +245,15 @@ public class DreamManager {
 
         boolean nearLighthouse = false;
 
-        for (LighthouseData lighthouseData : mixedCatastrophesData.getMetaData().getLighthouseDataList()) {
-            World lightHouseWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(lighthouseData.getWorldName());
+        List<LighthouseData> lighthouseList = mixedCatastrophesData.getRootCatastropheManager().getConstructManager()
+                .getLighthouseListIsConstructed(mixedCatastrophesData.getMetaData().getLighthouseDataList());
 
-            if (lightHouseWorld == null)
-                continue;
+        LighthouseData strongestLighthouse = mixedCatastrophesData.getRootCatastropheManager().getConstructManager()
+                .getStrongestLighthouse(lighthouseList, player.getLocation());
 
-            if (player.getWorld() != lightHouseWorld)
-                continue;
-
-            Location lighthouseLocation = lighthouseData.getPosition().toLocation(lightHouseWorld);
-
-            if (!Constants.Lighthouse.checkConstructed(lighthouseLocation).isConstructed())
-                continue;
-
-            if (lighthouseLocation.distance(player.getLocation()) > lighthouseData.getLevel() * Constants.LighthouseRangeFactor)
-                continue;
-
-            nearLighthouse = true;
-            break;
+        if (strongestLighthouse != null) {
+            Location lighthouseLocation = strongestLighthouse.getPosition().toLocation(player.getWorld());
+            nearLighthouse = lighthouseLocation.distance(player.getLocation()) <= strongestLighthouse.getLevel() * Constants.LighthouseRangeFactor;
         }
 
         if (nearLighthouse) {
