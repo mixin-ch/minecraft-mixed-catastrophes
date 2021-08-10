@@ -6,7 +6,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.HashMap;
 
 public class CatastropheSettings {
-    private double constructCheckPeriod;
+    private int constructCheckPeriod;
     private boolean timeDistortion;
     private boolean starSplinter;
     private boolean preventNaturalIronGolem;
@@ -28,7 +28,7 @@ public class CatastropheSettings {
         if (interactionSection == null)
             return;
 
-        constructCheckPeriod = interactionSection.getDouble("constructCheckPeriod");
+        constructCheckPeriod = interactionSection.getInt("constructCheckPeriod");
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
         preventNaturalIronGolem = interactionSection.getBoolean("preventNaturalIronGolem");
@@ -69,11 +69,11 @@ public class CatastropheSettings {
         aspect.fillConfig(interactionSection);
     }
 
-    public double getConstructCheckPeriod() {
+    public int getConstructCheckPeriod() {
         return constructCheckPeriod;
     }
 
-    public void setConstructCheckPeriod(double constructCheckPeriod) {
+    public void setConstructCheckPeriod(int constructCheckPeriod) {
         this.constructCheckPeriod = constructCheckPeriod;
     }
 
