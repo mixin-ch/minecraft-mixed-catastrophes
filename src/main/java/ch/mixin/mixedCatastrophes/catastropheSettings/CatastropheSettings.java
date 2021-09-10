@@ -1,5 +1,6 @@
 package ch.mixin.mixedCatastrophes.catastropheSettings;
 
+import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -11,11 +12,16 @@ public class CatastropheSettings {
     private boolean starSplinter;
     private boolean preventNaturalIronGolem;
     private HashMap<WeatherCatastropheType, Boolean> weather = new HashMap<>();
+    private HashMap<ConstructType, Boolean> construct = new HashMap<>();
     private AspectCatastropheSettings aspect = new AspectCatastropheSettings();
 
     public CatastropheSettings() {
         for (WeatherCatastropheType weatherType : WeatherCatastropheType.values()) {
             weather.put(weatherType, false);
+        }
+
+        for (ConstructType constructType : ConstructType.values()) {
+            construct.put(constructType, false);
         }
     }
 
@@ -44,6 +50,17 @@ public class CatastropheSettings {
             }
         }
 
+        ConfigurationSection constructSection = interactionSection.getConfigurationSection("construct");
+
+        if (constructSection != null) {
+            for (ConstructType constructType : ConstructType.values()) {
+                String constructLabel = constructType.toString();
+                constructLabel = constructLabel.substring(0, 1).toLowerCase() + constructLabel.substring(1);
+                boolean active = constructSection.getBoolean(constructLabel);
+                construct.put(constructType, active);
+            }
+        }
+
         aspect.initialize(interactionSection);
     }
 
@@ -64,6 +81,14 @@ public class CatastropheSettings {
             String weatherLabel = weatherType.toString();
             weatherLabel = weatherLabel.substring(0, 1).toLowerCase() + weatherLabel.substring(1);
             weatherSection.set(weatherLabel, weather.get(weatherType));
+        }
+
+        ConfigurationSection constructSection = interactionSection.createSection("construct");
+
+        for (ConstructType constructType : construct.keySet()) {
+            String constructLabel = constructType.toString();
+            constructLabel = constructLabel.substring(0, 1).toLowerCase() + constructLabel.substring(1);
+            constructSection.set(constructLabel, construct.get(constructType));
         }
 
         aspect.fillConfig(interactionSection);
@@ -91,6 +116,14 @@ public class CatastropheSettings {
 
     public void setWeather(HashMap<WeatherCatastropheType, Boolean> weather) {
         this.weather = weather;
+    }
+
+    public HashMap<ConstructType, Boolean> getConstruct() {
+        return construct;
+    }
+
+    public void setConstruct(HashMap<ConstructType, Boolean> construct) {
+        this.construct = construct;
     }
 
     public boolean isStarSplinter() {

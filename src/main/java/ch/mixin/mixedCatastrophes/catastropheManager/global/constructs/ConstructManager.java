@@ -68,12 +68,18 @@ public class ConstructManager extends CatastropheManager {
 
         tickConstructCache();
 
-        tickGreenWell();
-        tickBlazeReactor();
-        tickBlitzard();
-        tickLighthouse();
-        tickScarecrow();
-        tickEnderRail();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.GreenWell))
+            tickGreenWell();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.BlazeReactor))
+            tickBlazeReactor();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Blitzard))
+            tickBlitzard();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Lighthouse))
+            tickLighthouse();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Scarecrow))
+            tickScarecrow();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.EnderRail))
+            tickEnderRail();
     }
 
     private boolean calc = true;
@@ -81,12 +87,19 @@ public class ConstructManager extends CatastropheManager {
     private void tickConstructCache() {
         MetaData metaData = mixedCatastrophesData.getMetaData();
         List<ConstructData> constructDataList = new ArrayList<>();
-        constructDataList.addAll(metaData.getGreenWellDataList());
-        constructDataList.addAll(metaData.getBlazeReactorDataList());
-        constructDataList.addAll(metaData.getBlitzardDataList());
-        constructDataList.addAll(metaData.getLighthouseDataList());
-        constructDataList.addAll(metaData.getScarecrowDataList());
-        constructDataList.addAll(metaData.getEnderRailDataList());
+
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.GreenWell))
+            constructDataList.addAll(metaData.getGreenWellDataList());
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.BlazeReactor))
+            constructDataList.addAll(metaData.getBlazeReactorDataList());
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Blitzard))
+            constructDataList.addAll(metaData.getBlitzardDataList());
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Lighthouse))
+            constructDataList.addAll(metaData.getLighthouseDataList());
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Scarecrow))
+            constructDataList.addAll(metaData.getScarecrowDataList());
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.EnderRail))
+            constructDataList.addAll(metaData.getEnderRailDataList());
 
         boolean check = false;
         constructCheckTimer--;

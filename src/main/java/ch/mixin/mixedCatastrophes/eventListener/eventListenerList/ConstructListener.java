@@ -78,6 +78,9 @@ public class ConstructListener implements Listener {
     }
 
     private void makeGreenWell(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.GreenWell))
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -174,6 +177,9 @@ public class ConstructListener implements Listener {
 
 
     private void makeBlazeReactor(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.BlazeReactor))
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -272,6 +278,9 @@ public class ConstructListener implements Listener {
     }
 
     private void makeBlitzard(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Blitzard))
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -363,6 +372,9 @@ public class ConstructListener implements Listener {
     }
 
     private void makeLighthouse(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Lighthouse))
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -454,6 +466,9 @@ public class ConstructListener implements Listener {
     }
 
     private void makeScarecrow(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.Scarecrow))
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -534,6 +549,9 @@ public class ConstructListener implements Listener {
     }
 
     private void makeEnderRail(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.EnderRail))
+            return;
+
         Player player = event.getPlayer();
         World world = player.getWorld();
         ItemStack itemStack = player.getInventory().getItemInMainHand();

@@ -181,9 +181,9 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
         int time = (int) Math.floor(60 * Math.pow(0.005 * extent, 0.5));
 
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, time * 20, 0));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, time * 20, 0));
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
