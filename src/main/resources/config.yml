@@ -11,8 +11,8 @@ interaction:
     greenWell: true
     blazeReactor: true
     blitzard: true
-    Lighthouse: true
-    Scarecrow: true
+    lighthouse: true
+    scarecrow: true
     enderRail: true
   weather:
     radiantSky: true
