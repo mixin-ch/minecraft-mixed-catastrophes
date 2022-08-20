@@ -3,6 +3,7 @@ package ch.mixin.mixedCatastrophes.helperClasses;
 import org.bukkit.Location;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Coordinate2D {
     private double x;
@@ -13,8 +14,41 @@ public class Coordinate2D {
         this.z = z;
     }
 
+    public static Coordinate2D random() {
+        Random random = new Random();
+        return new Coordinate2D(random.nextDouble() - 0.5, random.nextDouble() - 0.5).normalize();
+    }
+
     public Coordinate2D sum(int x, int z) {
         return new Coordinate2D(this.x + x, this.z + z);
+    }
+
+    public Coordinate2D sum(double x, double z) {
+        return new Coordinate2D(this.x + x, this.z + z);
+    }
+
+    public Coordinate2D difference(Coordinate2D c2d) {
+        return sum(-c2d.getX(), -c2d.getZ());
+    }
+
+    public Coordinate2D multiply(double factor) {
+        return new Coordinate2D(x * factor, z * factor);
+    }
+
+    public Coordinate2D divide(double divisor) {
+        return new Coordinate2D(x / divisor, z / divisor);
+    }
+
+    public double distance(Coordinate2D c2d) {
+        return difference(c2d).length();
+    }
+
+    public double length() {
+        return Math.pow(x * x + z * z, 0.5);
+    }
+
+    public Coordinate2D normalize() {
+        return divide(length());
     }
 
     public Coordinate3D to3D(double y) {

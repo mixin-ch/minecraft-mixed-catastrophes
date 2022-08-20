@@ -17,6 +17,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -272,28 +273,22 @@ public class WeatherCatastropheManager extends CatastropheManager {
         }
     }
 
-    private void enforceRadiantSky() {
-        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-            ArrayList<Coordinate2D> spaces = new ArrayList<>();
+    private ArrayList<Location> getRandomRoofSpaces(ArrayList<Location> centerLocations, double radius, double amount) {
+        ArrayList<Location> spaces = new ArrayList<>();
+        Random random = new Random();
 
-            for (Player player : world.getPlayers()) {
-                if (!Functions.isNight(player.getWorld())) {
-                    Location playerLocation = player.getLocation();
-                    Coordinate2D center = new Coordinate2D(playerLocation.getBlockX(), playerLocation.getBlockZ());
-                    spaces = Functions.merge(spaces, Functions.getSphere2D(center, 20));
+        for (Location centerLocation : centerLocations) {
+            int AffectedClose = 0;
 
-                    if (!Functions.hasShelter(player)) {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5 * 20, 0));
+            for (Location space : spaces)
+                if (centerLocation.distance(space) <= radius)
+                    AffectedClose++;
 
-                        if (player.getWorld().getTime() % (3 * 20) < 20) {
-                            player.setFireTicks(20);
-                        }
-                    }
-                }
-            }
+            while (random.nextDouble() < (amount - AffectedClose)) {
+                Coordinate2D newSpace = Coordinate2D.random().multiply(random.nextDouble() * radius);
+                newSpace = newSpace.sum(centerLocation.getX(), centerLocation.getZ());
 
-            for (Coordinate2D space : spaces) {
-                Location roof = Functions.absoluteRoof(world, space);
+                Location roof = Functions.absoluteRoof(centerLocation.getWorld(), newSpace);
                 if (roof == null)
                     continue;
 
@@ -301,12 +296,37 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 if (roofAbove == null)
                     continue;
 
-                if (new Random().nextDouble() < 1 / (double) 1000) {
-                    if (Constants.Airs.contains(roofAbove.getBlock().getType())) {
-                        roofAbove.getBlock().setType(Material.FIRE);
-                    }
+                if (!Constants.Airs.contains(roofAbove.getBlock().getType()))
+                    continue;
+
+                spaces.add(roofAbove);
+                AffectedClose++;
+            }
+        }
+
+        return spaces;
+    }
+
+    private void enforceRadiantSky() {
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
+            if (Functions.isNight(world))
+                continue;
+
+            ArrayList<Location> centerLocations = new ArrayList<>();
+
+            for (Player player : world.getPlayers()) {
+                centerLocations.add(player.getLocation());
+
+                if (!Functions.hasShelter(player)) {
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 5 * 20, 0));
+
+                    if (player.getWorld().getTime() % (2 * 20) < 20)
+                        player.setFireTicks(20);
                 }
             }
+
+            for (Location space : getRandomRoofSpaces(centerLocations, 20, 1.25))
+                space.getBlock().setType(Material.FIRE);
         }
     }
 
@@ -317,12 +337,11 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 .getBlitzardListIsActive(mixedCatastrophesData.getMetaData().getBlitzardDataList());
 
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-            ArrayList<Coordinate2D> spaces = new ArrayList<>();
+            ArrayList<Location> centerLocations = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
                 Location location = player.getLocation();
-                Coordinate2D center = Coordinate2D.convert(location);
-                spaces = Functions.merge(spaces, Functions.getSphere2D(center, 20));
+                centerLocations.add(location);
 
                 if (Functions.hasShelter(player))
                     continue;
@@ -330,21 +349,13 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 int misfortune = pcm.get(player.getUniqueId()).getAspect(AspectType.Misfortune);
                 double probability = misfortune / (20.0 + misfortune);
 
-                if (new Random().nextDouble() < probability) {
+                if (new Random().nextDouble() < probability)
                     targets.add(rerouteBlitzard(blitzardList, location));
-                }
+
             }
 
-            for (Coordinate2D space : spaces) {
-                if (new Random().nextDouble() < 1 / (double) 1250) {
-                    Location roofAbove = Functions.offset(Functions.absoluteRoof(world, space), 1);
-
-                    if (roofAbove == null)
-                        continue;
-
-                    targets.add(rerouteBlitzard(blitzardList, roofAbove));
-                }
-            }
+            for (Location space : getRandomRoofSpaces(centerLocations, 20, 1.00))
+                targets.add(rerouteBlitzard(blitzardList, space));
         }
 
         lightningChain(targets, 4);
@@ -383,21 +394,20 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
     private void enforceSearingCold() {
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-            ArrayList<Coordinate2D> spaces = new ArrayList<>();
+            ArrayList<Location> centerLocations = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
                 Location playerLocation = player.getLocation();
-                Coordinate2D center = new Coordinate2D(playerLocation.getBlockX(), playerLocation.getBlockZ());
-                spaces = Functions.merge(spaces, Functions.getSphere2D(center, 20));
+                centerLocations.add(playerLocation);
 
                 boolean warm = Constants.HotItems.contains(player.getInventory().getItemInMainHand().getType())
                         || Constants.HotItems.contains(player.getInventory().getItemInOffHand().getType());
 
                 if (!warm) {
                     sphere:
-                    for (Location location : Functions.getSphereLocation(player.getLocation(), 7)) {
+                    for (Location location : Functions.getSphereLocation(playerLocation, 7)) {
                         Material material = location.getBlock().getType();
-                        double distance = location.distance(player.getLocation());
+                        double distance = location.distance(playerLocation);
 
                         switch (material) {
                             case LAVA:
@@ -457,31 +467,26 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 }
             }
 
-            for (Coordinate2D space : spaces) {
-                Location roof = Functions.absoluteRoof(world, space);
+            for (Location space : getRandomRoofSpaces(centerLocations, 20, 5.00)) {
+                Location roof = Functions.offset(space, 1);
                 if (roof == null)
                     continue;
 
-                Location roofAbove = Functions.offset(roof, 1);
+                if (roof.getBlock().getType() == Material.WATER) {
+                    ArrayList<Location> neighbours = new ArrayList<>();
+                    neighbours.add(Functions.offset(roof, 1, 0, 0));
+                    neighbours.add(Functions.offset(roof, -1, 0, 0));
+                    neighbours.add(Functions.offset(roof, 0, 0, 1));
+                    neighbours.add(Functions.offset(roof, 0, 0, -1));
 
-                if (new Random().nextDouble() < 1 / (double) 250) {
-                    if (roof.getBlock().getType() == Material.WATER) {
-                        ArrayList<Location> neighbours = new ArrayList<>();
-                        neighbours.add(Functions.offset(roof, 1, 0, 0));
-                        neighbours.add(Functions.offset(roof, -1, 0, 0));
-                        neighbours.add(Functions.offset(roof, 0, 0, 1));
-                        neighbours.add(Functions.offset(roof, 0, 0, -1));
-
-                        for (Location neighbour : neighbours) {
-                            if (neighbour.getBlock().getType() != Material.WATER) {
-                                roof.getBlock().setType(Material.ICE);
-                                break;
-                            }
+                    for (Location neighbour : neighbours) {
+                        if (neighbour.getBlock().getType() != Material.WATER) {
+                            roof.getBlock().setType(Material.ICE);
+                            break;
                         }
-                    } else if (roofAbove != null && Constants.Airs.contains(roofAbove.getBlock().getType())) {
-                        roofAbove.getBlock().setType(Material.SNOW);
                     }
-                }
+                } else
+                    space.getBlock().setType(Material.SNOW);
             }
         }
     }
@@ -499,18 +504,14 @@ public class WeatherCatastropheManager extends CatastropheManager {
         ArrayList<Location> targets = new ArrayList<>();
 
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-            ArrayList<Coordinate2D> spaces = new ArrayList<>();
+            ArrayList<Location> centerLocations = new ArrayList<>();
 
-            for (Player player : world.getPlayers()) {
-                Location playerLocation = player.getLocation();
-                Coordinate2D center = new Coordinate2D(playerLocation.getBlockX(), playerLocation.getBlockZ());
-                spaces = Functions.merge(spaces, Functions.getSphere2D(center, 20));
-            }
+            for (Player player : world.getPlayers())
+                centerLocations.add(player.getLocation());
 
-            for (Coordinate2D space : spaces) {
-                if (new Random().nextDouble() < 1 / (double) 1250) {
-                    targets.add(space.to3D(world.getMaxHeight() + 64).toLocation(world));
-                }
+            for (Location space : getRandomRoofSpaces(centerLocations, 20, 1.00)) {
+                space.setY(world.getMaxHeight() + 64);
+                targets.add(space);
             }
         }
 

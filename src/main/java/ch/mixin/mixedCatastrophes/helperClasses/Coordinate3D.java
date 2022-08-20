@@ -23,7 +23,7 @@ public class Coordinate3D {
 
     public static Coordinate3D random() {
         Random random = new Random();
-        return new Coordinate3D(random.nextDouble(), random.nextDouble(), random.nextDouble()).normalize();
+        return new Coordinate3D(random.nextDouble() - 0.5, random.nextDouble() - 0.5, random.nextDouble() - 0.5).normalize();
     }
 
     public Coordinate2D to2D() {
