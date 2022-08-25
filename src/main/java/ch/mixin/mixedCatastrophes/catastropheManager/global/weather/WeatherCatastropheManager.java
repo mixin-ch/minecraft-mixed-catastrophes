@@ -32,6 +32,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
         catastropheWeights.put(WeatherCatastropheType.SearingCold, 1.0);
         catastropheWeights.put(WeatherCatastropheType.GravityLoss, 0.35);
         catastropheWeights.put(WeatherCatastropheType.CatsAndDogs, 0.15);
+        catastropheWeights.put(WeatherCatastropheType.PersonaShift, 0.35);
     }
 
     private int weatherTimer;
@@ -75,6 +76,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 return Functions.random(10, 30);
             case CatsAndDogs:
                 return Functions.random(5, 15);
+            case PersonaShift:
+                return Functions.random(30, 300);
         }
 
         return 0;
@@ -147,6 +150,11 @@ public class WeatherCatastropheManager extends CatastropheManager {
                         Sound.AMBIENT_CAVE
                         , "It is raining Cats and Dogs."
                         , color);
+            case PersonaShift:
+                playEffect(
+                        Sound.AMBIENT_CAVE
+                        , "Do you even know who you are?"
+                        , color);
                 break;
         }
     }
@@ -186,6 +194,11 @@ public class WeatherCatastropheManager extends CatastropheManager {
                         Sound.AMBIENT_CAVE
                         , "The last Barks pass by."
                         , color);
+            case PersonaShift:
+                playEffect(
+                        Sound.AMBIENT_CAVE
+                        , "I am myself again."
+                        , color);
                 break;
         }
     }
@@ -208,6 +221,9 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 break;
             case CatsAndDogs:
                 enforceCatsAndDogs();
+                break;
+            case PersonaShift:
+                enforcePersonaShift();
                 break;
         }
     }
@@ -543,6 +559,44 @@ public class WeatherCatastropheManager extends CatastropheManager {
         if (remainingTicks > 0) {
             mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> catsAndDogsChain(targets, remainingTicks)
                     , 5);
+        }
+    }
+
+    private void enforcePersonaShift() {
+        Random random = new Random();
+
+        for (World world : mixedCatastrophesData.getAffectedWorlds()) {
+            if (random.nextDouble() >= 1 / 50f)
+                continue;
+
+            ArrayList<Player> affectedPlayers = new ArrayList<>(world.getPlayers());
+
+            if (affectedPlayers.size() < 2)
+                continue;
+
+            Collections.shuffle(affectedPlayers);
+
+            for (int i = 0; i < affectedPlayers.size(); i++) {
+                if (affectedPlayers.size() >= 2 && random.nextDouble() < 0.75f) {
+                    affectedPlayers.remove(i);
+                    i--;
+                }
+            }
+
+            Location nextLocation = affectedPlayers.get(affectedPlayers.size() - 1).getLocation();
+
+            for (Player player : affectedPlayers) {
+                Location location = player.getLocation();
+                player.teleport(nextLocation);
+                mixedCatastrophesData.getEventChangeManager()
+                        .eventChange(player)
+                        .withEventSound(Sound.ENTITY_ENDERMAN_TELEPORT)
+                        .withEventMessage("I am someone else.")
+                        .withColor(Constants.WeatherThemes.get(WeatherCatastropheType.PersonaShift).getColor())
+                        .finish()
+                        .execute();
+                nextLocation = location;
+            }
         }
     }
 

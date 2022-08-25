@@ -196,6 +196,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CatsAndDogs).getMaterial(), 1, slot(2, 7), "Cats and Dogs", new String[]{
                 "It is raining Cats and Dogs."
         });
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.PersonaShift).getMaterial(), 1, slot(2, 8), "Persona Shift", new String[]{
+                "Players may switch positions at any moment."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }

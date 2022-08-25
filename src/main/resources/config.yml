@@ -20,6 +20,7 @@ interaction:
     thunderStorm: true
     gravityLoss: true
     catsAndDogs: true
+    personaShift: true
   aspect:
     terror:
       whispers:

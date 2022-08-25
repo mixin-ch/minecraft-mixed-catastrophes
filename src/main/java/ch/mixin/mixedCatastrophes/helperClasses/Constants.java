@@ -79,6 +79,7 @@ public class Constants {
         WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("#7FBFFF"), Material.CHAIN));
         WeatherThemes.put(WeatherCatastropheType.GravityLoss, new Theme(ChatColor.of("#BFBFBF"), Material.FEATHER));
         WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("#BF7F5F"), Material.BONE));
+        WeatherThemes.put(WeatherCatastropheType.PersonaShift, new Theme(ChatColor.of("#BF3FFF"), Material.ENDER_EYE));
 
         AspectThemes = new HashMap<>();
         AspectThemes.put(AspectType.Nobility, new Theme(ChatColor.of("#FFDF7F"), Material.GOLDEN_HELMET));
