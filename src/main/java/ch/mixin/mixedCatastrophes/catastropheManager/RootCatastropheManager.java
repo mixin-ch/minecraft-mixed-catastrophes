@@ -54,6 +54,9 @@ public class RootCatastropheManager {
     }
 
     public void tick() {
+        if (plugin.getServer().getOnlinePlayers().size() == 0)
+            return;
+
         timeDistortionManager.tick();
         weatherCatastropheManager.tick();
         starSplinterCatastropheManager.tick();
