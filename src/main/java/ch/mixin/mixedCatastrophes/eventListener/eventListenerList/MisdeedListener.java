@@ -75,7 +75,7 @@ public class MisdeedListener implements Listener {
         if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getMisfortune().isCollectable())
             return;
 
-        if (new Random().nextDouble() >= 0.05)
+        if (new Random().nextDouble() >= 0.01)
             return;
 
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
