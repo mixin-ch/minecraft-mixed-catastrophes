@@ -22,7 +22,14 @@ interaction:
     catsAndDogs: true
   aspect:
     terror:
-      whispers: true
+      whispers:
+        active: true
+        occurrenceIntervalMin: 480
+        occurrenceIntervalMax: 960
+        terrorGainMin: 8
+        terrorGainMax: 12
+        secretsGainFlat: 20
+        secretsGainTerrorMultiplier: 1
       assault: true
       paranoia: true
       stalker: true

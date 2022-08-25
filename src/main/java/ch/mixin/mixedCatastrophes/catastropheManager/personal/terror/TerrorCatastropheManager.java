@@ -5,6 +5,7 @@ import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.Construct
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault.AssaultCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker.StalkerCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheSettings.aspect.terror.WhispersCatastropheSettings;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
@@ -103,7 +104,9 @@ public class TerrorCatastropheManager extends CatastropheManager {
             ScarecrowData strongestScarecrow = mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
 
-            if (mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isWhispers()) {
+            WhispersCatastropheSettings whispersSettings = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getWhispers();
+
+            if (whispersSettings.isActive()) {
                 int timer = terrorData.getTerrorTimer();
                 timer--;
 
@@ -126,7 +129,8 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     private int terrorTimer() {
-        return Functions.random(8 * 60, 12 * 60);
+        WhispersCatastropheSettings whispersSettings = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getWhispers();
+        return Functions.random(whispersSettings.getOccurrenceIntervalMin(), whispersSettings.getOccurrenceIntervalMax());
     }
 
     public void triggerHorrificWhispers(Player player) {
@@ -134,10 +138,11 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData) {
+        WhispersCatastropheSettings whispersSettings = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getWhispers();
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
-        int terrorPlus = 8 + new Random().nextInt(4 + 1);
-        int secretsPlus = 20 + playerData.getAspect(AspectType.Terror);
+        int terrorPlus = whispersSettings.getTerrorGainMin() + new Random().nextInt(whispersSettings.getTerrorGainMax() - whispersSettings.getTerrorGainMin() + 1);
+        int secretsPlus = (int) Math.round(whispersSettings.getSecretsGainFlat() + whispersSettings.getSecretsGainTerrorMultiplier() * playerData.getAspect(AspectType.Terror));
         String text = "The horrific Whispers grow louder.";
         ChatColor color = Constants.AspectThemes.get(AspectType.Terror).getColor();
 
