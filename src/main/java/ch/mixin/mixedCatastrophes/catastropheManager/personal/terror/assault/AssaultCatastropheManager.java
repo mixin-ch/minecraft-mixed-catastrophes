@@ -10,6 +10,7 @@ import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -24,8 +25,16 @@ import java.util.Random;
 public class AssaultCatastropheManager extends CatastropheManager {
     private static final HashMap<AssaultPremise, Double> entitySummonDayWeights;
     private static final HashMap<AssaultPremise, Double> entitySummonNightWeights;
+    private static final HashMap<AssaultPremise, Double> entitySummonSeaWeights;
 
     static {
+        entitySummonSeaWeights = new HashMap<>();
+        entitySummonSeaWeights.put(new AssaultPremise(
+                EntityType.DROWNED
+                , "From the dead Waters they emerge."
+                , 8
+        ), 1.0);
+
         entitySummonDayWeights = new HashMap<>();
         entitySummonDayWeights.put(new AssaultPremise(
                 EntityType.BLAZE
@@ -195,7 +204,9 @@ public class AssaultCatastropheManager extends CatastropheManager {
         Location mainPlayerLocation = player.getLocation();
         HashMap<AssaultPremise, Double> possibleAssaults;
 
-        if (Functions.isNight(world)) {
+        if (mainPlayerLocation.getBlock().getType() == Material.WATER){
+            possibleAssaults = new HashMap<>(entitySummonSeaWeights);
+        } else if (Functions.isNight(world)) {
             possibleAssaults = new HashMap<>(entitySummonNightWeights);
         } else {
             possibleAssaults = new HashMap<>(entitySummonDayWeights);
