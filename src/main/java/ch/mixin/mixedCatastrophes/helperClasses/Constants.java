@@ -92,6 +92,7 @@ public class Constants {
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("#BFBFBF"), Material.IRON_HELMET));
         AspectThemes.put(AspectType.Resolve, new Theme(ChatColor.of("#DFFF7F"), Material.LANTERN));
         AspectThemes.put(AspectType.SkyScorn, new Theme(ChatColor.of("#7F00FF"), Material.ELYTRA));
+        AspectThemes.put(AspectType.SeaScorn, new Theme(ChatColor.of("#3F7FFF"), Material.HEART_OF_THE_SEA));
 
         DreamThemes = new HashMap<>();
         DreamThemes.put(DreamType.SereneDreams, new Theme(ChatColor.of("#FF7FBF"), Material.WHITE_BED));

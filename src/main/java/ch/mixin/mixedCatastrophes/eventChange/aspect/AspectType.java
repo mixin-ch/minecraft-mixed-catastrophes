@@ -11,6 +11,7 @@ public enum AspectType {
     Nobility,
     Resolve,
     SkyScorn,
+    SeaScorn,
     ;
 
     private final String label;

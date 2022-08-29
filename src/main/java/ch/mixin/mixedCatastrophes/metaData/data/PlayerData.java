@@ -11,6 +11,7 @@ public class PlayerData {
     private int dreamCooldown;
     private int antiLighthouseTimer;
     private int skyScornTimer;
+    private int seaScornTimer;
     private HashMap<AspectType, Integer> aspects = new HashMap<>();
     private TerrorData terrorData = new TerrorData();
 
@@ -78,6 +79,14 @@ public class PlayerData {
 
     public void setSkyScornTimer(int skyScornTimer) {
         this.skyScornTimer = skyScornTimer;
+    }
+
+    public int getSeaScornTimer() {
+        return seaScornTimer;
+    }
+
+    public void setSeaScornTimer(int seaScornTimer) {
+        this.seaScornTimer = seaScornTimer;
     }
 
     public HashMap<AspectType, Integer> getAspects() {

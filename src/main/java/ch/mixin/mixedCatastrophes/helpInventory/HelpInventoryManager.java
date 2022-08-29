@@ -242,6 +242,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Constants.AspectThemes.get(AspectType.SkyScorn).getMaterial(), 1, slot(3, 1), "Sky Scorn", new String[]{
                 "May cause bad Things when using Elytra Boost.", "Gained when using Elytra Boost.", "Slowly declining."
         });
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.SeaScorn).getMaterial(), 1, slot(3, 2), "Sea Scorn", new String[]{
+                "May cause bad Things when swimming.", "Gained when swimming.", "Slowly declining."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
