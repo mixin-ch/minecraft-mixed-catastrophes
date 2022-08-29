@@ -99,6 +99,8 @@ public class ScornCatastropheManager extends CatastropheManager {
                         .withAspectChange(changeMap)
                         .execute();
             }
+
+            playerData.setSeaScornTimer(timer);
         }
 
         Random random = new Random();
@@ -114,6 +116,9 @@ public class ScornCatastropheManager extends CatastropheManager {
         boolean isDrowning = mixedCatastrophesData.getCatastropheSettings().getAspect().getSeaScorn().isDrowning();
 
         double drowningProbability = seaScorn / (seaScorn + 400.0);
+        double seaScornProbability = 0.02;
+        if (inBoat)
+            seaScornProbability = 0.05;
 
         if (isDrowning && random.nextDouble() < drowningProbability) {
             if (inBoat)
@@ -139,7 +144,7 @@ public class ScornCatastropheManager extends CatastropheManager {
                     .withTitle(true)
                     .finish()
                     .execute();
-        } else if (isCollectable && random.nextDouble() < 0.02) {
+        } else if (isCollectable && random.nextDouble() < seaScornProbability) {
             HashMap<AspectType, Integer> changeMap = new HashMap<>();
             changeMap.put(AspectType.SeaScorn, 1);
 

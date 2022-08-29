@@ -566,7 +566,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
         Random random = new Random();
 
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-            if (random.nextDouble() >= 1 / 50f)
+            if (random.nextDouble() >= 1 / 50.0)
                 continue;
 
             ArrayList<Player> affectedPlayers = new ArrayList<>(world.getPlayers());
@@ -577,7 +577,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
             Collections.shuffle(affectedPlayers);
 
             for (int i = 0; i < affectedPlayers.size(); i++) {
-                if (affectedPlayers.size() >= 2 && random.nextDouble() < 0.75f) {
+                if (affectedPlayers.size() > 2 && random.nextDouble() < 0.75f) {
                     affectedPlayers.remove(i);
                     i--;
                 }

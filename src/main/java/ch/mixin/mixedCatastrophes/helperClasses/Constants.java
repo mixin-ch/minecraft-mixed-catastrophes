@@ -60,6 +60,7 @@ public class Constants {
         AspectOrder.add(AspectType.Death_Seeker);
         AspectOrder.add(AspectType.Greyhat_Debt);
         AspectOrder.add(AspectType.SkyScorn);
+        AspectOrder.add(AspectType.SeaScorn);
         AspectOrder.add(AspectType.Resolve);
 
         ConstructOrder = new ArrayList<>();
