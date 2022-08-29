@@ -168,7 +168,7 @@ public final class MixedCatastrophesPlugin extends JavaPlugin {
     }
 
     private void tick() {
-        if (mixedCatastrophesData.isUseHolographicDisplays()
+        if (mixedCatastrophesData.isUseMixedAchievementsPlugin()
                 && mixedCatastrophesData.getMixedAchievementsPlugin().PluginFlawless
                 && !mixedCatastrophesData.isSetupMixedAchievementsPlugin()) {
             mixedCatastrophesData.setSetupMixedAchievementsPlugin(true);
