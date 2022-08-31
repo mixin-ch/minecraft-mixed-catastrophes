@@ -1,9 +1,10 @@
 package ch.mixin.mixedCatastrophes.catastropheSettings.aspect;
 
+import ch.mixin.mixedCatastrophes.catastropheSettings.aspect.terror.WhispersCatastropheSettings;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class TerrorCatastropheSettings {
-    private boolean whispers;
+    private WhispersCatastropheSettings whispers = new WhispersCatastropheSettings();
     private boolean assault;
     private boolean paranoia;
     private boolean stalker;
@@ -14,7 +15,7 @@ public class TerrorCatastropheSettings {
         if (terrorSection == null)
             return;
 
-        whispers = terrorSection.getBoolean("whispers");
+        whispers.initialize(terrorSection);
         assault = terrorSection.getBoolean("assault");
         paranoia = terrorSection.getBoolean("paranoia");
         stalker = terrorSection.getBoolean("stalker");
@@ -23,17 +24,18 @@ public class TerrorCatastropheSettings {
     public void fillConfig(ConfigurationSection superSection) {
         ConfigurationSection terrorSection = superSection.createSection("terror");
 
+        whispers.fillConfig(terrorSection);
         terrorSection.set("whispers", whispers);
         terrorSection.set("assault", assault);
         terrorSection.set("paranoia", paranoia);
         terrorSection.set("stalker", stalker);
     }
 
-    public boolean isWhispers() {
+    public WhispersCatastropheSettings getWhispers() {
         return whispers;
     }
 
-    public void setWhispers(boolean whispers) {
+    public void setWhispers(WhispersCatastropheSettings whispers) {
         this.whispers = whispers;
     }
 

@@ -66,7 +66,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
     public void tick() {
     }
 
-    public void tick(Player player, boolean hasScareCrow) {
+    public void tick(Player player, int severity) {
         if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isParanoia())
             return;
 
@@ -74,20 +74,15 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getParanoiaTimer();
-        timer--;
-
-        if (hasScareCrow) {
-            timer -= 2;
-        }
+        timer -= 1 + 2 * severity;
 
         if (timer <= 0) {
             timer = paranoiaTimer();
 
-            ParanoiaType paranoiaType = getParanoia(playerData.getAspect(AspectType.Terror) + (hasScareCrow ? 100 : 0));
+            ParanoiaType paranoiaType = getParanoia(playerData.getAspect(AspectType.Terror) + severity * 100);
 
-            if (paranoiaType != null) {
-                causeParanoia(player, paranoiaType);
-            }
+            if (paranoiaType != null)
+                causeParanoia(player, paranoiaType, severity);
         }
 
         terrorData.setParanoiaTimer(timer);
@@ -130,7 +125,7 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
         return new Random().nextDouble() < probability;
     }
 
-    private void causeParanoia(Player player, ParanoiaType paranoiaType) {
+    private void causeParanoia(Player player, ParanoiaType paranoiaType, int severity) {
         if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
             mixedCatastrophesData.getRootCatastropheManager().getPersonalCatastropheManager().getResolveCatastropheManager().mightShowVirtue(player, 0.05);
         }
@@ -143,10 +138,10 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
                 insomnia(player);
                 break;
             case Weakness:
-                weakness(player);
+                weakness(player, severity);
                 break;
             case Paralysis:
-                paralysis(player);
+                paralysis(player, severity);
                 break;
         }
     }
@@ -175,10 +170,10 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
                 .execute();
     }
 
-    private void weakness(Player player) {
+    private void weakness(Player player, int severity) {
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
-        int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
+        int extent = playerData.getAspect(AspectType.Terror) + severity * 50 + new Random().nextInt(50);
         int time = (int) Math.floor(60 * Math.pow(0.005 * extent, 0.5));
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 0));
@@ -195,30 +190,10 @@ public class ParanoiaCatastropheManager extends CatastropheManager {
                 .execute();
     }
 
-//    private void vulnerability(Player player) {
-//        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
-//
-//        int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
-//        int time = 2 * 60;
-//        int amplitude = (int) Math.floor(Math.pow(0.01 * extent, 0.5));
-//
-//        player.removePotionEffect(PotionEffectType.DAMAGE_RESISTANCE);
-//        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, time * 20, -(amplitude + 1)));
-//
-//        mixedCatastrophesData.getEventChangeManager()
-//                .eventChange(player)
-//                .withEventSound(Sound.AMBIENT_CAVE)
-//                .withEventMessage("You feel so vulnerable.")
-//                .withCause(AspectType.Terror)
-//                .withTitle(true)
-//                .finish()
-//                .execute();
-//    }
-
-    private void paralysis(Player player) {
+    private void paralysis(Player player, int severity) {
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
-        int extent = playerData.getAspect(AspectType.Terror) + new Random().nextInt(50);
+        int extent = playerData.getAspect(AspectType.Terror) + severity * 50 + new Random().nextInt(50);
         int time = 1 + (int) Math.round(Math.pow(0.05 * extent, 0.5));
 
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, time * 20, 10));

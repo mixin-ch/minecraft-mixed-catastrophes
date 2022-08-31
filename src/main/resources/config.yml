@@ -20,9 +20,18 @@ interaction:
     thunderStorm: true
     gravityLoss: true
     catsAndDogs: true
+    personaShift: true
+    crimsonSeason: true
   aspect:
     terror:
-      whispers: true
+      whispers:
+        active: true
+        occurrenceIntervalMin: 480
+        occurrenceIntervalMax: 960
+        terrorGainMin: 8
+        terrorGainMax: 12
+        secretsGainFlat: 20
+        secretsGainTerrorMultiplier: 1
       assault: true
       paranoia: true
       stalker: true
@@ -45,6 +54,9 @@ interaction:
     skyScorn:
       collectable: true
       tearFlesh: true
+    seaScorn:
+      collectable: true
+      drowning: true
 hintList:
   - Type "/mx dealWithDevil" if you are stranded on an Island.
   - Radiant Sky blinds you, if you have no shelter.

@@ -125,7 +125,7 @@ public class ActionListener implements Listener {
             return;
 
         Location location = entity.getLocation();
-        StarSplinterType starSplinterType = null;
+        StarSplinterRemainsData starSplinter = null;
         List<StarSplinterRemainsData> starSplinterRemainsDataList = mixedCatastrophesData.getMetaData().getStarSplinterRemainsDataList();
 
         for (int i = 0; i < starSplinterRemainsDataList.size(); i++) {
@@ -138,17 +138,16 @@ public class ActionListener implements Listener {
             Location remainsLocation = starSplinterRemainsData.getPosition().toLocation(remainsWorld);
 
             if (remainsLocation.distance(location) <= 1) {
-                starSplinterType = starSplinterRemainsData.getStarSplinterType();
+                starSplinter = starSplinterRemainsData;
                 starSplinterRemainsDataList.remove(starSplinterRemainsData);
                 break;
             }
         }
 
-        if (starSplinterType == null) {
-            starSplinterType = Functions.getRandomWithWeights(StarSplinterCatastropheManager.starSplinterWeightMap);
-        }
+        if (starSplinter == null)
+            return;
 
-        StarSplinterPremise starSplinterPremise = StarSplinterCatastropheManager.starSplinterPremiseMap.get(starSplinterType);
+        StarSplinterPremise starSplinterPremise = StarSplinterCatastropheManager.starSplinterPremiseMap.get(starSplinter.getStarSplinterType());
         int amount = (int) Math.round((new Random().nextDouble() + 1) * 5 * starSplinterPremise.getMultiplier());
         world.dropItem(location, new ItemStack(starSplinterPremise.getMaterial(), amount));
 

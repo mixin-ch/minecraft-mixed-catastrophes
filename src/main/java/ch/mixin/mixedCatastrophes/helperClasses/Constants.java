@@ -60,6 +60,7 @@ public class Constants {
         AspectOrder.add(AspectType.Death_Seeker);
         AspectOrder.add(AspectType.Greyhat_Debt);
         AspectOrder.add(AspectType.SkyScorn);
+        AspectOrder.add(AspectType.SeaScorn);
         AspectOrder.add(AspectType.Resolve);
 
         ConstructOrder = new ArrayList<>();
@@ -69,16 +70,6 @@ public class Constants {
         ConstructOrder.add(ConstructType.Lighthouse);
         ConstructOrder.add(ConstructType.Scarecrow);
         ConstructOrder.add(ConstructType.EnderRail);
-
-        TimeDistortionTheme = new Theme(ChatColor.of("#7F7FFF"), Material.CLOCK);
-
-        WeatherThemes = new HashMap<>();
-        WeatherThemes.put(WeatherCatastropheType.Nothing, new Theme(ChatColor.of("#FFFFFF"), Material.AIR));
-        WeatherThemes.put(WeatherCatastropheType.RadiantSky, new Theme(ChatColor.of("#FFBF3F"), Material.GLOWSTONE));
-        WeatherThemes.put(WeatherCatastropheType.SearingCold, new Theme(ChatColor.of("#3F7FFF"), Material.ICE));
-        WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("#7FBFFF"), Material.CHAIN));
-        WeatherThemes.put(WeatherCatastropheType.GravityLoss, new Theme(ChatColor.of("#BFBFBF"), Material.FEATHER));
-        WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("#BF7F5F"), Material.BONE));
 
         AspectThemes = new HashMap<>();
         AspectThemes.put(AspectType.Nobility, new Theme(ChatColor.of("#FFDF7F"), Material.GOLDEN_HELMET));
@@ -91,6 +82,19 @@ public class Constants {
         AspectThemes.put(AspectType.Greyhat_Debt, new Theme(ChatColor.of("#BFBFBF"), Material.IRON_HELMET));
         AspectThemes.put(AspectType.Resolve, new Theme(ChatColor.of("#DFFF7F"), Material.LANTERN));
         AspectThemes.put(AspectType.SkyScorn, new Theme(ChatColor.of("#7F00FF"), Material.ELYTRA));
+        AspectThemes.put(AspectType.SeaScorn, new Theme(ChatColor.of("#3F7FFF"), Material.HEART_OF_THE_SEA));
+
+        TimeDistortionTheme = new Theme(ChatColor.of("#7F7FFF"), Material.CLOCK);
+
+        WeatherThemes = new HashMap<>();
+        WeatherThemes.put(WeatherCatastropheType.Nothing, new Theme(ChatColor.of("#FFFFFF"), Material.AIR));
+        WeatherThemes.put(WeatherCatastropheType.RadiantSky, new Theme(ChatColor.of("#FFBF3F"), Material.GLOWSTONE));
+        WeatherThemes.put(WeatherCatastropheType.SearingCold, new Theme(ChatColor.of("#3F7FFF"), Material.ICE));
+        WeatherThemes.put(WeatherCatastropheType.ThunderStorm, new Theme(ChatColor.of("#7FBFFF"), Material.CHAIN));
+        WeatherThemes.put(WeatherCatastropheType.GravityLoss, new Theme(ChatColor.of("#BFBFBF"), Material.FEATHER));
+        WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("#BF7F5F"), Material.BONE));
+        WeatherThemes.put(WeatherCatastropheType.PersonaShift, new Theme(ChatColor.of("#BF3FFF"), Material.ENDER_EYE));
+        WeatherThemes.put(WeatherCatastropheType.CrimsonSeason, AspectThemes.get(AspectType.Terror));
 
         DreamThemes = new HashMap<>();
         DreamThemes.put(DreamType.SereneDreams, new Theme(ChatColor.of("#FF7FBF"), Material.WHITE_BED));

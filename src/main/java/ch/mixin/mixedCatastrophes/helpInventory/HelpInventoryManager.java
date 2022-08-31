@@ -196,6 +196,12 @@ public class HelpInventoryManager {
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CatsAndDogs).getMaterial(), 1, slot(2, 7), "Cats and Dogs", new String[]{
                 "It is raining Cats and Dogs."
         });
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.PersonaShift).getMaterial(), 1, slot(2, 8), "Persona Shift", new String[]{
+                "Players may switch positions at any moment."
+        });
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CrimsonSeason).getMaterial(), 1, slot(2, 9), "Crimson Season", new String[]{
+                "The season of terrors has begun.", "Terror events are amplified."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -238,6 +244,9 @@ public class HelpInventoryManager {
         });
         createSlot(inventory, Constants.AspectThemes.get(AspectType.SkyScorn).getMaterial(), 1, slot(3, 1), "Sky Scorn", new String[]{
                 "May cause bad Things when using Elytra Boost.", "Gained when using Elytra Boost.", "Slowly declining."
+        });
+        createSlot(inventory, Constants.AspectThemes.get(AspectType.SeaScorn).getMaterial(), 1, slot(3, 2), "Sea Scorn", new String[]{
+                "May cause bad Things when swimming.", "Gained when swimming.", "Slowly declining."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);
