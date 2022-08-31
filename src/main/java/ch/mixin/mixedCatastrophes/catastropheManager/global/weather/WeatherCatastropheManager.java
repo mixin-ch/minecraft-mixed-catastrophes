@@ -426,11 +426,11 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
     private void enforceSearingCold() {
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-            ArrayList<Location> centerLocations = new ArrayList<>();
+//            ArrayList<Location> centerLocations = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
                 Location playerLocation = player.getLocation();
-                centerLocations.add(playerLocation);
+//                centerLocations.add(playerLocation);
 
                 boolean warm = Constants.HotItems.contains(player.getInventory().getItemInMainHand().getType())
                         || Constants.HotItems.contains(player.getInventory().getItemInOffHand().getType());
@@ -499,27 +499,27 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 }
             }
 
-            for (Location space : getRandomRoofSpaces(centerLocations, 20, 5.00)) {
-                Location roof = Functions.offset(space, 1);
-                if (roof == null)
-                    continue;
-
-                if (roof.getBlock().getType() == Material.WATER) {
-                    ArrayList<Location> neighbours = new ArrayList<>();
-                    neighbours.add(Functions.offset(roof, 1, 0, 0));
-                    neighbours.add(Functions.offset(roof, -1, 0, 0));
-                    neighbours.add(Functions.offset(roof, 0, 0, 1));
-                    neighbours.add(Functions.offset(roof, 0, 0, -1));
-
-                    for (Location neighbour : neighbours) {
-                        if (neighbour.getBlock().getType() != Material.WATER) {
-                            roof.getBlock().setType(Material.ICE);
-                            break;
-                        }
-                    }
-                } else
-                    space.getBlock().setType(Material.SNOW);
-            }
+//            for (Location space : getRandomRoofSpaces(centerLocations, 20, 5.00)) {
+//                Location roof = Functions.offset(space, 1);
+//                if (roof == null)
+//                    continue;
+//
+//                if (roof.getBlock().getType() == Material.WATER) {
+//                    ArrayList<Location> neighbours = new ArrayList<>();
+//                    neighbours.add(Functions.offset(roof, 1, 0, 0));
+//                    neighbours.add(Functions.offset(roof, -1, 0, 0));
+//                    neighbours.add(Functions.offset(roof, 0, 0, 1));
+//                    neighbours.add(Functions.offset(roof, 0, 0, -1));
+//
+//                    for (Location neighbour : neighbours) {
+//                        if (neighbour.getBlock().getType() != Material.WATER) {
+//                            roof.getBlock().setType(Material.ICE);
+//                            break;
+//                        }
+//                    }
+//                } else
+//                    space.getBlock().setType(Material.SNOW);
+//            }
         }
     }
 
