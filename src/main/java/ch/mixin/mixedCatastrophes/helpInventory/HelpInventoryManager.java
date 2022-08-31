@@ -199,6 +199,9 @@ public class HelpInventoryManager {
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.PersonaShift).getMaterial(), 1, slot(2, 8), "Persona Shift", new String[]{
                 "Players may switch positions at any moment."
         });
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CrimsonSeason).getMaterial(), 1, slot(2, 9), "Crimson Season", new String[]{
+                "The season of terrors has begun.", "Terror events are amplified."
+        });
 
         return new HelpInventory(inventory, linkInventoryMap);
     }

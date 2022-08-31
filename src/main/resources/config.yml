@@ -21,6 +21,7 @@ interaction:
     gravityLoss: true
     catsAndDogs: true
     personaShift: true
+    crimsonSeason: true
   aspect:
     terror:
       whispers:

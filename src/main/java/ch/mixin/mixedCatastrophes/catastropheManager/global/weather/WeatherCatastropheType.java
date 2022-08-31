@@ -8,6 +8,7 @@ public enum WeatherCatastropheType {
     GravityLoss,
     CatsAndDogs,
     PersonaShift,
+    CrimsonSeason,
     ;
 
     public static WeatherCatastropheType convert(String string) {

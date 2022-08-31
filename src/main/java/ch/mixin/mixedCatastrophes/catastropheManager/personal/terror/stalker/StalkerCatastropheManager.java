@@ -47,7 +47,7 @@ public class StalkerCatastropheManager extends CatastropheManager {
     public void tick() {
     }
 
-    public void tick(Player player, boolean hasScareCrow) {
+    public void tick(Player player, int severity) {
         if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isStalker())
             return;
 
@@ -55,23 +55,19 @@ public class StalkerCatastropheManager extends CatastropheManager {
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getStalkerTimer();
-        timer--;
-
-        if (hasScareCrow) {
-            timer -= 2;
-        }
+        timer -= 1 + 2 * severity;
 
         if (timer <= 0) {
             timer = stalkerTimer();
 
             int hauntingDemise = playerData.getAspect(AspectType.Death_Seeker);
-            int terror = playerData.getAspect(AspectType.Terror) + (hasScareCrow ? 100 : 0);
+            int terror = playerData.getAspect(AspectType.Terror) + severity * 100;
             double modifier = Math.pow(Math.max(0, terror + hauntingDemise - 50), 0.5);
 
             double probability = (modifier) / (modifier + 600.0);
 
             if (new Random().nextDouble() < probability) {
-                causeStalker(player);
+                causeStalker(player, severity);
             }
         }
 
@@ -163,12 +159,16 @@ public class StalkerCatastropheManager extends CatastropheManager {
     }
 
     public void causeStalker(Player player) {
+        causeStalker(player, 0);
+    }
+
+    public void causeStalker(Player player, int severity) {
         World world = player.getWorld();
         Coordinate3D coordinate3D = Coordinate3D.toCoordinate(player.getLocation()).sum(Coordinate3D.random().multiply(50));
 
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
         int hauntingDemise = playerData.getAspect(AspectType.Death_Seeker);
-        int terror = playerData.getAspect(AspectType.Terror);
+        int terror = playerData.getAspect(AspectType.Terror) + severity * 50;
         int modifier = hauntingDemise + terror;
 
         double baseSpeed = new Random().nextDouble() + 0.5;

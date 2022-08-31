@@ -2,6 +2,8 @@ package ch.mixin.mixedCatastrophes.catastropheManager.personal.terror;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.constructs.ConstructType;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.weather.WeatherCatastropheType;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.assault.AssaultCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.paranoia.ParanoiaCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.personal.terror.stalker.StalkerCatastropheManager;
@@ -78,6 +80,9 @@ public class TerrorCatastropheManager extends CatastropheManager {
         List<LighthouseData> lighthouseList = getActiveLighthouseList();
         List<ScarecrowData> scarecrowList = getActiveScarecrowList();
 
+        boolean isCromsonSeason = mixedCatastrophesData.getRootCatastropheManager().getWeatherCatastropheManager().getActiveWeather() == WeatherCatastropheType.CrimsonSeason;
+        WhispersCatastropheSettings whispersSettings = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getWhispers();
+
         playerLoop:
         for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
@@ -104,27 +109,29 @@ public class TerrorCatastropheManager extends CatastropheManager {
             ScarecrowData strongestScarecrow = mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(scarecrowList, playerLocation);
             boolean hasScareCrow = strongestScarecrow != null;
 
-            WhispersCatastropheSettings whispersSettings = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getWhispers();
-
             if (whispersSettings.isActive()) {
                 int timer = terrorData.getTerrorTimer();
                 timer--;
 
-                if (hasScareCrow) {
+                if (hasScareCrow)
                     timer -= 2;
-                }
+
+                if (isCromsonSeason)
+                    timer -= 2;
 
                 if (timer <= 0) {
                     timer = terrorTimer();
-                    executeHorrificWhispers(player, strongestScarecrow);
+                    executeHorrificWhispers(player, strongestScarecrow, isCromsonSeason);
                 }
 
                 terrorData.setTerrorTimer(timer);
             }
 
-            assaultCatastropheManager.tick(player, hasScareCrow);
-            stalkerCatastropheManager.tick(player, hasScareCrow);
-            paranoiaCatastropheManager.tick(player, hasScareCrow);
+            int severity = (hasScareCrow ? 1 : 0) + (isCromsonSeason ? 1 : 0);
+
+            assaultCatastropheManager.tick(player, severity);
+            stalkerCatastropheManager.tick(player, severity);
+            paranoiaCatastropheManager.tick(player, severity);
         }
     }
 
@@ -134,15 +141,24 @@ public class TerrorCatastropheManager extends CatastropheManager {
     }
 
     public void triggerHorrificWhispers(Player player) {
-        executeHorrificWhispers(player, mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(getActiveScarecrowList(), player.getLocation()));
+        executeHorrificWhispers(player
+                , mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getStrongestScarecrow(getActiveScarecrowList(), player.getLocation())
+                , mixedCatastrophesData.getRootCatastropheManager().getWeatherCatastropheManager().getActiveWeather() == WeatherCatastropheType.CrimsonSeason
+        );
     }
 
-    private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData) {
+    private void executeHorrificWhispers(Player player, ScarecrowData scarecrowData, boolean IsCrimsonSeason) {
         WhispersCatastropheSettings whispersSettings = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getWhispers();
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         int terrorPlus = whispersSettings.getTerrorGainMin() + new Random().nextInt(whispersSettings.getTerrorGainMax() - whispersSettings.getTerrorGainMin() + 1);
         int secretsPlus = (int) Math.round(whispersSettings.getSecretsGainFlat() + whispersSettings.getSecretsGainTerrorMultiplier() * playerData.getAspect(AspectType.Terror));
+
+        if (IsCrimsonSeason) {
+            terrorPlus += 10;
+            secretsPlus += 10;
+        }
+
         String text = "The horrific Whispers grow louder.";
         ChatColor color = Constants.AspectThemes.get(AspectType.Terror).getColor();
 

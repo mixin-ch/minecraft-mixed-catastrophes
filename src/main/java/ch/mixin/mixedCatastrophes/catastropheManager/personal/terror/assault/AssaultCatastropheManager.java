@@ -164,7 +164,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
     public void tick() {
     }
 
-    public void tick(Player player, boolean hasScareCrow) {
+    public void tick(Player player, int severity) {
         if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isAssault())
             return;
 
@@ -172,21 +172,17 @@ public class AssaultCatastropheManager extends CatastropheManager {
         TerrorData terrorData = playerData.getTerrorData();
 
         int timer = terrorData.getAssaultTimer();
-        timer--;
-
-        if (hasScareCrow) {
-            timer -= 2;
-        }
+        timer -= 1 + 2 * severity;
 
         if (timer <= 0) {
             timer = assaultTimer();
 
-            int terror = playerData.getAspect(AspectType.Terror) + (hasScareCrow ? 100 : 0);
+            int terror = playerData.getAspect(AspectType.Terror) + severity * 100;
             double modifier = Math.pow(terror, 0.5);
             double probability = (modifier + 1) / (modifier + 100.0);
 
             if (new Random().nextDouble() < probability) {
-                causeAssault(player);
+                causeAssault(player, severity);
             }
         }
 
@@ -198,13 +194,17 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     public void causeAssault(Player player) {
+        causeAssault(player,0);
+    }
+
+    public void causeAssault(Player player, int severity) {
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
         World world = player.getWorld();
         Location mainPlayerLocation = player.getLocation();
         HashMap<AssaultPremise, Double> possibleAssaults;
 
-        if (mainPlayerLocation.getBlock().getType() == Material.WATER){
+        if (mainPlayerLocation.getBlock().getType() == Material.WATER) {
             possibleAssaults = new HashMap<>(entitySummonSeaWeights);
         } else if (Functions.isNight(world)) {
             possibleAssaults = new HashMap<>(entitySummonNightWeights);
@@ -212,7 +212,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             possibleAssaults = new HashMap<>(entitySummonDayWeights);
         }
 
-        int terror = playerData.getAspect(AspectType.Terror);
+        int terror = playerData.getAspect(AspectType.Terror) + severity * 50;
         double modifier = Math.pow(terror * 0.03, 0.75);
         int amount = 0;
         AssaultPremise assaultPremise = null;

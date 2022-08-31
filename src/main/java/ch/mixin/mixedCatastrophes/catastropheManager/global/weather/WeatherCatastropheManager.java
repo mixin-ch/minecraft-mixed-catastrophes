@@ -33,6 +33,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
         catastropheWeights.put(WeatherCatastropheType.GravityLoss, 0.35);
         catastropheWeights.put(WeatherCatastropheType.CatsAndDogs, 0.15);
         catastropheWeights.put(WeatherCatastropheType.PersonaShift, 0.35);
+        catastropheWeights.put(WeatherCatastropheType.CrimsonSeason, 0.65);
     }
 
     private int weatherTimer;
@@ -78,6 +79,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 return Functions.random(5, 15);
             case PersonaShift:
                 return Functions.random(30, 300);
+            case CrimsonSeason:
+                return Functions.random(120, 300);
         }
 
         return 0;
@@ -155,6 +158,11 @@ public class WeatherCatastropheManager extends CatastropheManager {
                         Sound.AMBIENT_CAVE
                         , "Do you even know who you are?"
                         , color);
+            case CrimsonSeason:
+                playEffect(
+                        Sound.AMBIENT_CAVE
+                        , "The season of crimson has begun."
+                        , color);
                 break;
         }
     }
@@ -200,6 +208,12 @@ public class WeatherCatastropheManager extends CatastropheManager {
                         , "I am myself again."
                         , color);
                 break;
+            case CrimsonSeason:
+                playEffect(
+                        Sound.AMBIENT_CAVE
+                        , "The season of crimson has ended."
+                        , color);
+                break;
         }
     }
 
@@ -224,6 +238,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 break;
             case PersonaShift:
                 enforcePersonaShift();
+                break;
+            case CrimsonSeason:
                 break;
         }
     }
