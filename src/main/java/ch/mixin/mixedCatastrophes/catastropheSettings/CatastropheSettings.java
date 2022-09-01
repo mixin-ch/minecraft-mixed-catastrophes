@@ -11,6 +11,7 @@ public class CatastropheSettings {
     private boolean timeDistortion;
     private boolean starSplinter;
     private boolean preventNaturalIronGolem;
+    private boolean radiantSkyMakesFire;
     private HashMap<WeatherCatastropheType, Boolean> weather = new HashMap<>();
     private HashMap<ConstructType, Boolean> construct = new HashMap<>();
     private AspectCatastropheSettings aspect = new AspectCatastropheSettings();
@@ -38,6 +39,7 @@ public class CatastropheSettings {
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
         preventNaturalIronGolem = interactionSection.getBoolean("preventNaturalIronGolem");
+        radiantSkyMakesFire = interactionSection.getBoolean("radiantSkyMakesFire");
 
         ConfigurationSection weatherSection = interactionSection.getConfigurationSection("weather");
 
@@ -74,6 +76,7 @@ public class CatastropheSettings {
         interactionSection.set("timeDistortion", timeDistortion);
         interactionSection.set("starSplinter", starSplinter);
         interactionSection.set("preventNaturalIronGolem", preventNaturalIronGolem);
+        interactionSection.set("radiantSkyMakesFire", radiantSkyMakesFire);
 
         ConfigurationSection weatherSection = interactionSection.createSection("weather");
 
@@ -148,5 +151,13 @@ public class CatastropheSettings {
 
     public void setPreventNaturalIronGolem(boolean preventNaturalIronGolem) {
         this.preventNaturalIronGolem = preventNaturalIronGolem;
+    }
+
+    public boolean isRadiantSkyMakesFire() {
+        return radiantSkyMakesFire;
+    }
+
+    public void setRadiantSkyMakesFire(boolean radiantSkyMakesFire) {
+        this.radiantSkyMakesFire = radiantSkyMakesFire;
     }
 }

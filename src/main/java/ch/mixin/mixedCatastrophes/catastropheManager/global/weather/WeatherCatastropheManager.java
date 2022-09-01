@@ -357,8 +357,9 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 }
             }
 
-            for (Location space : getRandomRoofSpaces(centerLocations, 20, 1.25))
-                space.getBlock().setType(Material.FIRE);
+            if (mixedCatastrophesData.getCatastropheSettings().isRadiantSkyMakesFire())
+                for (Location space : getRandomRoofSpaces(centerLocations, 20, 1.25))
+                    space.getBlock().setType(Material.FIRE);
         }
     }
 

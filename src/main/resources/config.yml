@@ -7,6 +7,7 @@ interaction:
   timeDistortion: true
   starSplinter: true
   preventNaturalIronGolem: false
+  radiantSkyMakesFire: true
   construct:
     greenWell: true
     blazeReactor: true
