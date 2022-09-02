@@ -25,7 +25,6 @@ public class TerrorCatastropheSettings {
         ConfigurationSection terrorSection = superSection.createSection("terror");
 
         whispers.fillConfig(terrorSection);
-        terrorSection.set("whispers", whispers);
         terrorSection.set("assault", assault);
         terrorSection.set("paranoia", paranoia);
         terrorSection.set("stalker", stalker);
