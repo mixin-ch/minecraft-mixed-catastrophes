@@ -6,7 +6,7 @@
 
     <groupId>ch.mixin</groupId>
     <artifactId>MixedCatastrophes</artifactId>
-    <version>2.6.3-u</version>
+    <version>2.6.3</version>
     <packaging>jar</packaging>
 
     <name>MixedCatastrophes</name>
