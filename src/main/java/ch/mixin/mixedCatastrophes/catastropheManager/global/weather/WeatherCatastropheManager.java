@@ -119,102 +119,77 @@ public class WeatherCatastropheManager extends CatastropheManager {
     }
 
     private void startWeather(WeatherCatastropheType weatherCatastropheType) {
+        Sound sound = Sound.AMBIENT_CAVE;
+        String message = weatherCatastropheType.toString() + " start";
         ChatColor color = Constants.WeatherThemes.get(weatherCatastropheType).getColor();
+        boolean playEffect = true;
 
         switch (weatherCatastropheType) {
-            case Nothing:
-                break;
             case RadiantSky:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The Sky is scattered with Rays of Radiance."
-                        , color);
+                message = "The Sky is scattered with Rays of Radiance.";
                 break;
             case ThunderStorm:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "Erratic Lightning licks across the Heavens."
-                        , color);
+                message = "Erratic Lightning licks across the Heavens.";
                 break;
             case SearingCold:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The creeping Cold tears the Flesh."
-                        , color);
+                message = "The creeping Cold tears the Flesh.";
                 break;
             case GravityLoss:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The Ground can not hold you."
-                        , color);
+                message = "The Ground can not hold you.";
                 break;
             case CatsAndDogs:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "It is raining Cats and Dogs."
-                        , color);
+                message = "It is raining Cats and Dogs.";
+                break;
             case PersonaShift:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "Do you even know who you are?"
-                        , color);
+                message = "Do you even know who you are?";
+                break;
             case CrimsonSeason:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The season of crimson has begun."
-                        , color);
+                message = "The season of crimson has begun.";
+                break;
+            default:
+                playEffect = false;
                 break;
         }
+
+        if (playEffect)
+            playEffect(sound, message, color);
     }
 
     private void stopWeather(WeatherCatastropheType weatherCatastropheType) {
+        Sound sound = Sound.AMBIENT_CAVE;
+        String message = weatherCatastropheType.toString() + " end";
         ChatColor color = Constants.WeatherThemes.get(weatherCatastropheType).getColor();
+        boolean playEffect = true;
 
         switch (weatherCatastropheType) {
-            case Nothing:
-                break;
             case RadiantSky:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The Sky is no longer radiant."
-                        , color);
+                message = "The Sky is no longer radiant.";
                 break;
             case ThunderStorm:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The thunderous Roaring ceases."
-                        , color);
+                message = "The thunderous Roaring ceases.";
                 break;
             case SearingCold:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The icy Winds vanish."
-                        , color);
+                message = "The icy Winds vanish.";
                 break;
             case GravityLoss:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "Gravity grips you again."
-                        , color);
+                message = "Gravity grips you again.";
                 break;
             case CatsAndDogs:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The last Barks pass by."
-                        , color);
+                message = "The last Barks pass by.";
+                break;
             case PersonaShift:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "I am myself again."
-                        , color);
+                message = "I am myself again.";
                 break;
             case CrimsonSeason:
-                playEffect(
-                        Sound.AMBIENT_CAVE
-                        , "The season of crimson has ended."
-                        , color);
+                message = "The season of crimson has ended.";
+                break;
+            default:
+                playEffect = false;
                 break;
         }
+
+        if (playEffect)
+            playEffect(sound, message, color);
     }
 
     private void enforceWeather(WeatherCatastropheType weatherCatastropheType) {
@@ -380,7 +355,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
                     continue;
 
                 int misfortune = pcm.get(player.getUniqueId()).getAspect(AspectType.Misfortune);
-                double probability = misfortune / (20.0 + misfortune);
+                double probability = misfortune / (40.0 + misfortune);
 
                 if (new Random().nextDouble() < probability)
                     targets.add(rerouteBlitzard(blitzardList, location));
