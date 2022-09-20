@@ -119,11 +119,11 @@ public class ScornCatastropheManager extends CatastropheManager {
         double seaScornProbability = 0.02;
 
         if (inBoat) {
-            drowningAmplifier += 10 + seaScorn * 5;
-            seaScornProbability += 0.04;
+            drowningAmplifier += 10 + seaScorn * 3;
+            seaScornProbability += 0.2;
         }
 
-        double drowningProbability = drowningAmplifier / (drowningAmplifier + 400.0);
+        double drowningProbability = drowningAmplifier / (drowningAmplifier + 100.0);
 
         if (isDrowning && random.nextDouble() < drowningProbability) {
             if (inBoat)
