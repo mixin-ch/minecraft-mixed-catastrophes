@@ -145,6 +145,11 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         causeStarSplinter(starSplinterType, spectacular);
     }
 
+    public void causeStarSplinter(Player player, boolean spectacular) {
+        StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
+        causeStarSplinter(player, starSplinterType, spectacular);
+    }
+
     public void causeStarSplinter(StarSplinterType starSplinterType, boolean spectacular) {
         ArrayList<Player> playerList = new ArrayList<>();
 

@@ -51,9 +51,9 @@ public class StarSplinterCommand extends SubCommand {
                 return;
             }
 
-            mixedCatastrophesData.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter(player);
+            mixedCatastrophesData.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter(player, true);
         } else {
-            mixedCatastrophesData.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter();
+            mixedCatastrophesData.getRootCatastropheManager().getStarSplinterCatastropheManager().causeStarSplinter(true);
         }
 
         sender.sendMessage(ChatColor.GREEN + "Triggered Star-Splinter.");
