@@ -6,6 +6,7 @@ interaction:
   constructCheckPeriod: 30
   timeDistortion: true
   starSplinter: true
+  starSplinterInterval: 2700
   preventNaturalIronGolem: false
   radiantSkyMakesFire: true
   construct:

@@ -10,6 +10,7 @@ public class CatastropheSettings {
     private int constructCheckPeriod;
     private boolean timeDistortion;
     private boolean starSplinter;
+    private double starSplinterInterval;
     private boolean preventNaturalIronGolem;
     private boolean radiantSkyMakesFire;
     private HashMap<WeatherCatastropheType, Boolean> weather = new HashMap<>();
@@ -38,6 +39,7 @@ public class CatastropheSettings {
         constructCheckPeriod = interactionSection.getInt("constructCheckPeriod");
         timeDistortion = interactionSection.getBoolean("timeDistortion");
         starSplinter = interactionSection.getBoolean("starSplinter");
+        starSplinterInterval = interactionSection.getDouble("starSplinterInterval");
         preventNaturalIronGolem = interactionSection.getBoolean("preventNaturalIronGolem");
         radiantSkyMakesFire = interactionSection.getBoolean("radiantSkyMakesFire");
 
@@ -75,6 +77,7 @@ public class CatastropheSettings {
         interactionSection.set("constructCheckPeriod", constructCheckPeriod);
         interactionSection.set("timeDistortion", timeDistortion);
         interactionSection.set("starSplinter", starSplinter);
+        interactionSection.set("starSplinterInterval", starSplinterInterval);
         interactionSection.set("preventNaturalIronGolem", preventNaturalIronGolem);
         interactionSection.set("radiantSkyMakesFire", radiantSkyMakesFire);
 
@@ -135,6 +138,14 @@ public class CatastropheSettings {
 
     public void setStarSplinter(boolean starSplinter) {
         this.starSplinter = starSplinter;
+    }
+
+    public double getStarSplinterInterval() {
+        return starSplinterInterval;
+    }
+
+    public void setStarSplinterInterval(double starSplinterInterval) {
+        this.starSplinterInterval = starSplinterInterval;
     }
 
     public AspectCatastropheSettings getAspect() {

@@ -116,7 +116,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
     }
 
     private int starSplinterTimer() {
-        return Functions.random(20, 40);
+        return Functions.random(10, 20);
     }
 
     @Override
@@ -128,24 +128,20 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
         if (starSplinterTimer <= 0) {
             starSplinterTimer = starSplinterTimer();
-            ArrayList<Player> playerList = new ArrayList<>();
 
-            for (Player p : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
-                if (mixedCatastrophesData.getAffectedWorlds().contains(p.getWorld())) {
-                    playerList.add(p);
-                }
-            }
+            double probability = 15 / mixedCatastrophesData.getCatastropheSettings().getStarSplinterInterval();
 
-            double multiplier = Math.pow(playerList.size(), 0.5);
-            double probability = multiplier / (200.0 + multiplier);
-
-            if (new Random().nextDouble() < probability) {
+            if (new Random().nextDouble() < probability)
                 causeStarSplinter();
-            }
         }
     }
 
     public void causeStarSplinter() {
+        StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
+        causeStarSplinter(starSplinterType);
+    }
+
+    public void causeStarSplinter(StarSplinterType starSplinterType) {
         ArrayList<Player> playerList = new ArrayList<>();
 
         for (Player p : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
@@ -158,11 +154,15 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             return;
 
         Player player = playerList.get(new Random().nextInt(playerList.size()));
-        causeStarSplinter(player);
+        causeStarSplinter(player, starSplinterType);
     }
 
     public void causeStarSplinter(Player player) {
         StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
+        causeStarSplinter(player, starSplinterType);
+    }
+
+    public void causeStarSplinter(Player player,  StarSplinterType starSplinterType) {
         StarSplinterPremise starSplinterPremise = starSplinterPremiseMap.get(starSplinterType);
         World world = player.getWorld();
         List<Location> locations = new ArrayList<>();
