@@ -25,6 +25,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
     static {
         starSplinterWeightMap = new HashMap<>();
+        starSplinterWeightMap.put(StarSplinterType.Cobblestone, 0.0);
         starSplinterWeightMap.put(StarSplinterType.Iron, 4.0);
         starSplinterWeightMap.put(StarSplinterType.Gold, 4.0);
         starSplinterWeightMap.put(StarSplinterType.Diamond, 1.0);
@@ -41,6 +42,9 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         starSplinterWeightMap.put(StarSplinterType.Feather, 1.0);
 
         starSplinterPremiseMap = new HashMap<>();
+        starSplinterPremiseMap.put(StarSplinterType.Cobblestone, new StarSplinterPremise(
+                "Cobblestone", Material.COBBLESTONE, 4.0
+        ));
         starSplinterPremiseMap.put(StarSplinterType.Iron, new StarSplinterPremise(
                 "Iron", Material.IRON_NUGGET, 9.0
         ));
@@ -132,16 +136,16 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             double probability = 15 / mixedCatastrophesData.getCatastropheSettings().getStarSplinterInterval();
 
             if (new Random().nextDouble() < probability)
-                causeStarSplinter();
+                causeStarSplinter(true);
         }
     }
 
-    public void causeStarSplinter() {
+    public void causeStarSplinter(boolean spectacular) {
         StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
-        causeStarSplinter(starSplinterType);
+        causeStarSplinter(starSplinterType, spectacular);
     }
 
-    public void causeStarSplinter(StarSplinterType starSplinterType) {
+    public void causeStarSplinter(StarSplinterType starSplinterType, boolean spectacular) {
         ArrayList<Player> playerList = new ArrayList<>();
 
         for (Player p : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
@@ -154,15 +158,10 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
             return;
 
         Player player = playerList.get(new Random().nextInt(playerList.size()));
-        causeStarSplinter(player, starSplinterType);
+        causeStarSplinter(player, starSplinterType, spectacular);
     }
 
-    public void causeStarSplinter(Player player) {
-        StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
-        causeStarSplinter(player, starSplinterType);
-    }
-
-    public void causeStarSplinter(Player player,  StarSplinterType starSplinterType) {
+    public void causeStarSplinter(Player player, StarSplinterType starSplinterType, boolean spectacular) {
         StarSplinterPremise starSplinterPremise = starSplinterPremiseMap.get(starSplinterType);
         World world = player.getWorld();
         List<Location> locations = new ArrayList<>();
@@ -195,6 +194,9 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
 
         mixedCatastrophesData.getPlugin().getServer().getScheduler().scheduleSyncDelayedTask(mixedCatastrophesData.getPlugin(), () -> spawnSplinterRemains(starSplinterPremise, location)
                 , 20 * 1);
+
+        if (!spectacular)
+            return;
 
         fireworkChain(location, 30);
 

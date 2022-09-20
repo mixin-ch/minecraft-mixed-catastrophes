@@ -95,6 +95,7 @@ public class Constants {
         WeatherThemes.put(WeatherCatastropheType.CatsAndDogs, new Theme(ChatColor.of("#BF7F5F"), Material.BONE));
         WeatherThemes.put(WeatherCatastropheType.PersonaShift, new Theme(ChatColor.of("#BF3FFF"), Material.ENDER_EYE));
         WeatherThemes.put(WeatherCatastropheType.CrimsonSeason, AspectThemes.get(AspectType.Terror));
+        WeatherThemes.put(WeatherCatastropheType.MeteorShower, new Theme(ChatColor.of("#FF5F00"), Material.FIRE_CHARGE));
 
         DreamThemes = new HashMap<>();
         DreamThemes.put(DreamType.SereneDreams, new Theme(ChatColor.of("#FF7FBF"), Material.WHITE_BED));

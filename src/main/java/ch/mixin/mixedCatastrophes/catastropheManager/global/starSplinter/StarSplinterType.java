@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter;
 
 public enum StarSplinterType {
+    Cobblestone,
     Iron,
     Gold,
     Diamond,

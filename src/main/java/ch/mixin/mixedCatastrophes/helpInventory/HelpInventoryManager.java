@@ -176,31 +176,34 @@ public class HelpInventoryManager {
         createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
                 , linkInventoryMap, HelpInventoryType.Help);
         createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
-                "Special Weathers can happen at random Times, lasting a random Duration."
+                "Special weathers can happen at random times, lasting a random duration."
         });
         createSlot(inventory, Constants.TimeDistortionTheme.getMaterial(), 1, slot(2, 2), "Time Distortion", new String[]{
                 "Time shifts forward or backward."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.RadiantSky).getMaterial(), 1, slot(2, 3), "Radiant Sky", new String[]{
-                "Hot Rays pierce the Sky.", "Seek Shelter, or be burned and blinded.", "No Danger at Night."
+                "Hot rays pierce the sky.", "Seek shelter, or be burned and blinded.", "No danger at night."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.SearingCold).getMaterial(), 1, slot(2, 4), "Searing Cold", new String[]{
-                "It is freezing Cold.", "Stay near Fire or other Sources of Heat.", "Less Danger at Day."
+                "It is freezing cold.", "Stay near fire or other sources of heat.", "Less danger at day."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.ThunderStorm).getMaterial(), 1, slot(2, 5), "Thunderstorm", new String[]{
-                "Lightning strikes, a lot of it.", "Seek Shelter, or be hit.", "Misfortune attracts Lightning."
+                "Lightning strikes, a lot of it.", "Seek shelter, or be hit.", "Misfortune attracts lightning."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.GravityLoss).getMaterial(), 1, slot(2, 6), "Gravity Loss", new String[]{
-                "The Laws of Gravity are temporarily broken.", "Fly up high and land soft."
+                "The laws of gravity are temporarily broken.", "Fly up high and land soft."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CatsAndDogs).getMaterial(), 1, slot(2, 7), "Cats and Dogs", new String[]{
-                "It is raining Cats and Dogs."
+                "It is raining cats and dogs."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.PersonaShift).getMaterial(), 1, slot(2, 8), "Persona Shift", new String[]{
                 "Players may switch positions at any moment."
         });
         createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.CrimsonSeason).getMaterial(), 1, slot(2, 9), "Crimson Season", new String[]{
                 "The season of terrors has begun.", "Terror events are amplified."
+        });
+        createSlot(inventory, Constants.WeatherThemes.get(WeatherCatastropheType.MeteorShower).getMaterial(), 1, slot(3, 5), "Crimson Season", new String[]{
+                "Meteors rain from above."
         });
 
         return new HelpInventory(inventory, linkInventoryMap);

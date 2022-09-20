@@ -9,6 +9,7 @@ public enum WeatherCatastropheType {
     CatsAndDogs,
     PersonaShift,
     CrimsonSeason,
+    MeteorShower,
     ;
 
     public static WeatherCatastropheType convert(String string) {

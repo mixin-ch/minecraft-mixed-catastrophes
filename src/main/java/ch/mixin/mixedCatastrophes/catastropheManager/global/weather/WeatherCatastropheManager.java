@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.weather;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
@@ -34,6 +35,7 @@ public class WeatherCatastropheManager extends CatastropheManager {
         catastropheWeights.put(WeatherCatastropheType.CatsAndDogs, 0.15);
         catastropheWeights.put(WeatherCatastropheType.PersonaShift, 0.35);
         catastropheWeights.put(WeatherCatastropheType.CrimsonSeason, 0.65);
+        catastropheWeights.put(WeatherCatastropheType.MeteorShower, 0.50);
     }
 
     private int weatherTimer;
@@ -81,6 +83,8 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 return Functions.random(30, 300);
             case CrimsonSeason:
                 return Functions.random(120, 300);
+            case MeteorShower:
+                return Functions.random(15, 45);
         }
 
         return 0;
@@ -126,25 +130,28 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
         switch (weatherCatastropheType) {
             case RadiantSky:
-                message = "The Sky is scattered with Rays of Radiance.";
+                message = "The sky is scattered with rays of radiance.";
                 break;
             case ThunderStorm:
-                message = "Erratic Lightning licks across the Heavens.";
+                message = "Erratic lightning licks across the heavens.";
                 break;
             case SearingCold:
-                message = "The creeping Cold tears the Flesh.";
+                message = "The creeping cold tears the flesh.";
                 break;
             case GravityLoss:
-                message = "The Ground can not hold you.";
+                message = "The ground can not hold you.";
                 break;
             case CatsAndDogs:
-                message = "It is raining Cats and Dogs.";
+                message = "It is raining cats and dogs.";
                 break;
             case PersonaShift:
                 message = "Do you even know who you are?";
                 break;
             case CrimsonSeason:
                 message = "The season of crimson has begun.";
+                break;
+            case MeteorShower:
+                message = "Bombardement from the astral.";
                 break;
             default:
                 playEffect = false;
@@ -163,25 +170,28 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
         switch (weatherCatastropheType) {
             case RadiantSky:
-                message = "The Sky is no longer radiant.";
+                message = "The sky is no longer radiant.";
                 break;
             case ThunderStorm:
-                message = "The thunderous Roaring ceases.";
+                message = "The thunderous roaring ceases.";
                 break;
             case SearingCold:
-                message = "The icy Winds vanish.";
+                message = "The icy winds vanish.";
                 break;
             case GravityLoss:
                 message = "Gravity grips you again.";
                 break;
             case CatsAndDogs:
-                message = "The last Barks pass by.";
+                message = "The last barks pass by.";
                 break;
             case PersonaShift:
                 message = "I am myself again.";
                 break;
             case CrimsonSeason:
                 message = "The season of crimson has ended.";
+                break;
+            case MeteorShower:
+                message = "The skies are at rest again.";
                 break;
             default:
                 playEffect = false;
@@ -213,6 +223,9 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 break;
             case PersonaShift:
                 enforcePersonaShift();
+                break;
+            case MeteorShower:
+                enforceMeteorShower();
                 break;
             case CrimsonSeason:
                 break;
@@ -402,11 +415,9 @@ public class WeatherCatastropheManager extends CatastropheManager {
 
     private void enforceSearingCold() {
         for (World world : mixedCatastrophesData.getAffectedWorlds()) {
-//            ArrayList<Location> centerLocations = new ArrayList<>();
 
             for (Player player : world.getPlayers()) {
                 Location playerLocation = player.getLocation();
-//                centerLocations.add(playerLocation);
 
                 boolean warm = Constants.HotItems.contains(player.getInventory().getItemInMainHand().getType())
                         || Constants.HotItems.contains(player.getInventory().getItemInOffHand().getType());
@@ -474,28 +485,6 @@ public class WeatherCatastropheManager extends CatastropheManager {
                     }
                 }
             }
-
-//            for (Location space : getRandomRoofSpaces(centerLocations, 20, 5.00)) {
-//                Location roof = Functions.offset(space, 1);
-//                if (roof == null)
-//                    continue;
-//
-//                if (roof.getBlock().getType() == Material.WATER) {
-//                    ArrayList<Location> neighbours = new ArrayList<>();
-//                    neighbours.add(Functions.offset(roof, 1, 0, 0));
-//                    neighbours.add(Functions.offset(roof, -1, 0, 0));
-//                    neighbours.add(Functions.offset(roof, 0, 0, 1));
-//                    neighbours.add(Functions.offset(roof, 0, 0, -1));
-//
-//                    for (Location neighbour : neighbours) {
-//                        if (neighbour.getBlock().getType() != Material.WATER) {
-//                            roof.getBlock().setType(Material.ICE);
-//                            break;
-//                        }
-//                    }
-//                } else
-//                    space.getBlock().setType(Material.SNOW);
-//            }
         }
     }
 
@@ -590,6 +579,20 @@ public class WeatherCatastropheManager extends CatastropheManager {
                 nextLocation = location;
             }
         }
+    }
+
+    private void enforceMeteorShower() {
+        int players = 0;
+
+        for (World world : mixedCatastrophesData.getAffectedWorlds())
+            players += world.getPlayers().size();
+
+        double weight = 1 + 0.25 * Math.pow(players, 0.5);
+        double probability = weight / (5.0 + weight);
+
+        if (new Random().nextDouble() < probability)
+            mixedCatastrophesData.getRootCatastropheManager().getStarSplinterCatastropheManager()
+                    .causeStarSplinter(StarSplinterType.Cobblestone, false);
     }
 
     public int getWeatherTimer() {
