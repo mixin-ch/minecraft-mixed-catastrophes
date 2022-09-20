@@ -115,10 +115,15 @@ public class ScornCatastropheManager extends CatastropheManager {
         boolean isCollectable = mixedCatastrophesData.getCatastropheSettings().getAspect().getSeaScorn().isCollectable();
         boolean isDrowning = mixedCatastrophesData.getCatastropheSettings().getAspect().getSeaScorn().isDrowning();
 
-        double drowningProbability = seaScorn / (seaScorn + 400.0);
+        double drowningAmplifier = seaScorn;
         double seaScornProbability = 0.02;
-        if (inBoat)
-            seaScornProbability = 0.05;
+
+        if (inBoat) {
+            drowningAmplifier += 10 + seaScorn * 5;
+            seaScornProbability += 0.04;
+        }
+
+        double drowningProbability = drowningAmplifier / (drowningAmplifier + 400.0);
 
         if (isDrowning && random.nextDouble() < drowningProbability) {
             if (inBoat)
