@@ -7,6 +7,7 @@ public enum ConstructType {
     Lighthouse,
     Scarecrow,
     EnderRail,
+    SeaPoint,
     ;
 
     private final String label;

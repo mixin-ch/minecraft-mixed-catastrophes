@@ -21,4 +21,5 @@ public enum HelpInventoryType {
     Constructs_EnderRail_Side,
     Constructs_EnderRail_Up,
     Constructs_EnderRail_Down,
+    Constructs_SeaPoint,
 }

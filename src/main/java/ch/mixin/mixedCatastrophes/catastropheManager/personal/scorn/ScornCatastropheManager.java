@@ -5,8 +5,12 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.LighthouseData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.SeaPointData;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -14,6 +18,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 public class ScornCatastropheManager extends CatastropheManager {
@@ -44,6 +49,8 @@ public class ScornCatastropheManager extends CatastropheManager {
 
     @Override
     public void tick() {
+        List<SeaPointData> seaPointList = getActiveSeaPointList();
+
         for (Player player : mixedCatastrophesData.getPlugin().getServer().getOnlinePlayers()) {
             if (!mixedCatastrophesData.getAffectedWorlds().contains(player.getWorld()))
                 continue;
@@ -51,7 +58,27 @@ public class ScornCatastropheManager extends CatastropheManager {
             PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
 
             processSkyScorn(player, playerData);
-            processSeaScorn(player, playerData);
+            boolean inSeaPointRange = false;
+
+            World world = player.getWorld();
+            Location playerLocation = player.getLocation();
+
+            for (SeaPointData seaPointData : seaPointList) {
+                World seaPointWorld = mixedCatastrophesData.getPlugin().getServer().getWorld(seaPointData.getWorldName());
+
+                if (world != seaPointWorld)
+                    continue;
+
+                Location seaPointLocation = seaPointData.getPosition().toLocation(world);
+
+                if (seaPointLocation.distance(playerLocation) > Constants.SeaPointRange)
+                    continue;
+
+                inSeaPointRange = true;
+                break;
+            }
+
+            processSeaScorn(player, playerData, inSeaPointRange);
         }
     }
 
@@ -80,7 +107,7 @@ public class ScornCatastropheManager extends CatastropheManager {
         playerData.setSkyScornTimer(timer);
     }
 
-    private void processSeaScorn(Player player, PlayerData playerData) {
+    private void processSeaScorn(Player player, PlayerData playerData, boolean inSeaPointRange) {
         int seaScorn = playerData.getAspect(AspectType.SeaScorn);
         int loss = (int) Math.ceil(0.1 * seaScorn);
 
@@ -102,6 +129,9 @@ public class ScornCatastropheManager extends CatastropheManager {
 
             playerData.setSeaScornTimer(timer);
         }
+
+        if (inSeaPointRange)
+            return;
 
         Random random = new Random();
 
@@ -171,5 +201,10 @@ public class ScornCatastropheManager extends CatastropheManager {
 
     private int seaScornTimer() {
         return 10 * 60;
+    }
+
+
+    private List<SeaPointData> getActiveSeaPointList() {
+        return mixedCatastrophesData.getRootCatastropheManager().getConstructManager().getSeaPointListIsActive(mixedCatastrophesData.getMetaData().getSeaPointDataList());
     }
 }

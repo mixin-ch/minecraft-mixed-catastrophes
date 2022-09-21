@@ -27,6 +27,7 @@ public class ConstructAchievementManager {
         buildPresetMap.put(ConstructType.Lighthouse, "the Lantern of Solace");
         buildPresetMap.put(ConstructType.Scarecrow, "the Screams from Beyond");
         buildPresetMap.put(ConstructType.EnderRail, "the Bridge through Space");
+        buildPresetMap.put(ConstructType.SeaPoint, "the Hope in the Depths");
 
         contributePresetMap = new HashMap<>();
         contributePresetMap.put(ConstructType.GreenWell, new ConstructAchievementPreset(

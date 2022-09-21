@@ -3,7 +3,6 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
-import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Animals;
@@ -14,10 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -43,7 +38,7 @@ public class MisdeedListener implements Listener {
 
         if (Constants.Logs.contains(material)) {
             breakWood(player);
-        } else if (Constants.Mirrors.contains(material)) {
+        } else if (Constants.Glass.contains(material) || Constants.Glass_Panes.contains(material)) {
             breakMirror(player);
         } else if (Constants.Stones.contains(material)) {
             breakStone(player);

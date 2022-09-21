@@ -130,6 +130,7 @@ public class HelpInventoryManager {
         helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail_Side, makeConstructsEnderRailSideInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail_Up, makeConstructsEnderRailUpInventory());
         helpInventoryMap.put(HelpInventoryType.Constructs_EnderRail_Down, makeConstructsEnderRailDownInventory());
+        helpInventoryMap.put(HelpInventoryType.Constructs_SeaPoint, makeConstructsSeaPointInventory());
     }
 
     private HelpInventory makeHelpInventory() {
@@ -485,6 +486,9 @@ public class HelpInventoryManager {
         createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.EnderRail).getMaterial(), 1, slot(2, 7), "Ender Rail", new String[]{
                 "Teleport between Stations."
         }, linkInventoryMap, HelpInventoryType.Constructs_EnderRail);
+        createSlotLink(inventory, Constants.ConstructThemes.get(ConstructType.SeaPoint).getMaterial(), 1, slot(2, 8), "Sea Point", new String[]{
+                "Protects against any Sea Scorn Event."
+        }, linkInventoryMap, HelpInventoryType.Constructs_SeaPoint);
 
         return new HelpInventory(inventory, linkInventoryMap);
     }
@@ -764,6 +768,38 @@ public class HelpInventoryManager {
             Material material = materialMap.get(c3d);
             createSlot(inventory, material, 1, slot(-c3d.getXRound() + 4, c3d.getZRound() + c3d.getYRound() * 4 + 3), material.name(), new String[]{});
         }
+
+        return new HelpInventory(inventory, linkInventoryMap);
+    }
+
+    private HelpInventory makeConstructsSeaPointInventory() {
+        Inventory inventory = Bukkit.createInventory(null, 6 * 9, "Sea Point");
+        HashMap<Integer, HelpInventoryType> linkInventoryMap = new HashMap<>();
+
+        createSlotLink(inventory, Material.ARROW, 1, slot(1, 9), "Back", new String[]{}
+                , linkInventoryMap, HelpInventoryType.Constructs);
+        createSlot(inventory, Material.BOOK, 1, slot(1, 1), "Information", new String[]{
+                "Construct in the following Configuration.", "Use Prismarine Crystals to activate.", "No Sea Scorn Events within Range."
+        });
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 3), "Side View", new String[]{});
+        createSlot(inventory, Material.PAPER, 1, true, slot(1, 7), "Middle Layer", new String[]{});
+        createSlot(inventory, Material.PRISMARINE_CRYSTALS, 1, true, slot(1, 5), "Prismarine Crystals", new String[]{
+                "Click on the Soul Lantern with Prismarine Crystals.", "Costs Prismarine Crystals and Secrets."
+        });
+
+        createSlot(inventory, Material.GLASS, 1, slot(2, 2), "Glass", new String[]{});
+        createSlot(inventory, Material.GLASS, 1, slot(3, 1), "Glass", new String[]{});
+        createSlot(inventory, Material.SEA_LANTERN, 1, slot(3, 2), "Sea Lantern", new String[]{});
+        createSlot(inventory, Material.GLASS, 1, slot(3, 3), "Glass", new String[]{});
+        createSlot(inventory, Material.CHAIN, 1, slot(4, 2), "Chain", new String[]{});
+        createSlot(inventory, Material.CHAIN, 1, slot(5, 2), "Chain", new String[]{});
+        createSlot(inventory, Material.SOUL_LANTERN, 1, slot(6, 2), "Soul Lantern", new String[]{});
+
+        createSlot(inventory, Material.GLASS, 1, slot(3, 7), "Glass", new String[]{});
+        createSlot(inventory, Material.GLASS, 1, slot(4, 6), "Glass", new String[]{});
+        createSlot(inventory, Material.SEA_LANTERN, 1, slot(4, 7), "Sea Lantern", new String[]{});
+        createSlot(inventory, Material.GLASS, 1, slot(4, 8), "Glass", new String[]{});
+        createSlot(inventory, Material.GLASS, 1, slot(5, 7), "Glass", new String[]{});
 
         return new HelpInventory(inventory, linkInventoryMap);
     }

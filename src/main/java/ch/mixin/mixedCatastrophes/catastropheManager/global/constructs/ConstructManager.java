@@ -51,6 +51,9 @@ public class ConstructManager extends CatastropheManager {
 
         if (mixedCatastrophesData.getMetaData().getEnderRailDataList() == null)
             mixedCatastrophesData.getMetaData().setEnderRailDataList(new ArrayList<>());
+
+        if (mixedCatastrophesData.getMetaData().getSeaPointDataList() == null)
+            mixedCatastrophesData.getMetaData().setSeaPointDataList(new ArrayList<>());
     }
 
     @Override
@@ -80,6 +83,8 @@ public class ConstructManager extends CatastropheManager {
             tickScarecrow();
         if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.EnderRail))
             tickEnderRail();
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.SeaPoint))
+            tickSeaPoint();
     }
 
     private boolean calc = true;
@@ -100,6 +105,8 @@ public class ConstructManager extends CatastropheManager {
             constructDataList.addAll(metaData.getScarecrowDataList());
         if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.EnderRail))
             constructDataList.addAll(metaData.getEnderRailDataList());
+        if (mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.SeaPoint))
+            constructDataList.addAll(metaData.getSeaPointDataList());
 
         boolean check = false;
         constructCheckTimer--;
@@ -156,6 +163,8 @@ public class ConstructManager extends CatastropheManager {
                         metaData.getScarecrowDataList().remove(constructData);
                     } else if (constructData instanceof EnderRailData) {
                         metaData.getEnderRailDataList().remove(constructData);
+                    } else if (constructData instanceof SeaPointData) {
+                        metaData.getSeaPointDataList().remove(constructData);
                     }
                 }
             }
@@ -197,6 +206,8 @@ public class ConstructManager extends CatastropheManager {
                     shapeCompareResult = Constants.EnderRail_Down.checkConstructed(location);
                     break;
             }
+        } else if (constructData instanceof SeaPointData) {
+            shapeCompareResult = Constants.SeaPoint.checkConstructed(location);
         }
 
         return shapeCompareResult;
@@ -302,6 +313,19 @@ public class ConstructManager extends CatastropheManager {
         }
 
         generateConstructHologram(data, lines, 3);
+    }
+
+    private void generateSeaPointHologram(SeaPointData data, boolean isConstructed) {
+        ChatColor color = Constants.ConstructThemes.get(ConstructType.SeaPoint).getColor();
+        ArrayList<String> lines = new ArrayList<>();
+        lines.add(color + Functions.splitCamelCase(ConstructType.SeaPoint.toString()));
+
+        if (isConstructed)
+            lines.add(color + "Active");
+        else
+            lines.add(color + "Inactive");
+
+        generateConstructHologram(data, lines, 5);
     }
 
     private void generateConstructHologram(ConstructData data, ArrayList<String> lines, int height) {
@@ -661,6 +685,34 @@ public class ConstructManager extends CatastropheManager {
         }
     }
 
+    private void tickSeaPoint() {
+        List<SeaPointData> seaPointDataList = mixedCatastrophesData.getMetaData().getSeaPointDataList();
+
+        for (SeaPointData seaPointData : seaPointDataList) {
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(seaPointData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            ConstructCache constructCache = cacheMap.get(seaPointData);
+
+            boolean isActive = constructCache.isActive();
+
+            if (mixedCatastrophesData.isUseHolographicDisplays())
+                generateSeaPointHologram(seaPointData, isActive);
+
+            if (!isActive)
+                continue;
+
+            Coordinate3D center = seaPointData.getPosition();
+
+            List<Coordinate3D> particles = new ArrayList<>();
+            particles.add(center);
+
+            mixedCatastrophesData.getParticler().spawnParticles(Particle.WATER_BUBBLE, particles, world, 1, 4, 5);
+        }
+    }
+
     public List<ScarecrowData> getScarecrowDataListInWorld(List<ScarecrowData> constructDataList, String worldName) {
         List<ScarecrowData> constructDataListInWorld = new ArrayList<>();
 
@@ -718,6 +770,22 @@ public class ConstructManager extends CatastropheManager {
         }
 
         return constructDataListIsConstructed;
+    }
+
+    public List<SeaPointData> getSeaPointListIsActive(List<SeaPointData> constructDataList) {
+        List<SeaPointData> constructDataListIsActive = new ArrayList<>();
+
+        for (SeaPointData constructData : constructDataList) {
+            ConstructCache constructCache = cacheMap.get(constructData);
+
+            if (constructCache == null)
+                continue;
+
+            if (constructCache.isActive())
+                constructDataListIsActive.add(constructData);
+        }
+
+        return constructDataListIsActive;
     }
 
     public BlitzardData getStrongestBlitzard(List<BlitzardData> constructList, Location location) {

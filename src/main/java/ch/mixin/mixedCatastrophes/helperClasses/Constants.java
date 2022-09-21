@@ -15,6 +15,7 @@ public class Constants {
     public static final int BlitzardRangeFactor = 10;
     public static final int LighthouseRangeFactor = 10;
     public static final int ScareCrowRange = 50;
+    public static final int SeaPointRange = 50;
 
     public static final List<AspectType> AspectOrder;
     public static final List<ConstructType> ConstructOrder;
@@ -30,7 +31,8 @@ public class Constants {
     public static final ArrayList<Material> Flowers_Small;
     public static final ArrayList<Material> Flowers_Tall;
     public static final ArrayList<Material> PottedFlowers;
-    public static final ArrayList<Material> Mirrors;
+    public static final ArrayList<Material> Glass;
+    public static final ArrayList<Material> Glass_Panes;
     public static final ArrayList<Material> Stones;
     public static final ArrayList<Material> Beds;
     public static final ArrayList<Material> Fires;
@@ -48,6 +50,7 @@ public class Constants {
     public static final ConstructShape EnderRail_Side;
     public static final ConstructShape EnderRail_Up;
     public static final ConstructShape EnderRail_Down;
+    public static final ConstructShape SeaPoint;
 
     static {
         AspectOrder = new ArrayList<>();
@@ -70,6 +73,7 @@ public class Constants {
         ConstructOrder.add(ConstructType.Lighthouse);
         ConstructOrder.add(ConstructType.Scarecrow);
         ConstructOrder.add(ConstructType.EnderRail);
+        ConstructOrder.add(ConstructType.SeaPoint);
 
         AspectThemes = new HashMap<>();
         AspectThemes.put(AspectType.Nobility, new Theme(ChatColor.of("#FFDF7F"), Material.GOLDEN_HELMET));
@@ -112,6 +116,7 @@ public class Constants {
         ConstructThemes.put(ConstructType.Lighthouse, new Theme(ChatColor.of("#FFFF00"), Material.LANTERN));
         ConstructThemes.put(ConstructType.Scarecrow, new Theme(AspectThemes.get(AspectType.Terror).getColor(), Material.CARVED_PUMPKIN));
         ConstructThemes.put(ConstructType.EnderRail, new Theme(ChatColor.of("#00BF7F"), Material.RAIL));
+        ConstructThemes.put(ConstructType.SeaPoint, AspectThemes.get(AspectType.SeaScorn));
 
         Airs = new ArrayList<>();
         Airs.add(Material.AIR);
@@ -164,42 +169,45 @@ public class Constants {
         PottedFlowers.add(Material.POTTED_LILY_OF_THE_VALLEY);
         PottedFlowers.add(Material.POTTED_WITHER_ROSE);
 
-        Mirrors = new ArrayList<>();
-        Mirrors.add(Material.GLASS);
-        Mirrors.add(Material.GLASS_PANE);
+        Glass = new ArrayList<>();
+        Glass.add(Material.GLASS);
 
-        Mirrors.add(Material.BLACK_STAINED_GLASS);
-        Mirrors.add(Material.BLUE_STAINED_GLASS);
-        Mirrors.add(Material.BROWN_STAINED_GLASS);
-        Mirrors.add(Material.CYAN_STAINED_GLASS);
-        Mirrors.add(Material.GRAY_STAINED_GLASS);
-        Mirrors.add(Material.GREEN_STAINED_GLASS);
-        Mirrors.add(Material.LIGHT_BLUE_STAINED_GLASS);
-        Mirrors.add(Material.LIGHT_GRAY_STAINED_GLASS);
-        Mirrors.add(Material.LIME_STAINED_GLASS);
-        Mirrors.add(Material.MAGENTA_STAINED_GLASS);
-        Mirrors.add(Material.ORANGE_STAINED_GLASS);
-        Mirrors.add(Material.PINK_STAINED_GLASS);
-        Mirrors.add(Material.PURPLE_STAINED_GLASS);
-        Mirrors.add(Material.RED_STAINED_GLASS);
-        Mirrors.add(Material.WHITE_STAINED_GLASS);
-        Mirrors.add(Material.YELLOW_STAINED_GLASS);
-        Mirrors.add(Material.BLACK_STAINED_GLASS_PANE);
-        Mirrors.add(Material.BLUE_STAINED_GLASS_PANE);
-        Mirrors.add(Material.BROWN_STAINED_GLASS_PANE);
-        Mirrors.add(Material.CYAN_STAINED_GLASS_PANE);
-        Mirrors.add(Material.GRAY_STAINED_GLASS_PANE);
-        Mirrors.add(Material.GREEN_STAINED_GLASS_PANE);
-        Mirrors.add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
-        Mirrors.add(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
-        Mirrors.add(Material.LIME_STAINED_GLASS_PANE);
-        Mirrors.add(Material.MAGENTA_STAINED_GLASS_PANE);
-        Mirrors.add(Material.ORANGE_STAINED_GLASS_PANE);
-        Mirrors.add(Material.PINK_STAINED_GLASS_PANE);
-        Mirrors.add(Material.PURPLE_STAINED_GLASS_PANE);
-        Mirrors.add(Material.RED_STAINED_GLASS_PANE);
-        Mirrors.add(Material.WHITE_STAINED_GLASS_PANE);
-        Mirrors.add(Material.YELLOW_STAINED_GLASS_PANE);
+        Glass.add(Material.BLACK_STAINED_GLASS);
+        Glass.add(Material.BLUE_STAINED_GLASS);
+        Glass.add(Material.BROWN_STAINED_GLASS);
+        Glass.add(Material.CYAN_STAINED_GLASS);
+        Glass.add(Material.GRAY_STAINED_GLASS);
+        Glass.add(Material.GREEN_STAINED_GLASS);
+        Glass.add(Material.LIGHT_BLUE_STAINED_GLASS);
+        Glass.add(Material.LIGHT_GRAY_STAINED_GLASS);
+        Glass.add(Material.LIME_STAINED_GLASS);
+        Glass.add(Material.MAGENTA_STAINED_GLASS);
+        Glass.add(Material.ORANGE_STAINED_GLASS);
+        Glass.add(Material.PINK_STAINED_GLASS);
+        Glass.add(Material.PURPLE_STAINED_GLASS);
+        Glass.add(Material.RED_STAINED_GLASS);
+        Glass.add(Material.WHITE_STAINED_GLASS);
+        Glass.add(Material.YELLOW_STAINED_GLASS);
+
+        Glass_Panes = new ArrayList<>();
+        Glass_Panes.add(Material.GLASS_PANE);
+
+        Glass_Panes.add(Material.BLACK_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.BLUE_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.BROWN_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.CYAN_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.GRAY_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.GREEN_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.LIGHT_GRAY_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.LIME_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.MAGENTA_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.ORANGE_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.PINK_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.PURPLE_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.RED_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.WHITE_STAINED_GLASS_PANE);
+        Glass_Panes.add(Material.YELLOW_STAINED_GLASS_PANE);
 
         Stones = new ArrayList<>();
         Stones.add(Material.STONE);
@@ -413,6 +421,19 @@ public class Constants {
             put(new Coordinate3D(0, 1, 0), Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
             put(new Coordinate3D(1, 1, -1), Material.END_ROD);
             put(new Coordinate3D(1, 1, 1), Material.END_ROD);
+        }});
+
+        SeaPoint = new ConstructShape(RotationSymmetry.Degrees90, new HashMap<Coordinate3D, Material>() {{
+            put(new Coordinate3D(0, 3, 0), Material.SEA_LANTERN);
+            put(new Coordinate3D(0, 2, 0), Material.CHAIN);
+            put(new Coordinate3D(0, 1, 0), Material.CHAIN);
+            put(new Coordinate3D(0, 0, 0), Material.SOUL_LANTERN);
+        }}, new HashMap<Coordinate3D, List<Material>>() {{
+            put(new Coordinate3D(0, 4, 0), Glass);
+            put(new Coordinate3D(-1, 3, 0), Glass);
+            put(new Coordinate3D(0, 3, -1), Glass);
+            put(new Coordinate3D(0, 3, 1), Glass);
+            put(new Coordinate3D(1, 3, 0), Glass);
         }});
     }
 }

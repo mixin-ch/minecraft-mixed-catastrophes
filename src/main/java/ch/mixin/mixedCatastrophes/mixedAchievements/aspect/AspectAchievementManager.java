@@ -61,30 +61,30 @@ public class AspectAchievementManager {
         presetMap.put(AspectType.Celestial_Favor, new AspectAchievementPreset(
                 false
                 , new ArrayList<>(Arrays.asList(
-                new AchievementStagePreset("make a Wish", 1)
-                , new AchievementStagePreset("Guardian Star", 5)
-                , new AchievementStagePreset("a Friend to Skies", 20)
+                new AchievementStagePreset("make a wish", 1)
+                , new AchievementStagePreset("guardian star", 5)
+                , new AchievementStagePreset("a friend to skies", 20)
         ))));
         presetMap.put(AspectType.Misfortune, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AchievementStagePreset("no 4-Leaf Clover", 1)
-                , new AchievementStagePreset("45% Coin Toss", 4)
-                , new AchievementStagePreset("always wrong Guesses", 16)
-                , new AchievementStagePreset("Dice roll only 1", 64)
+                new AchievementStagePreset("no 4-leaf clover", 1)
+                , new AchievementStagePreset("45% coin toss", 4)
+                , new AchievementStagePreset("always wrong guesses", 16)
+                , new AchievementStagePreset("dice roll only 1", 64)
         ))));
         presetMap.put(AspectType.Death_Seeker, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
-                new AchievementStagePreset("the Day I died", 1)
-                , new AchievementStagePreset("a Cat dies 9 Times", 9)
-                , new AchievementStagePreset("the Answer to Death and Everything", 42)
+                new AchievementStagePreset("the day I died", 1)
+                , new AchievementStagePreset("a cat dies 9 times", 9)
+                , new AchievementStagePreset("the answer to death and everything", 42)
         ))));
         presetMap.put(AspectType.Greyhat_Debt, new AspectAchievementPreset(
                 true
                 , new ArrayList<>(Arrays.asList(
                 new AchievementStagePreset("Business", 1)
-                , new AchievementStagePreset("sold your Soul", 10)
+                , new AchievementStagePreset("sold your soul", 10)
         ))));
         presetMap.put(AspectType.Resolve, new AspectAchievementPreset(
                 true
@@ -97,8 +97,15 @@ public class AspectAchievementManager {
                 true
                 , new ArrayList<>(Arrays.asList(
                 new AchievementStagePreset("to the Sky", 1)
-                , new AchievementStagePreset("frequent Flyer", 10)
-                , new AchievementStagePreset("unchained Hubris", 50)
+                , new AchievementStagePreset("frequent flyer", 10)
+                , new AchievementStagePreset("unchained hubris", 50)
+        ))));
+        presetMap.put(AspectType.SeaScorn, new AspectAchievementPreset(
+                true
+                , new ArrayList<>(Arrays.asList(
+                new AchievementStagePreset("to the Sea", 1)
+                , new AchievementStagePreset("in risk of drowning", 10)
+                , new AchievementStagePreset("ultimate hydrophiliac", 50)
         ))));
     }
 

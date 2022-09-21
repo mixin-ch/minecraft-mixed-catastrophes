@@ -74,6 +74,9 @@ public class ConstructListener implements Listener {
             case ENDER_EYE:
                 makeEnderRail(event);
                 break;
+            case PRISMARINE_CRYSTALS:
+                makeSeaPoint(event);
+                break;
         }
     }
 
@@ -671,5 +674,88 @@ public class ConstructListener implements Listener {
 
         mixedAchievementsManager.updateConstructAchievementProgress(
                 player, ConstructType.EnderRail, enderRailData.getLevel());
+    }
+
+    private void makeSeaPoint(PlayerInteractEvent event) {
+        if (!mixedCatastrophesData.getCatastropheSettings().getConstruct().get(ConstructType.SeaPoint))
+            return;
+
+        Player player = event.getPlayer();
+        World world = player.getWorld();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        Block block = event.getClickedBlock();
+
+        if (block == null)
+            return;
+
+        if (block.getType() != Material.SOUL_LANTERN)
+            return;
+
+        ShapeCompareResult shapeCompareResult = Constants.SeaPoint.checkConstructed(block.getLocation());
+
+        if (!shapeCompareResult.isConstructed())
+            return;
+
+        Coordinate3D center = Coordinate3D.toCoordinate(block.getLocation());
+
+        for (SeaPointData sd : mixedCatastrophesData.getMetaData().getSeaPointDataList()) {
+            if (center.equals(sd.getPosition()))
+                return;
+        }
+
+        SeaPointData seaPointData = new SeaPointData(center, world.getName());
+        PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
+        int cost = 1000;
+        int costItem = 1;
+        boolean success = true;
+
+        if (playerData.getAspect(AspectType.Secrets) < cost) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + cost + " Secrets to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (itemStack.getAmount() < costItem) {
+            mixedCatastrophesData.getEventChangeManager()
+                    .eventChange(player)
+                    .withEventMessage("You need at least " + costItem + " Prismarine Crystals to do this.")
+                    .withColor(Constants.AspectThemes.get(AspectType.Secrets).getColor())
+                    .finish()
+                    .execute();
+            success = false;
+        }
+
+        if (!success)
+            return;
+
+        mixedCatastrophesData.getMetaData().getSeaPointDataList().add(seaPointData);
+        itemStack.setAmount(itemStack.getAmount() - costItem);
+
+        HashMap<AspectType, Integer> changeMap = new HashMap<>();
+        changeMap.put(AspectType.Secrets, -cost);
+
+        mixedCatastrophesData.getEventChangeManager()
+                .eventChange(player)
+                .withAspectChange(changeMap)
+                .withEventSound(Sound.AMBIENT_CAVE)
+                .withEventMessage("A light to distract the Sea.")
+                .withColor(Constants.ConstructThemes.get(ConstructType.SeaPoint).getColor())
+                .withTitle(true)
+                .finish()
+                .execute();
+
+        mixedCatastrophesData.getRootCatastropheManager().getConstructManager().constructChanged(seaPointData);
+
+        MixedAchievementsManager mixedAchievementsManager = mixedCatastrophesData.getMixedAchievementsManager();
+
+        if (!mixedAchievementsManager.isActive())
+            return;
+
+        mixedAchievementsManager.updateConstructAchievementProgress(
+                player, ConstructType.SeaPoint, 1);
     }
 }

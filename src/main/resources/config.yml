@@ -16,6 +16,7 @@ interaction:
     lighthouse: true
     scarecrow: true
     enderRail: true
+    seaPoint: true
   weather:
     radiantSky: true
     searingCold: true

@@ -26,6 +26,7 @@ public class MetaData {
     private List<BlazeReactorData> blazeReactorDataList;
     private List<ScarecrowData> scarecrowDataList;
     private List<EnderRailData> enderRailDataList;
+    private List<SeaPointData> seaPointDataList;
 
     public void save() {
         MixedCatastrophesPlugin.writeFile(MixedCatastrophesPlugin.METADATA_FILE, new Gson().toJson(this));
@@ -133,5 +134,13 @@ public class MetaData {
 
     public void setEnderRailDataList(List<EnderRailData> enderRailDataList) {
         this.enderRailDataList = enderRailDataList;
+    }
+
+    public List<SeaPointData> getSeaPointDataList() {
+        return seaPointDataList;
+    }
+
+    public void setSeaPointDataList(List<SeaPointData> seaPointDataList) {
+        this.seaPointDataList = seaPointDataList;
     }
 }
