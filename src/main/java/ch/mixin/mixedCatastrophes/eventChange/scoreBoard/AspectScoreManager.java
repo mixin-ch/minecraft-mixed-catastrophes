@@ -14,6 +14,7 @@ import ch.mixin.mixedCatastrophes.metaData.data.PlayerData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.BlitzardData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.LighthouseData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.ScarecrowData;
+import ch.mixin.mixedCatastrophes.metaData.data.constructs.SeaPointData;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -42,11 +43,12 @@ public class AspectScoreManager {
         List<BlitzardData> blitzardDataList = constructManager.getBlitzardListIsActive(metaData.getBlitzardDataList());
         List<LighthouseData> lighthouseDataList = constructManager.getLighthouseListIsConstructed(metaData.getLighthouseDataList());
         List<ScarecrowData> scarecrowDataList = constructManager.getScarecrowListIsConstructed(metaData.getScarecrowDataList());
+        List<SeaPointData> seaPointDataList = constructManager.getSeaPointListIsActive(metaData.getSeaPointDataList());
 
-        updateScoreboard(player, blitzardDataList, lighthouseDataList, scarecrowDataList);
+        updateScoreboard(player, blitzardDataList, lighthouseDataList, scarecrowDataList, seaPointDataList);
     }
 
-    public void updateScoreboard(Player player, List<BlitzardData> blitzardDataList, List<LighthouseData> lighthouseDataList, List<ScarecrowData> scarecrowDataList) {
+    public void updateScoreboard(Player player, List<BlitzardData> blitzardDataList, List<LighthouseData> lighthouseDataList, List<ScarecrowData> scarecrowDataList, List<SeaPointData> seaPointDataList) {
         UUID playerId = player.getUniqueId();
         PlayerData pcd = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(playerId);
         HashMap<AspectType, Integer> aspects = pcd.getAspects();
@@ -94,6 +96,7 @@ public class AspectScoreManager {
         BlitzardData blitzardData = constructManager.getStrongestBlitzard(blitzardDataList, player.getLocation());
         LighthouseData lighthouseData = constructManager.getStrongestLighthouse(lighthouseDataList, player.getLocation());
         ScarecrowData scarecrowData = constructManager.getStrongestScarecrow(scarecrowDataList, player.getLocation());
+        SeaPointData seaPointData = constructManager.getStrongestSeaPoint(seaPointDataList, player.getLocation());
         Location playerLocation = player.getLocation();
         World world = playerLocation.getWorld();
 
@@ -112,6 +115,12 @@ public class AspectScoreManager {
         if (scarecrowData != null) {
             int distance = (int) scarecrowData.getPosition().toLocation(world).distance(player.getLocation());
             makeScore(scoreboard, objective, index, Constants.ConstructThemes.get(ConstructType.Scarecrow).getColor(), "Scarecrow", distance, "m");
+            index++;
+        }
+
+        if (seaPointData != null) {
+            int distance = (int) seaPointData.getPosition().toLocation(world).distance(player.getLocation());
+            makeScore(scoreboard, objective, index, Constants.ConstructThemes.get(ConstructType.SeaPoint).getColor(), "Sea Point", distance, "m");
             index++;
         }
 

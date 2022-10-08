@@ -878,6 +878,36 @@ public class ConstructManager extends CatastropheManager {
         return strongestConstruct;
     }
 
+    public SeaPointData getStrongestSeaPoint(List<SeaPointData> constructList, Location location) {
+        SeaPointData strongestConstruct = null;
+        double strongestPull = -1;
+
+        for (SeaPointData constructData : constructList) {
+            World world = mixedCatastrophesData.getPlugin().getServer().getWorld(constructData.getWorldName());
+
+            if (world == null)
+                continue;
+
+            Location constructLocation = constructData.getPosition().toLocation(world);
+
+            if (location.getWorld() != constructLocation.getWorld())
+                continue;
+
+            double pull = Constants.SeaPointRange - constructLocation.distance(location);
+
+            if (pull < 0)
+                continue;
+
+            if (pull <= strongestPull)
+                continue;
+
+            strongestPull = pull;
+            strongestConstruct = constructData;
+        }
+
+        return strongestConstruct;
+    }
+
     public void constructChanged(ConstructData constructData) {
         ConstructCache constructCache = cacheMap.get(constructData);
 
