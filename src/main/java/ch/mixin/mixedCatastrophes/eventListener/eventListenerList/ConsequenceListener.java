@@ -236,8 +236,9 @@ public class ConsequenceListener implements Listener {
         for (int i = 0; i < amount; i++) {
             Rabbit rabbit = (Rabbit) world.spawnEntity(targetLocation, EntityType.RABBIT);
             rabbit.setRabbitType(Rabbit.Type.THE_KILLER_BUNNY);
-            rabbit.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(5);
-            rabbit.setHealth(5);
+            rabbit.getAttribute(Attribute.GENERIC_ARMOR).setBaseValue(0);
+            rabbit.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(3);
+            rabbit.setHealth(3);
             rabbit.setCustomName(name);
             rabbit.setCustomNameVisible(true);
             rabbit.setTarget(player);
