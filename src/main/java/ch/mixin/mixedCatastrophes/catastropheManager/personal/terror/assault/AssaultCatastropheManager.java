@@ -9,18 +9,20 @@ import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate2D;
 import ch.mixin.mixedCatastrophes.helperClasses.Functions;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.loot.LootContext;
+import org.bukkit.loot.LootTable;
+import org.bukkit.loot.LootTables;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class AssaultCatastropheManager extends CatastropheManager {
     private static final HashMap<AssaultPremise, Double> entitySummonDayWeights;
@@ -152,7 +154,6 @@ public class AssaultCatastropheManager extends CatastropheManager {
 
     @Override
     public void updateMetaData() {
-
     }
 
     @Override
@@ -165,7 +166,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     public void tick(Player player, int severity) {
-        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().isAssault())
+        if (!mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getAssault().isActive())
             return;
 
         PlayerData playerData = mixedCatastrophesData.getMetaData().getPlayerDataMap().get(player.getUniqueId());
@@ -194,7 +195,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
     }
 
     public void causeAssault(Player player) {
-        causeAssault(player,0);
+        causeAssault(player, 0);
     }
 
     public void causeAssault(Player player, int severity) {
@@ -275,10 +276,15 @@ public class AssaultCatastropheManager extends CatastropheManager {
         if (spawnPoints.size() == 0)
             return;
 
+        double pumpkinHeadChance = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getAssault().getPumpkinHeadChance();
+
         for (int i = 0; i < amount; i++) {
             Location spawnPoint = spawnPoints.get(new Random().nextInt(spawnPoints.size()));
             Mob mob = (Mob) world.spawnEntity(spawnPoint, assaultPremise.getEntityType());
             mob.setTarget(player);
+
+            if (new Random().nextDouble() < pumpkinHeadChance)
+                makePumpkinMob(mob);
         }
 
         if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
@@ -293,5 +299,52 @@ public class AssaultCatastropheManager extends CatastropheManager {
                 .withTitle(true)
                 .finish()
                 .execute();
+    }
+
+    private void makePumpkinMob(Mob mob) {
+        EntityEquipment equipment = mob.getEquipment();
+
+        if (equipment != null)
+            equipment.setHelmet(new ItemStack(Material.CARVED_PUMPKIN, 1));
+
+        mob.setGlowing(true);
+
+        AttributeInstance attributeMH = mob.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (attributeMH != null) {
+            attributeMH.setBaseValue(attributeMH.getBaseValue() * 2.5);
+            mob.setHealth(attributeMH.getBaseValue());
+        }
+
+        AttributeInstance attributeMS = mob.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        if (attributeMS != null)
+            attributeMS.setBaseValue(attributeMS.getBaseValue() * 1.5);
+
+        AttributeInstance attributeAD = mob.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (attributeAD != null)
+            attributeAD.setBaseValue(attributeAD.getBaseValue() * 1.5);
+
+        LootTable lootTable = mob.getLootTable();
+        if (lootTable != null) {
+            mob.setLootTable(new LootTable() {
+                @Override
+                public Collection<ItemStack> populateLoot(Random random, LootContext context) {
+                    Collection<ItemStack> itemStacks = lootTable.populateLoot(random, context);
+                    for (int i = 1; i < 3; i++)
+                        itemStacks.addAll(lootTable.populateLoot(random, context));
+                    itemStacks.add(new ItemStack(Material.GOLD_NUGGET, 3));
+                    return itemStacks;
+                }
+
+                @Override
+                public void fillInventory(Inventory inventory, Random random, LootContext context) {
+                    lootTable.fillInventory(inventory, random, context);
+                }
+
+                @Override
+                public NamespacedKey getKey() {
+                    return lootTable.getKey();
+                }
+            });
+        }
     }
 }

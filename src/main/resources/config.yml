@@ -36,7 +36,9 @@ interaction:
         terrorGainMax: 12
         secretsGainFlat: 20
         secretsGainTerrorMultiplier: 1
-      assault: true
+      assault:
+        active: true
+        pumpkinHeadChance: 0.01
       paranoia: true
       stalker: true
     misfortune:
