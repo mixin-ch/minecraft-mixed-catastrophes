@@ -20,7 +20,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootContext;
 import org.bukkit.loot.LootTable;
-import org.bukkit.loot.LootTables;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -276,7 +280,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
         if (spawnPoints.size() == 0)
             return;
 
-        double pumpkinHeadChance = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getAssault().getPumpkinHeadChance();
+        double pumpkinHeadChance = mixedCatastrophesData.getCatastropheSettings().getAspect().getTerror().getAssault().getHallowedChance();
 
         for (int i = 0; i < amount; i++) {
             Location spawnPoint = spawnPoints.get(new Random().nextInt(spawnPoints.size()));
@@ -284,7 +288,7 @@ public class AssaultCatastropheManager extends CatastropheManager {
             mob.setTarget(player);
 
             if (new Random().nextDouble() < pumpkinHeadChance)
-                makePumpkinMob(mob);
+                makeHallowedMob(mob);
         }
 
         if (mixedCatastrophesData.getCatastropheSettings().getAspect().getResolve().isVirtue()) {
@@ -301,17 +305,23 @@ public class AssaultCatastropheManager extends CatastropheManager {
                 .execute();
     }
 
-    private void makePumpkinMob(Mob mob) {
+    private void makeHallowedMob(Mob mob) {
+        NamespacedKey key = new NamespacedKey(mixedCatastrophesData.getPlugin(), "hallowed");
+        mob.getPersistentDataContainer().set(key, PersistentDataType.SHORT, (short) 1);
+
         EntityEquipment equipment = mob.getEquipment();
 
         if (equipment != null)
-            equipment.setHelmet(new ItemStack(Material.CARVED_PUMPKIN, 1));
+            equipment.setHelmet(new ItemStack(Material.JACK_O_LANTERN, 1));
 
         mob.setGlowing(true);
+        mob.setVisualFire(true);
+        mob.setCustomName("Hallowed One");
+        mob.setCustomNameVisible(true);
 
         AttributeInstance attributeMH = mob.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (attributeMH != null) {
-            attributeMH.setBaseValue(attributeMH.getBaseValue() * 2.5);
+            attributeMH.setBaseValue(attributeMH.getBaseValue() * 1.5 + 10);
             mob.setHealth(attributeMH.getBaseValue());
         }
 
@@ -323,28 +333,8 @@ public class AssaultCatastropheManager extends CatastropheManager {
         if (attributeAD != null)
             attributeAD.setBaseValue(attributeAD.getBaseValue() * 1.5);
 
-        LootTable lootTable = mob.getLootTable();
-        if (lootTable != null) {
-            mob.setLootTable(new LootTable() {
-                @Override
-                public Collection<ItemStack> populateLoot(Random random, LootContext context) {
-                    Collection<ItemStack> itemStacks = lootTable.populateLoot(random, context);
-                    for (int i = 1; i < 3; i++)
-                        itemStacks.addAll(lootTable.populateLoot(random, context));
-                    itemStacks.add(new ItemStack(Material.GOLD_NUGGET, 3));
-                    return itemStacks;
-                }
-
-                @Override
-                public void fillInventory(Inventory inventory, Random random, LootContext context) {
-                    lootTable.fillInventory(inventory, random, context);
-                }
-
-                @Override
-                public NamespacedKey getKey() {
-                    return lootTable.getKey();
-                }
-            });
-        }
+        AttributeInstance attributeAK = mob.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK);
+        if (attributeAK != null)
+            attributeAK.setBaseValue(attributeAK.getBaseValue() * 2);
     }
 }

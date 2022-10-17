@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 public class AssaultCatastropheSettings {
     private boolean active;
-    private double pumpkinHeadChance;
+    private double hallowedChance;
 
     public void initialize(ConfigurationSection superSection) {
         ConfigurationSection assaultSection = superSection.getConfigurationSection("assault");
@@ -13,14 +13,14 @@ public class AssaultCatastropheSettings {
             return;
 
         active = assaultSection.getBoolean("active");
-        pumpkinHeadChance = assaultSection.getInt("pumpkinHeadChance");
+        hallowedChance = assaultSection.getDouble("hallowedChance");
     }
 
     public void fillConfig(ConfigurationSection superSection) {
         ConfigurationSection assaultSection = superSection.createSection("assault");
 
         assaultSection.set("active", active);
-        assaultSection.set("pumpkinHeadChance", pumpkinHeadChance);
+        assaultSection.set("hallowedChance", hallowedChance);
     }
 
     public boolean isActive() {
@@ -31,11 +31,11 @@ public class AssaultCatastropheSettings {
         this.active = active;
     }
 
-    public double getPumpkinHeadChance() {
-        return pumpkinHeadChance;
+    public double getHallowedChance() {
+        return hallowedChance;
     }
 
-    public void setPumpkinHeadChance(double pumpkinHeadChance) {
-        this.pumpkinHeadChance = pumpkinHeadChance;
+    public void setHallowedChance(double hallowedChance) {
+        this.hallowedChance = hallowedChance;
     }
 }

@@ -38,7 +38,7 @@ interaction:
         secretsGainTerrorMultiplier: 1
       assault:
         active: true
-        pumpkinHeadChance: 0.01
+        HallowedChance: 0.01
       paranoia: true
       stalker: true
     misfortune:
