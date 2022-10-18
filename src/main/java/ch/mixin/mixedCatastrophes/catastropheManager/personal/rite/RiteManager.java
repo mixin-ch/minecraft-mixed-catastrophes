@@ -77,7 +77,7 @@ public class RiteManager {
                 multiplier = 16;
                 break;
             case NETHERITE_BLOCK:
-                multiplier = 16;
+                multiplier = 32;
                 break;
             default:
                 return;
@@ -136,7 +136,7 @@ public class RiteManager {
                 multiplier = 16;
                 break;
             case NETHERITE_BLOCK:
-                multiplier = 16;
+                multiplier = 32;
                 break;
             default:
                 return;
