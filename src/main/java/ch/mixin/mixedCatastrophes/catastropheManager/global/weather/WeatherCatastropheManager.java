@@ -1,6 +1,7 @@
 package ch.mixin.mixedCatastrophes.catastropheManager.global.weather;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.CatastropheManager;
+import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterPremise;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
@@ -24,6 +25,7 @@ import java.util.*;
 
 public class WeatherCatastropheManager extends CatastropheManager {
     private static final HashMap<WeatherCatastropheType, Double> catastropheWeights;
+    private static final HashMap<StarSplinterType, Double> starSplinterWeightMap;
 
     static {
         catastropheWeights = new HashMap<>();
@@ -36,6 +38,11 @@ public class WeatherCatastropheManager extends CatastropheManager {
         catastropheWeights.put(WeatherCatastropheType.PersonaShift, 0.35);
         catastropheWeights.put(WeatherCatastropheType.CrimsonSeason, 0.65);
         catastropheWeights.put(WeatherCatastropheType.MeteorShower, 0.50);
+
+        starSplinterWeightMap = new HashMap<>();
+        starSplinterWeightMap.put(StarSplinterType.Cobblestone, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Dirt, 1.0);
+        starSplinterWeightMap.put(StarSplinterType.Sand, 1.0);
     }
 
     private int weatherTimer;
@@ -590,9 +597,12 @@ public class WeatherCatastropheManager extends CatastropheManager {
         double weight = 1 + 0.25 * Math.pow(players, 0.5);
         double probability = weight / (5.0 + weight);
 
-        if (new Random().nextDouble() < probability)
+        if (new Random().nextDouble() < probability) {
+            StarSplinterType starSplinterType = Functions.getRandomWithWeights(starSplinterWeightMap);
+
             mixedCatastrophesData.getRootCatastropheManager().getStarSplinterCatastropheManager()
-                    .causeStarSplinter(StarSplinterType.Cobblestone, false);
+                    .causeStarSplinter(starSplinterType, false);
+        }
     }
 
     public int getWeatherTimer() {

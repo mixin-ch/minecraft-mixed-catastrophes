@@ -2,6 +2,8 @@ package ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter;
 
 public enum StarSplinterType {
     Cobblestone,
+    Dirt,
+    Sand,
     Iron,
     Gold,
     Diamond,

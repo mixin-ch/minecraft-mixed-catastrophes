@@ -20,12 +20,14 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class StarSplinterCatastropheManager extends CatastropheManager {
-    public static final HashMap<StarSplinterType, Double> starSplinterWeightMap;
-    public static final HashMap<StarSplinterType, StarSplinterPremise> starSplinterPremiseMap;
+    private static final HashMap<StarSplinterType, Double> starSplinterWeightMap;
+    public static final HashMap<StarSplinterType, StarSplinterPremise> StarSplinterPremiseMap;
 
     static {
         starSplinterWeightMap = new HashMap<>();
         starSplinterWeightMap.put(StarSplinterType.Cobblestone, 0.0);
+        starSplinterWeightMap.put(StarSplinterType.Dirt, 0.0);
+        starSplinterWeightMap.put(StarSplinterType.Sand, 0.0);
         starSplinterWeightMap.put(StarSplinterType.Iron, 4.0);
         starSplinterWeightMap.put(StarSplinterType.Gold, 4.0);
         starSplinterWeightMap.put(StarSplinterType.Diamond, 1.0);
@@ -41,53 +43,53 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
         starSplinterWeightMap.put(StarSplinterType.Clay, 2.0);
         starSplinterWeightMap.put(StarSplinterType.Feather, 1.0);
 
-        starSplinterPremiseMap = new HashMap<>();
-        starSplinterPremiseMap.put(StarSplinterType.Cobblestone, new StarSplinterPremise(
+        StarSplinterPremiseMap = new HashMap<>();
+        StarSplinterPremiseMap.put(StarSplinterType.Cobblestone, new StarSplinterPremise(
                 "Cobblestone", Material.COBBLESTONE, 4.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Iron, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Iron, new StarSplinterPremise(
                 "Iron", Material.IRON_NUGGET, 9.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Gold, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Gold, new StarSplinterPremise(
                 "Gold", Material.GOLD_NUGGET, 9.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Diamond, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Diamond, new StarSplinterPremise(
                 "Diamond", Material.DIAMOND, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Netherite, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Netherite, new StarSplinterPremise(
                 "Netherite", Material.NETHERITE_SCRAP, 4.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Emerald, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Emerald, new StarSplinterPremise(
                 "Emerald", Material.EMERALD, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Redstone, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Redstone, new StarSplinterPremise(
                 "Redstone", Material.REDSTONE, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Lapis_Lazuli, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Lapis_Lazuli, new StarSplinterPremise(
                 "Lapis Lazuli", Material.LAPIS_LAZULI, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Quartz, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Quartz, new StarSplinterPremise(
                 "Quartz", Material.QUARTZ, 4.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Glowstone, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Glowstone, new StarSplinterPremise(
                 "Glowstone", Material.GLOWSTONE_DUST, 4.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Flint, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Flint, new StarSplinterPremise(
                 "Flint", Material.FLINT, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Blaze, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Blaze, new StarSplinterPremise(
                 "Blaze", Material.BLAZE_ROD, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Ender_Pearl, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Ender_Pearl, new StarSplinterPremise(
                 "Ender Pearl", Material.ENDER_PEARL, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Obsidian, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Obsidian, new StarSplinterPremise(
                 "Obsidian", Material.OBSIDIAN, 1.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Clay, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Clay, new StarSplinterPremise(
                 "Clay", Material.CLAY_BALL, 4.0
         ));
-        starSplinterPremiseMap.put(StarSplinterType.Feather, new StarSplinterPremise(
+        StarSplinterPremiseMap.put(StarSplinterType.Feather, new StarSplinterPremise(
                 "Feather", Material.FEATHER, 1.0
         ));
 
@@ -167,7 +169,7 @@ public class StarSplinterCatastropheManager extends CatastropheManager {
     }
 
     public void causeStarSplinter(Player player, StarSplinterType starSplinterType, boolean spectacular) {
-        StarSplinterPremise starSplinterPremise = starSplinterPremiseMap.get(starSplinterType);
+        StarSplinterPremise starSplinterPremise = StarSplinterPremiseMap.get(starSplinterType);
         World world = player.getWorld();
         List<Location> locations = new ArrayList<>();
         ArrayList<Player> playerList = new ArrayList<>();

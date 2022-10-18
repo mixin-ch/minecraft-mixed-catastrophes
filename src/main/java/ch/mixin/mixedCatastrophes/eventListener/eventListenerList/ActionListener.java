@@ -2,12 +2,10 @@ package ch.mixin.mixedCatastrophes.eventListener.eventListenerList;
 
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterCatastropheManager;
 import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterPremise;
-import ch.mixin.mixedCatastrophes.catastropheManager.global.starSplinter.StarSplinterType;
 import ch.mixin.mixedCatastrophes.eventChange.aspect.AspectType;
 import ch.mixin.mixedCatastrophes.helpInventory.HelpInventoryManager;
 import ch.mixin.mixedCatastrophes.helperClasses.Constants;
 import ch.mixin.mixedCatastrophes.helperClasses.Coordinate3D;
-import ch.mixin.mixedCatastrophes.helperClasses.Functions;
 import ch.mixin.mixedCatastrophes.main.MixedCatastrophesData;
 import ch.mixin.mixedCatastrophes.metaData.data.StarSplinterRemainsData;
 import ch.mixin.mixedCatastrophes.metaData.data.constructs.EnderRailData;
@@ -147,7 +145,7 @@ public class ActionListener implements Listener {
         if (starSplinter == null)
             return;
 
-        StarSplinterPremise starSplinterPremise = StarSplinterCatastropheManager.starSplinterPremiseMap.get(starSplinter.getStarSplinterType());
+        StarSplinterPremise starSplinterPremise = StarSplinterCatastropheManager.StarSplinterPremiseMap.get(starSplinter.getStarSplinterType());
         int amount = (int) Math.round((new Random().nextDouble() + 1) * 5 * starSplinterPremise.getMultiplier());
         world.dropItem(location, new ItemStack(starSplinterPremise.getMaterial(), amount));
 
