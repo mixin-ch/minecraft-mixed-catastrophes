@@ -85,10 +85,14 @@ public class StatusListener implements Listener {
         playerData.setDreamCooldown(0);
         playerData.setAntiLighthouseTimer(0);
 
+        int secrets = playerData.getAspect(AspectType.Secrets);
+        int looseSecrets = 200 * secrets / (5000 + secrets) + 50;
+        looseSecrets = Math.min(looseSecrets, secrets);
+
         HashMap<AspectType, Integer> changeMap = new HashMap<>();
-        changeMap.put(AspectType.Death_Seeker, 1);
-        changeMap.put(AspectType.Secrets, 100);
         changeMap.put(AspectType.Terror, -(int) Math.floor(0.5 * playerData.getAspect(AspectType.Terror)));
+        changeMap.put(AspectType.Secrets, -looseSecrets);
+        changeMap.put(AspectType.Death_Seeker, 1);
 
         mixedCatastrophesData.getEventChangeManager()
                 .eventChange(player)
